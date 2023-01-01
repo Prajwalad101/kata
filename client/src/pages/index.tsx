@@ -1,8 +1,4 @@
-import {
-  CategoriesDropdown,
-  MainHeading,
-  Searchbar,
-} from '@features/home-page/components';
+import { MainHeading, Searchbar } from '@features/home-page/components';
 import { RecommendedSection } from '@features/recommended-business/layouts';
 import { QueryProvider } from 'src/components/context-provider';
 import { NavigationProvider } from 'src/components/context-provider/NavigationProvider/NavigationProvider';
@@ -25,7 +21,7 @@ const Home: NextPageWithLayout = () => {
             placeholder2="Kathmandu, New baneshwor"
             className="h-[60px] max-w-xl rounded-md shadow-md transition-shadow focus-within:shadow-lg md:max-w-2xl"
           />
-          <CategoriesDropdown />
+          {/* <CategoriesDropdown /> */}
         </section>
       </div>
       <div>

@@ -40,7 +40,7 @@ function RecommendedSection({
         >
           {businesses.map((business, index) => (
             <div key={index} className="w-full sm:w-1/2 sm:px-2 lg:w-1/4">
-              <Link href={`search/business/${business._id}`}>
+              <Link href="/">
                 <a>
                   <BusinessCard business={business} />
                 </a>
