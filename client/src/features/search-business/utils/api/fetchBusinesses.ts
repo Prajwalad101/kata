@@ -1,4 +1,6 @@
 export const fetchBusinesses = async (queryURL: string) => {
+  console.log(process.env.NEXT_PUBLIC_HOST);
+
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_HOST}/api/business?${queryURL}`
   );

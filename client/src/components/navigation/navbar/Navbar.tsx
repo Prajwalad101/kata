@@ -1,3 +1,4 @@
+import getGoogleOAuthUrl from '@features/authentication/utils/getGoogleUrl';
 import Link from 'next/link';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { BiMenu } from 'react-icons/bi';
@@ -54,9 +55,11 @@ function Navbar({ theme }: INavbar) {
               </Link>
             </div>
             {/* Login Buttons */}
-            <SecondaryButton theme={theme}>
-              <p className="py-2 px-6">Sign Up</p>
-            </SecondaryButton>
+            <Link href={getGoogleOAuthUrl()}>
+              <SecondaryButton theme={theme}>
+                <p className="py-2 px-6">Sign Up</p>
+              </SecondaryButton>
+            </Link>
             <PrimaryButton>
               <p className="py-2 px-6">Log In</p>
             </PrimaryButton>
