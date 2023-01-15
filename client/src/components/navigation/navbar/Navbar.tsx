@@ -1,4 +1,3 @@
-import getGoogleOAuthUrl from '@features/authentication/utils/getGoogleUrl';
 import Link from 'next/link';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { BiMenu } from 'react-icons/bi';
@@ -55,7 +54,9 @@ function Navbar({ theme }: INavbar) {
               </Link>
             </div>
             {/* Login Buttons */}
-            <Link href={getGoogleOAuthUrl()}>
+            <Link
+              href={`${process.env.NEXT_PUBLIC_SERVER_ENDPOINT}/api/auth/google`}
+            >
               <SecondaryButton theme={theme}>
                 <p className="py-2 px-6">Sign Up</p>
               </SecondaryButton>

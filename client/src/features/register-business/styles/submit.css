@@ -1,0 +1,6 @@
+.confetti-background {
+  background-image: url('../../../../public/animations/register-business/confetti.gif');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
