@@ -44,7 +44,7 @@ function Navbar({ theme }: INavbar) {
           <Logo>Logo</Logo>
           <div className="flex items-center gap-7 lg:gap-10">
             <div className="underline-offset-4 hover:underline">
-              <Link href="/">
+              <Link href="/register-business">
                 <a>For Businesses</a>
               </Link>
             </div>
