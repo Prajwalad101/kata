@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+@import '../features/search-business/styles/checkbox.css';
 @import './line-clamp.css';
 
 html,
