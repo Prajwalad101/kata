@@ -1,20 +1,20 @@
 import express from 'express';
 import passport from 'passport';
-import '../utils/auth';
+import { handleUserToken } from '../controllers/authController';
+import '../utils/auth/googleAuth';
+import '../utils/auth/jwt';
 
 const router = express.Router();
 
-// router.route('/google').get(handleGoogleOauth);
-
-router
-  .route('/google')
-  .get(passport.authenticate('google', { scope: ['email', 'profile'] }));
-
-router.route('/google/callback').get(
+router.route('/google/start').get(
   passport.authenticate('google', {
-    successRedirect: '/protected',
-    failureRedirect: '/auth/failure',
+    scope: ['email', 'profile', 'openid'],
+    session: false,
   })
 );
+
+router
+  .route('/google/redirect')
+  .get(passport.authenticate('google', { session: false }), handleUserToken);
 
 export default router;

@@ -55,7 +55,7 @@ function Navbar({ theme }: INavbar) {
             </div>
             {/* Login Buttons */}
             <Link
-              href={`${process.env.NEXT_PUBLIC_SERVER_ENDPOINT}/api/auth/google`}
+              href={`${process.env.NEXT_PUBLIC_SERVER_ENDPOINT}/api/auth/google/start`}
             >
               <SecondaryButton theme={theme}>
                 <p className="py-2 px-6">Sign Up</p>
