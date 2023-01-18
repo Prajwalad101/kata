@@ -11,6 +11,7 @@ import app from './app';
 
 const DB = process.env.DB as string;
 
+mongoose.set('strictQuery', false);
 mongoose.connect(DB).then(() => {
   console.log('DB connection successful');
 });
