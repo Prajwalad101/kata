@@ -1,6 +1,6 @@
-import { profile } from 'console';
 import passport from 'passport';
 import { Strategy } from 'passport-google-oauth2';
+import { createUser, findUser } from '../../controllers/userController';
 
 passport.use(
   new Strategy(
@@ -9,8 +9,20 @@ passport.use(
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
       callbackURL: `${process.env.HOST}/api/auth/google/redirect`,
     },
-    (_accessToken, _refreshToken, _profile, done) => {
-      return done(null, profile);
+    async (_accessToken, _refreshToken, profile, done) => {
+      let user;
+      try {
+        user = await findUser(profile.id);
+        console.log(user);
+
+        if (!user) {
+          user = await createUser(profile);
+          console.log(user);
+        }
+        return done(null, user);
+      } catch (err) {
+        return done(err, null);
+      }
     }
   )
 );

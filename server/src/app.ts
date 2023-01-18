@@ -5,6 +5,7 @@ import globalErrorHandler from './controllers/errorController';
 import authRouter from './routes/authRoutes';
 import businessRouter from './routes/businessRoutes';
 import reviewRouter from './routes/reviewRoutes';
+import userRouter from './routes/userRoutes';
 import AppError from './utils/appError';
 import './utils/auth/jwt';
 
@@ -25,6 +26,7 @@ app.use(
 );
 app.use('/api/reviews', reviewRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/users', userRouter);
 
 app.all('*', (req: Request, _res: Response, next: NextFunction) => {
   const err = new AppError(

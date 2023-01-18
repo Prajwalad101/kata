@@ -8,7 +8,6 @@ const jwtOptions = {
 
 passport.use(
   new passportJwt.Strategy(jwtOptions, (payload, done) => {
-    // get user by searching by id
     {
       return done(null, { name: 'John Doe' }, payload);
     }

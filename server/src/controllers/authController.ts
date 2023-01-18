@@ -6,6 +6,6 @@ import catchAsync from '../utils/catchAsync';
 export const handleUserToken = catchAsync(
   async (req: Request, res: Response, _next: NextFunction) => {
     const accessToken = generateAccessToken('userId123');
-    res.status(200).json({ accessToken });
+    res.cookie('access-token', accessToken).redirect('http://localhost:3000');
   }
 );

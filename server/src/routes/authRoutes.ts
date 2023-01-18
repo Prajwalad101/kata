@@ -15,6 +15,12 @@ router.route('/google/start').get(
 
 router
   .route('/google/redirect')
-  .get(passport.authenticate('google', { session: false }), handleUserToken);
+  .get(
+    passport.authenticate('google', {
+      failureRedirect: '/login',
+      session: false,
+    }),
+    handleUserToken
+  );
 
 export default router;
