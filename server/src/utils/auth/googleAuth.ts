@@ -11,14 +11,15 @@ passport.use(
     },
     async (_accessToken, _refreshToken, profile, done) => {
       let user;
+      if (!profile.email_verified) {
+        return done(null, false); // triggers failure redirect
+      }
       try {
         user = await findUser(profile.id);
-        console.log(user);
-
         if (!user) {
           user = await createUser(profile);
-          console.log(user);
         }
+
         return done(null, user);
       } catch (err) {
         return done(err, null);

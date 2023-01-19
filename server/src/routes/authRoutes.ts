@@ -1,6 +1,9 @@
 import express from 'express';
 import passport from 'passport';
-import { handleUserToken } from '../controllers/authController';
+import {
+  handleUserToken,
+  passportErrorHandler,
+} from '../controllers/authController';
 import '../utils/auth/googleAuth';
 import '../utils/auth/jwt';
 
@@ -13,14 +16,13 @@ router.route('/google/start').get(
   })
 );
 
-router
-  .route('/google/redirect')
-  .get(
-    passport.authenticate('google', {
-      failureRedirect: '/login',
-      session: false,
-    }),
-    handleUserToken
-  );
+router.route('/google/redirect').get(
+  passport.authenticate('google', {
+    failureRedirect: `${process.env.CLIENT_ORIGIN}?authentication=error&message=invalid-credentials`,
+    session: false,
+  }),
+  handleUserToken,
+  passportErrorHandler
+);
 
 export default router;

@@ -8,8 +8,6 @@ const jwtOptions = {
 
 passport.use(
   new passportJwt.Strategy(jwtOptions, (payload, done) => {
-    {
-      return done(null, { name: 'John Doe' }, payload);
-    }
+    done(null, payload);
   })
 );
