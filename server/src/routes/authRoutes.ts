@@ -4,6 +4,7 @@ import {
   handleUserToken,
   passportErrorHandler,
 } from '../controllers/authController';
+import '../utils/auth/facebookAuth';
 import '../utils/auth/googleAuth';
 import '../utils/auth/jwt';
 
@@ -24,5 +25,14 @@ router.route('/google/redirect').get(
   handleUserToken,
   passportErrorHandler
 );
+
+router
+  .route('/facebook/start')
+  .get(passport.authenticate('facebook', { session: false }));
+
+router
+  .route('/facebook/redirect')
+  .get(passport.authenticate('facebook', { session: false }))
+  .get(handleUserToken, passportErrorHandler);
 
 export default router;

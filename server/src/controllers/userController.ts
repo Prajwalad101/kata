@@ -23,12 +23,10 @@ export const findUser = async (id: string) => {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const createUser = async (profile: any) => {
-  console.log(profile);
-
   const user = await User.create({
     userName: profile.displayName,
-    email: profile.email,
-    picture: profile.picture,
+    ...(profile.email && { email: profile.email }),
+    picture: profile.photos[0].value,
     provider: profile.provider,
     providerId: profile.id,
   });
