@@ -1,4 +1,6 @@
+import LoginModal from '@features/authentication/components/LoginModal';
 import Link from 'next/link';
+import { useState } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { BiMenu } from 'react-icons/bi';
 import PrimaryButton from 'src/components/button/primary/PrimaryButton';
@@ -14,11 +16,16 @@ interface INavbar {
 
 function Navbar({ theme }: INavbar) {
   const { open, setOpen } = useSidebar();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   usePreventBodyOverflow(open);
 
   return (
     <>
+      <LoginModal
+        isOpen={isModalOpen}
+        closeModal={() => setIsModalOpen(false)}
+      />
       <div className="py-4 font-rubik md:pt-7">
         {/* For smaller(<md) screens */}
         <div className="flex items-center justify-between md:hidden">
@@ -50,19 +57,14 @@ function Navbar({ theme }: INavbar) {
             </div>
             <div className="underline-offset-4 hover:underline">
               <Link href="/">
-                <a>Write a review</a>
+                <SecondaryButton theme={theme}>
+                  <p className="py-2 px-6">Write a review</p>
+                </SecondaryButton>
               </Link>
             </div>
             {/* Login Buttons */}
-            <Link
-              href={`${process.env.NEXT_PUBLIC_SERVER_ENDPOINT}/api/auth/google/start`}
-            >
-              <SecondaryButton theme={theme}>
-                <p className="py-2 px-6">Sign Up</p>
-              </SecondaryButton>
-            </Link>
-            <PrimaryButton>
-              <p className="py-2 px-6">Log In</p>
+            <PrimaryButton onClick={() => setIsModalOpen(true)}>
+              <p className="py-2 px-6">Sign In</p>
             </PrimaryButton>
           </div>
         </div>
