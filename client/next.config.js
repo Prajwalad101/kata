@@ -14,7 +14,12 @@ const nextConfig = withTM({
     ];
   },
   images: {
-    domains: ['via.placeholder.com', 'dummyimage.com', 'images.unsplash.com'],
+    domains: [
+      'lh3.googleusercontent.com',
+      'via.placeholder.com',
+      'dummyimage.com',
+      'images.unsplash.com',
+    ],
   },
 });
 

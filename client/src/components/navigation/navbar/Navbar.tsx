@@ -7,7 +7,9 @@ import PrimaryButton from 'src/components/button/primary/PrimaryButton';
 import SecondaryButton from 'src/components/button/secondary/SecondaryButton';
 import { useSidebar } from 'src/components/context-provider';
 import Logo from 'src/components/logo/Logo';
+import UserProfile from 'src/components/userprofile/UserProfile';
 import { usePreventBodyOverflow } from 'src/hooks';
+import useCookie from 'src/hooks/browser/useCookie';
 import { classNames } from 'src/utils/tailwind';
 
 interface INavbar {
@@ -19,6 +21,8 @@ function Navbar({ theme }: INavbar) {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   usePreventBodyOverflow(open);
+
+  const accessToken = useCookie('access-token', null);
 
   return (
     <>
@@ -63,9 +67,13 @@ function Navbar({ theme }: INavbar) {
               </Link>
             </div>
             {/* Login Buttons */}
-            <PrimaryButton onClick={() => setIsModalOpen(true)}>
-              <p className="py-2 px-6">Sign In</p>
-            </PrimaryButton>
+            {accessToken ? (
+              <UserProfile accessToken={accessToken} />
+            ) : (
+              <PrimaryButton onClick={() => setIsModalOpen(true)}>
+                <p className="py-2 px-6">Sign In</p>
+              </PrimaryButton>
+            )}
           </div>
         </div>
       </div>

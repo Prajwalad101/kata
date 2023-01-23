@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
  * @param {String} key The key to store our data to
  * @param {String} defaultValue The default value to return in case the cookie doesn't exist
  */
-const useCookie = (key: string, defaultValue: string) => {
-  const [cookie, setCookie] = useState<string>(defaultValue); // TODO: Add custom functions for cookie management.
+const useCookie = (key: string, defaultValue: string | null) => {
+  const [cookie, setCookie] = useState<string | null>(defaultValue); // TODO: Add custom functions for cookie management.
 
   useEffect(() => {
     const cookieArray = document.cookie.split('; ');
