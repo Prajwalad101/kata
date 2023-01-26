@@ -95,10 +95,38 @@ const deleteBusiness = catchAsync(
   }
 );
 
+const searchBusiness = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const searchString = req.query.text;
+
+    if (typeof searchString !== 'string') {
+      const error = new AppError('search text must be of type string', 400);
+      return next(error);
+    }
+
+    const businessesQuery = Business.find(
+      { $text: { $search: searchString } },
+      { score: { $meta: 'textScore' } }
+    );
+
+    businessesQuery.sort({ score: { $meta: 'textScore' } });
+    businessesQuery.select(['name', 'location.address']);
+
+    const businesses = await businessesQuery;
+
+    res.status(200).json({
+      status: 'success',
+      documentCount: businesses.length,
+      data: businesses,
+    });
+  }
+);
+
 export default {
   getAllBusinesses,
   getBusiness,
   createBusiness,
   updateBusiness,
   deleteBusiness,
+  searchBusiness,
 };

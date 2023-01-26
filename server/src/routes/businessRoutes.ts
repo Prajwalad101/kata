@@ -15,6 +15,8 @@ router
   .get(businessController.getAllBusinesses)
   .post(upload, businessController.createBusiness);
 
+router.route('/search').get(businessController.searchBusiness);
+
 router
   .route('/:id')
   .get(businessController.getBusiness)

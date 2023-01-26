@@ -71,6 +71,9 @@ const businessSchema = new mongoose.Schema<IBusiness>(
   }
 );
 
+// index based on business name and address
+businessSchema.index({ name: 'text', 'location.address': 'text' });
+
 businessSchema.virtual('reviews', {
   ref: 'Review',
   foreignField: 'business',
