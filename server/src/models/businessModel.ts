@@ -89,16 +89,17 @@ businessSchema.pre('save', function (next) {
   next();
 });
 
-businessSchema.pre('find', function (next) {
-  this.populate({
-    path: 'reviews',
-    select: 'review -business',
-    perDocumentLimit: 2,
-    options: { sort: { likes: -1, createdAt: -1 } },
-  });
+//--------LEGACY CODE---------
+// businessSchema.pre('find', function (next) {
+//   this.populate({
+//     path: 'reviews',
+//     select: 'review -business',
+//     perDocumentLimit: 2,
+//     options: { sort: { likes: -1, createdAt: -1 } },
+//   });
 
-  next();
-});
+//   next();
+// });
 
 // businessSchema.pre('findOne', function (next) {
 //   this.populate({

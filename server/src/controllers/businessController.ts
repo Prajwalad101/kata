@@ -15,6 +15,13 @@ const getAllBusinesses = catchAsync(
     const features = req.query.features as string | undefined;
     filterFeatures(businessQuery, features);
 
+    businessQuery.populate({
+      path: 'reviews',
+      select: 'review -business',
+      perDocumentLimit: 2,
+      options: { sort: { likes: -1, createdAt: -1 } },
+    });
+
     const apiFeatures = new APIFeatures(businessQuery, req.query)
       .filter(customFilters)
       .sort()
