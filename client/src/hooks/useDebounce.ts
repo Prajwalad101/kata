@@ -1,14 +1,14 @@
-import { useMemo } from 'react';
+import { useCallback } from 'react';
 
 function debounce<T extends unknown[]>(
-  fn: (..._args: T) => void,
+  cb: (..._args: T) => void,
   delay: number
 ) {
   let timeoutId: number | undefined;
 
   const debounced = (...args: T) => {
     clearTimeout(timeoutId);
-    timeoutId = window.setTimeout(() => fn(...args), delay);
+    timeoutId = window.setTimeout(() => cb(...args), delay);
   };
 
   return debounced;
@@ -18,5 +18,6 @@ export default function useDebounce<T extends unknown[]>(
   cb: (..._args: T) => void,
   delay: number
 ) {
-  return useMemo(() => debounce(cb, delay), [cb, delay]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  return useCallback(debounce(cb, delay), []);
 }

@@ -1,6 +1,7 @@
 import useSearchBusiness from '@features/home-page/api/useSearchBusiness';
 import { useState } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
+import useDebounce from 'src/hooks/useDebounce';
 import { classNames } from 'src/utils/tailwind';
 
 interface SearchbarProps {
@@ -15,9 +16,22 @@ function Searchbar({
   className = '',
 }: SearchbarProps) {
   const [searchText, setSearchText] = useState<string>();
+  const [debouncedText, setDebouncedText] = useState<string>();
 
-  const { data } = useSearchBusiness(searchText);
-  console.log(data);
+  const { data, isLoading } = useSearchBusiness(debouncedText);
+
+  const debounceCb = (text: string | undefined) => {
+    console.log('debounce callback called');
+    setDebouncedText(text);
+  };
+
+  // debounce handleChange for 2 secs
+  const handleDebounce = useDebounce(debounceCb, 1000);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(event.target.value);
+    handleDebounce(event.target.value);
+  };
 
   return (
     <div
@@ -32,7 +46,7 @@ function Searchbar({
         className="h-full w-full rounded-sm bg-[#E6E6E6] px-4 text-base md:bg-white"
         type="text"
         placeholder={placeholder1}
-        onChange={(e) => setSearchText(e.target.value)}
+        onChange={handleChange}
         value={searchText}
       />
 
