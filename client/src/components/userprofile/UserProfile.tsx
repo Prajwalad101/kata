@@ -1,7 +1,7 @@
 import { Menu, Transition } from '@headlessui/react';
 import Image from 'next/image';
 import { Fragment } from 'react';
-import parseJwt from 'src/utils/text/parseJWT';
+import parseJwt from 'src/utils/text/parseJwt';
 
 interface UserProfileProps {
   accessToken: string;
@@ -9,22 +9,9 @@ interface UserProfileProps {
 
 export default function UserProfile({ accessToken }: UserProfileProps) {
   const userData = parseJwt(accessToken);
-  if (!userData) return;
-
-  console.log(userData);
-
-  // if (userData && 'picture' in userData) {
-  //   return (
-  //     <div className="relative h-10 w-10 rounded-full">
-  //       <Image
-  //         layout="fill"
-  //         className="cursor-pointer rounded-full"
-  //         alt="user-profile"
-  //         src={userData.picture as string}
-  //       />
-  //     </div>
-  //   );
-  // }
+  if (!userData || !('picture' in userData) || !('email' in userData)) {
+    return <></>;
+  }
 
   return (
     <div className="h-[40px]">
@@ -56,7 +43,7 @@ export default function UserProfile({ accessToken }: UserProfileProps) {
               </Menu.Item>
               <Menu.Item>
                 <button className="group flex w-full cursor-default bg-gray-100 px-2 py-2 text-sm text-gray-900">
-                  {userData.email}
+                  {userData.email as string}
                 </button>
               </Menu.Item>
             </div>
