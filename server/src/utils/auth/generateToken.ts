@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function generateAccessToken(user: any) {
-  const expiresIn = '1 hour';
+  const expiresIn = '10h';
   const secret = process.env.AUTH_SECRET as string;
 
   const payload = {

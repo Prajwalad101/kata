@@ -117,7 +117,7 @@ const searchBusiness = catchAsync(
     );
 
     businessesQuery.sort({ score: { $meta: 'textScore' } });
-    businessesQuery.select(['name', 'location.address']);
+    businessesQuery.select(['name', 'location.address', 'category']);
 
     const businesses = await businessesQuery;
 

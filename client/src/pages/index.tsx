@@ -16,11 +16,7 @@ const Home: NextPageWithLayout = () => {
           <MainHeading className="mb-5 max-w-sm sm:max-w-xl md:mb-7">
             Find and support local businesses
           </MainHeading>
-          <Searchbar
-            placeholder1="Search for stuff"
-            placeholder2="Kathmandu, New baneshwor"
-            className="h-[60px] max-w-xl rounded-md shadow-md transition-shadow focus-within:shadow-lg md:max-w-2xl"
-          />
+          <Searchbar />
           {/* <CategoriesDropdown /> */}
         </section>
       </div>
