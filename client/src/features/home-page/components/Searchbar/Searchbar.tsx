@@ -1,3 +1,5 @@
+import useSearchBusiness from '@features/home-page/api/useSearchBusiness';
+import { useState } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { classNames } from 'src/utils/tailwind';
 
@@ -12,10 +14,16 @@ function Searchbar({
   placeholder2,
   className = '',
 }: SearchbarProps) {
+  const [searchText, setSearchText] = useState<string>();
+
+  const { data } = useSearchBusiness(searchText);
+  console.log(data);
+
   return (
     <div
       className={classNames(
         'relative flex h-[51.5px] w-full items-center overflow-hidden bg-gray-500 font-merriweather md:h-[60px]',
+        'ring-blue-500 ring-offset-2 ring-offset-gray-600 focus-within:ring-2 active:ring-2',
         className
       )}
     >
@@ -24,6 +32,8 @@ function Searchbar({
         className="h-full w-full rounded-sm bg-[#E6E6E6] px-4 text-base md:bg-white"
         type="text"
         placeholder={placeholder1}
+        onChange={(e) => setSearchText(e.target.value)}
+        value={searchText}
       />
 
       {/* LOCATION SEARCH INPUT FIELD  */}
