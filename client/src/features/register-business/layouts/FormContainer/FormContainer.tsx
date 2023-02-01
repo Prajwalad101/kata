@@ -62,11 +62,7 @@ function FormContainer() {
           />
         )}
         {step === 3 && (
-          <FormStep3
-            control={control}
-            register={register}
-            className="mb-20 xs:pt-10"
-          />
+          <FormStep3 control={control} className="mb-20 xs:pt-10" />
         )}
         <Divider className="mb-10" width={2} />
         <div className="flex flex-wrap gap-x-10 gap-y-5">
