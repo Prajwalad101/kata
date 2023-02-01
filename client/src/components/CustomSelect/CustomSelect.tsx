@@ -32,6 +32,12 @@ export default function CustomSelect<
           padding: '12px 0 12px 5px',
           backgroundColor: 'rgb(243 244 246)',
         }),
+        multiValueLabel: (base) => ({
+          ...base,
+          paddingTop: '5px',
+          paddingBottom: '5px',
+          fontSize: '16px',
+        }),
       }}
     />
   );
