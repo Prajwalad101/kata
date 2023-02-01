@@ -18,6 +18,7 @@ export type FormInputs = {
   subcategory: string;
   features: string[] | null;
   socials: { value: string }[];
+  images: File[] | null;
 };
 
 export const defaultFormValues: FormInputs = {
@@ -70,6 +71,7 @@ export const defaultFormValues: FormInputs = {
   subcategory: '',
   features: null,
   socials: [{ value: '' }],
+  images: null,
 };
 
 export const formContent = [

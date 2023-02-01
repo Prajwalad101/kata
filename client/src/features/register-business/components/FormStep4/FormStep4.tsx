@@ -4,22 +4,26 @@ import {
   Control,
   useFieldArray,
   UseFormRegister,
+  UseFormSetValue,
   useFormState,
 } from 'react-hook-form';
 import { FiTrash2 } from 'react-icons/fi';
 import { classNames } from 'src/utils/tailwind';
 import MyInput from '../MyInput/MyInput';
 import MyLabel from '../MyLabel/MyLabel';
+import UploadBusinessImage from './UploadBusinessImage';
 
 interface FormStep3Props {
   control: Control<FormInputs>;
   register: UseFormRegister<FormInputs>;
+  setValue: UseFormSetValue<FormInputs>;
   className?: string;
 }
 
 export default function FormStep4({
   control,
   register,
+  setValue,
   className = '',
 }: FormStep3Props) {
   const { errors } = useFormState({ control, name: 'email' });
@@ -80,6 +84,11 @@ export default function FormStep4({
           </button>
         </div>
       </FieldLayout>
+      <UploadBusinessImage
+        control={control}
+        setValue={setValue}
+        register={register}
+      />
     </div>
   );
 }

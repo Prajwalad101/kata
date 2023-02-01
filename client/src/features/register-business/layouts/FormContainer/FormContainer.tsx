@@ -12,7 +12,7 @@ function FormContainer() {
   // holds the highest validated form step
   const maxStepRef = useRef<number>(1);
 
-  const { register, control, handleSubmit } = useForm({
+  const { register, control, handleSubmit, setValue } = useForm({
     mode: 'onBlur',
     defaultValues: defaultFormValues,
   });
@@ -69,6 +69,7 @@ function FormContainer() {
           <FormStep4
             register={register}
             control={control}
+            setValue={setValue}
             className="mb-20 xs:pt-10"
           />
         )}
