@@ -17,6 +17,7 @@ export type FormInputs = {
   category: string;
   subcategory: string;
   features: string[] | null;
+  socials: { value: string }[];
 };
 
 export const defaultFormValues: FormInputs = {
@@ -68,6 +69,7 @@ export const defaultFormValues: FormInputs = {
   category: '',
   subcategory: '',
   features: null,
+  socials: [{ value: '' }],
 };
 
 export const formContent = [
