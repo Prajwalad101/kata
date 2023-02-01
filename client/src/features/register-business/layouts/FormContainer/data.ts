@@ -14,6 +14,9 @@ export type FormInputs = {
   email: '';
   coordinates: [number, number] | null;
   directions: { value: string }[];
+  category: string;
+  subcategory: string;
+  features: string[] | null;
 };
 
 export const defaultFormValues: FormInputs = {
@@ -62,6 +65,9 @@ export const defaultFormValues: FormInputs = {
   email: '',
   coordinates: null,
   directions: [{ value: '' }],
+  category: '',
+  subcategory: '',
+  features: null,
 };
 
 export const formContent = [

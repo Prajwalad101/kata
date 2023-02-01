@@ -16,23 +16,16 @@ const Form: NextPageWithLayout = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const _handleSubmit = (values: any) => {
     const formData = dataToFormData(values);
-    mutation.mutate(formData);
+    mutation.mutate(formData, {
+      onSuccess: (data) => {
+        router.push(`submit?status=success&id=${data.data.data._id}`, 'submit');
+      },
+      onError: () => {
+        logMutationError(mutation.error);
+        router.push('submit?status=error', 'submit');
+      },
+    });
   };
-
-  const stringifiedMutation = JSON.stringify(mutation);
-
-  useEffect(() => {
-    const data = mutation.data?.data.data;
-    const id = data?._id;
-
-    if (mutation.isSuccess)
-      router.push(`submit?status=success&id=${id}`, 'submit');
-    if (mutation.isError) {
-      logMutationError(mutation.error);
-      router.push('submit?status=error', 'submit');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stringifiedMutation]);
 
   // change the cursor style when submitting form
   useEffect(() => {
@@ -45,15 +38,14 @@ const Form: NextPageWithLayout = () => {
 
   return <FormContainer />;
 };
+
 Form.getLayout = (page) => (
-  <>
-    <QueryProvider>
-      <AppLayout size="sm">
-        <Navbar />
-        {page}
-      </AppLayout>
-    </QueryProvider>
-  </>
+  <QueryProvider>
+    <AppLayout size="sm">
+      <Navbar />
+      {page}
+    </AppLayout>
+  </QueryProvider>
 );
 
 export default Form;

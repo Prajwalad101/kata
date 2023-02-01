@@ -1,36 +1,38 @@
-const businessCategories = {
-  foodanddrinks: {
+export const businessCategories = [
+  {
     name: 'food and drinks',
-    resturant: 'resturant',
-    cafe: 'cafe',
-    fastfood: 'fast food',
-    hotel: 'hotel',
-    bakery: 'bakery',
+    subcategories: ['resturant', 'cafe', 'fast food', 'hotel', 'bakery'],
+    features: [
+      'outdoors',
+      'takeout',
+      'homedelivery',
+      'finedining',
+      'kids friendly',
+      'good parking',
+    ],
   },
-  sportsandfitness: {
+  {
     name: 'sports and fitness',
-    gym: 'gym',
-    futsal: 'futsal',
-    tennis: 'tennis',
-    zumba: 'zumba',
-    swimming: 'swimming',
+    subcategories: ['gym', 'futsal', 'tennis', 'zumba', 'swimming'],
+    features: [
+      'memberships',
+      'good parking',
+      'allows refunds',
+      'open on weekends',
+    ],
   },
-  homeandservices: {
-    name: 'home',
-    plumbing: 'plumbing',
-    electricity: 'electricity',
-    cleaning: 'cleaning',
-    repairs: 'repairs',
+  {
+    name: 'home services',
+    subcategories: ['plumbing', 'electricity', 'cleaning', 'repairs'],
+    features: ['feature1', 'feature2'],
   },
-  others: {
+  {
     name: 'others',
-    entertainment: 'entertainment',
-    shopping: 'shopping',
-    essential: 'essential',
-    vehicle: 'vehicles',
+    subcategories: ['entertainment', 'shopping', 'essential', 'vehicles'],
+    features: ['feature3', 'feature4'],
   },
-} as const;
+] as const;
 
 type BusinessCategories = typeof businessCategories;
-export type BusinessCategory =
-  BusinessCategories[keyof BusinessCategories]['name'];
+
+export type BusinessCategory = BusinessCategories[number]['name'];

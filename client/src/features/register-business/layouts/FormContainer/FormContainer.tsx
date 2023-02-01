@@ -1,3 +1,4 @@
+import FormStep3 from '@features/register-business/components/FormStep3/FormStep3';
 import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Divider, PrimaryButton, SecondaryButton } from 'src/components';
@@ -5,7 +6,7 @@ import { Breadcrumbs, FormStep1, FormStep2, Header } from '../../components';
 import { defaultFormValues, FormInputs } from './data';
 
 function FormContainer() {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(3);
 
   // holds the highest validated form step
   const maxStepRef = useRef<number>(1);
@@ -59,6 +60,9 @@ function FormContainer() {
             register={register}
             className="mb-20 xs:pt-10"
           />
+        )}
+        {step === 3 && (
+          <FormStep3 control={control} className="mb-20 xs:pt-10" />
         )}
         <Divider className="mb-10" width={2} />
         <div className="flex flex-wrap gap-x-10 gap-y-5">
