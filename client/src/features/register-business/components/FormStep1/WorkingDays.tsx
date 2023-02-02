@@ -3,7 +3,7 @@ import {
   FormInputs,
 } from '@features/register-business/layouts/FormContainer';
 import { FieldError } from 'react-hook-form';
-import ErrorMessage from '../ErrorMessage/ErrorMessage';
+import FormErrorMessage from 'src/components/FormErrorMessage/FormErrorMessage';
 import MyLabel from '../MyLabel/MyLabel';
 import { Day, hours } from './data';
 import SelectTime from './SelectTime';
@@ -117,7 +117,7 @@ export default function WorkingDays({
             </div>
           </div>
         ))}
-        <ErrorMessage className="mt-12" error={error} validate={['validate']} />
+        <FormErrorMessage className="mt-12" error={error} />
       </div>
     </div>
   );

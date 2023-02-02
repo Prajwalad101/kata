@@ -1,4 +1,9 @@
-import { Control, UseFormRegister, useFormState } from 'react-hook-form';
+import {
+  Control,
+  UseFormRegister,
+  useFormState,
+  useWatch,
+} from 'react-hook-form';
 import { classNames } from 'src/utils/tailwind';
 import { FieldLayout } from '../../layouts';
 import { FormInputs } from '../../layouts/FormContainer';
@@ -16,6 +21,7 @@ export default function DescriptionInput({
   control,
 }: DescriptionInputProps) {
   const { errors } = useFormState({ control, name: 'description' });
+  const description = useWatch({ control, name: 'description' });
 
   return (
     <FieldLayout>
@@ -28,11 +34,7 @@ export default function DescriptionInput({
         <textarea
           id="description"
           rows={7}
-          {...register('description', {
-            required: 'Description is required',
-            maxLength: { value: 200, message: 'Description is too long' },
-            minLength: { value: 15, message: 'Description is too short' },
-          })}
+          {...register('description')}
           className={classNames(
             errors.description ? 'ring-red-500' : 'ring-blue-600',
             'mb-2 w-full rounded-md border-2 border-gray-300 px-4 py-3 outline-none ring-offset-2  transition-all focus:ring-[3px]'
@@ -42,7 +44,9 @@ export default function DescriptionInput({
           error={errors.description}
           validate={['required', 'minLength', 'maxLength']}
         />
-        <p className="text-right text-gray-400">0 / 200 words</p>
+        <p className="text-right text-gray-400">
+          {description.length} / 200 words
+        </p>
       </div>
     </FieldLayout>
   );

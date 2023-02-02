@@ -23,11 +23,7 @@ export default function NameInput({ register, control }: NameInputProps) {
       <div>
         <MyInput
           error={errors.name}
-          {...register('name', {
-            required: 'Business name is required',
-            maxLength: { value: 50, message: 'Business name is too long' },
-            minLength: { value: 4, message: 'Business name is too short' },
-          })}
+          {...register('name')}
           id="business name"
           placeholder="eg: The Burger House"
           type="text"
