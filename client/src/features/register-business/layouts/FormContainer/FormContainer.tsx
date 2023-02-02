@@ -1,23 +1,39 @@
 import FormStep3 from '@features/register-business/components/FormStep3/FormStep3';
 import FormStep4 from '@features/register-business/components/FormStep4/FormStep4';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Divider, PrimaryButton, SecondaryButton } from 'src/components';
 import { Breadcrumbs, FormStep1, FormStep2, Header } from '../../components';
+import {
+  regiserBusinessFormStep2,
+  registerBusinessFormStep1,
+  registerBusinessFormStep3,
+} from '../schemas/registerBusinessFormSchema';
 import { defaultFormValues, FormInputs } from './data';
 
+const validationSchemas = [
+  registerBusinessFormStep1,
+  regiserBusinessFormStep2,
+  registerBusinessFormStep3,
+];
+
 function FormContainer() {
-  const [step, setStep] = useState(4);
+  const [step, setStep] = useState(2);
+
+  const resolver = yupResolver(validationSchemas[step - 1]);
+  const { register, control, handleSubmit, setValue } = useForm({
+    mode: 'onBlur',
+    defaultValues: defaultFormValues,
+    resolver,
+  });
 
   // holds the highest validated form step
   const maxStepRef = useRef<number>(1);
 
-  const { register, control, handleSubmit, setValue } = useForm({
-    mode: 'onBlur',
-    defaultValues: defaultFormValues,
-  });
-
   const onSubmit = (data: FormInputs) => {
+    console.log('submit');
+
     if (step < 4) {
       setStep((prev) => {
         const newStep = prev + 1;
