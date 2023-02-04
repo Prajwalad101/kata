@@ -12,46 +12,61 @@ const businessSchema = new mongoose.Schema<IBusiness>(
       type: String,
       required: [true, 'A business must contain a description'],
     },
-    price: {
+    city: { type: String, required: [true, 'City is required'] },
+    workingDays: [
+      {
+        day: { type: String, required: [true, 'Day field is required'] },
+        startTime: { type: String, required: [true, 'Start time is required'] },
+        endTime: { type: String },
+      },
+    ],
+    contactNumber: {
       type: String,
-      required: true,
-      enum: ['cheap', 'medium', 'high', 'exclusive'],
+      required: [true, 'Contact Number is required'],
     },
-    businessHours: {
-      open: {
+    email: { type: String, required: [true, 'Email is required'] },
+    directions: [
+      {
         type: String,
-        required: true,
+        required: [true, 'Directions is required'],
+        validate: {
+          validator: (v: string[]) => v.length > 0,
+          message: 'A business must contain at least 1 direction',
+        },
       },
-      close: {
-        type: String,
-        required: true,
-      },
-    },
-    location: {
-      type: {
-        type: String,
-        enum: ['Point'],
-        required: true,
-      },
-      coordinates: {
-        type: [Number],
-        required: true,
-      },
-      address: String,
-    },
-    category: {
+    ],
+    category: { type: String, required: [true, 'Category is required'] },
+    subcategory: {
       type: String,
-      required: [true, 'A business must contain a category'],
+      required: [true, 'subcategory is required'],
     },
-    subCategory: {
-      type: String,
-      required: [true, 'A business must contain a subCategory'],
-    },
+    location: [
+      {
+        type: {
+          type: String,
+          enum: ['Point'],
+          required: true,
+        },
+        coordinates: {
+          type: [Number],
+          required: true,
+        },
+        address: String,
+      },
+    ],
     features: {
       type: [String],
       validate: {
         validator: (v: string[]) => v.length > 0,
         message: 'A business must contain 1 or more features',
+      },
+    },
+    socials: {
+      type: [String],
+      required: [true, 'Socials is required'],
+      validate: {
+        validator: (v: string[]) => v.length > 0,
+        message: 'A business must contain at least 1 socials',
       },
     },
     images: {
