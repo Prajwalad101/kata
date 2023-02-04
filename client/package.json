@@ -18,8 +18,10 @@
     "react-dom": "18.1.0",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.37.0",
+    "react-lottie": "^1.2.3",
     "react-query": "^3.39.1",
     "react-select": "^5.7.0",
+    "react-spinner": "^0.2.7",
     "yup": "^0.32.11"
   },
   "devDependencies": {
