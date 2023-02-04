@@ -1,7 +1,7 @@
 import { Control, UseFormRegister, useFormState } from 'react-hook-form';
+import FormErrorMessage from 'src/components/FormErrorMessage/FormErrorMessage';
 import { FieldLayout } from '../../layouts';
 import { FormInputs } from '../../layouts/FormContainer';
-import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import MyInput from '../MyInput/MyInput';
 import MyLabel from '../MyLabel/MyLabel';
 
@@ -24,23 +24,13 @@ export default function ContactNumberInput({
       />
       <div>
         <MyInput
-          {...register('contactNumber', {
-            required: 'Contact number is required',
-            pattern: {
-              value: /^\d+$/,
-              message: 'Contact number is not valid',
-            },
-            maxLength: { value: 10, message: 'Phone number is not valid' },
-            minLength: { value: 10, message: 'Phone number is not valid' },
-          })}
+          {...register('contactNumber')}
+          placeholder="9800000000"
           error={errors.contactNumber}
           type="text"
           className="mb-2"
         />
-        <ErrorMessage
-          error={errors.contactNumber}
-          validate={['required', 'validate', 'minLength', 'maxLength']}
-        />
+        <FormErrorMessage error={errors.contactNumber} />
       </div>
     </FieldLayout>
   );

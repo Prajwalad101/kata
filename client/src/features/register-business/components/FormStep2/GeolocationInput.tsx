@@ -2,7 +2,7 @@ import { FieldLayout } from '@features/register-business/layouts';
 import { FormInputs } from '@features/register-business/layouts/FormContainer';
 import { getUserCoordinates } from '@features/register-business/utils/api';
 import { Control, Controller } from 'react-hook-form';
-import ErrorMessage from '../ErrorMessage/ErrorMessage';
+import FormErrorMessage from 'src/components/FormErrorMessage/FormErrorMessage';
 import MyLabel from '../MyLabel/MyLabel';
 
 interface GeoLocationInputProps {
@@ -22,7 +22,6 @@ export default function GeoLocationInput({ control }: GeoLocationInputProps) {
       <Controller
         control={control}
         name="coordinates"
-        rules={{ required: 'Location is a required field' }}
         render={({ field, fieldState }) => (
           <div>
             <button
@@ -32,7 +31,7 @@ export default function GeoLocationInput({ control }: GeoLocationInputProps) {
             >
               Set Location
             </button>
-            <ErrorMessage error={fieldState.error} validate={['required']} />
+            <FormErrorMessage className="mt-2" error={fieldState.error} />
           </div>
         )}
       />

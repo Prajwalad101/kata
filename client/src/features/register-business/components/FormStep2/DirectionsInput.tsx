@@ -7,7 +7,7 @@ import {
   useFormState,
 } from 'react-hook-form';
 import { FiTrash2 } from 'react-icons/fi';
-import ErrorMessage from '../ErrorMessage/ErrorMessage';
+import FormErrorMessage from 'src/components/FormErrorMessage/FormErrorMessage';
 import MyInput from '../MyInput/MyInput';
 import MyLabel from '../MyLabel/MyLabel';
 
@@ -24,9 +24,6 @@ export default function DirectionsInput({
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'directions',
-    rules: {
-      maxLength: { value: 3, message: 'Cannot add more than 3 directions' },
-    },
   });
 
   return (
@@ -41,11 +38,7 @@ export default function DirectionsInput({
             <div className="flex items-center gap-4">
               <MyInput
                 className="mb-2"
-                {...register(`directions.${index}.value`, {
-                  required: 'This field cannot be empty',
-                  minLength: { value: 10, message: 'Direction is too short' },
-                  maxLength: { value: 50, message: 'Direction is too long' },
-                })}
+                {...register(`directions.${index}.value`)}
                 error={errors.directions && errors.directions[index]?.value}
               />
               {index !== 0 && (
@@ -58,20 +51,15 @@ export default function DirectionsInput({
                 </div>
               )}
             </div>
-            <ErrorMessage
+            <FormErrorMessage
               error={errors.directions && errors.directions[index]?.value}
-              validate={['minLength', 'maxLength', 'required']}
             />
           </div>
         ))}
-        <ErrorMessage
-          error={errors.directions?.root}
-          validate={['maxLength']}
-          className="mb-2"
-        />
+        <FormErrorMessage className="mt-2" error={errors.directions} />
         <button
           type="button"
-          className="text-blue-700 hover:text-blue-500"
+          className="mt-2 text-blue-700 hover:text-blue-500"
           onClick={() => append({ value: '' })}
         >
           Add direction

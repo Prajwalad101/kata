@@ -10,13 +10,15 @@ export type FormInputs = {
     startTime: TimeString;
     endTime: TimeString;
   }[];
-  contactNumber: '';
-  email: '';
+  contactNumber: string;
+  email: string;
   coordinates: [number, number] | null;
   directions: { value: string }[];
   category: string;
   subcategory: string;
-  features: string[] | null;
+  features: string[];
+  socials: { value: string }[];
+  images: File[] | null;
 };
 
 export const defaultFormValues: FormInputs = {
@@ -67,7 +69,9 @@ export const defaultFormValues: FormInputs = {
   directions: [{ value: '' }],
   category: '',
   subcategory: '',
-  features: null,
+  features: [],
+  socials: [{ value: '' }],
+  images: null,
 };
 
 export const formContent = [
