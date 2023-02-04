@@ -112,7 +112,11 @@ function FormContainer({ mutation }: FormContainerProps) {
           >
             {step === 1 ? 'Cancel' : 'Back'}
           </SecondaryButton>
-          <PrimaryButton isLoading type="submit" className="w-32 py-2.5">
+          <PrimaryButton
+            isLoading={mutation.isLoading}
+            type="submit"
+            className="w-32 py-2.5"
+          >
             {step === 4 ? 'Submit' : 'Next'}
           </PrimaryButton>
         </div>
