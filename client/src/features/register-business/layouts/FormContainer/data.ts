@@ -10,8 +10,8 @@ export type FormInputs = {
     startTime: TimeString;
     endTime: TimeString;
   }[];
-  contactNumber: '';
-  email: '';
+  contactNumber: string;
+  email: string;
   coordinates: [number, number] | null;
   directions: { value: string }[];
   category: string;
@@ -22,10 +22,10 @@ export type FormInputs = {
 };
 
 export const defaultFormValues: FormInputs = {
-  name: '',
-  address: '',
-  description: '',
-  city: '',
+  name: 'businesseaeou',
+  address: 'aoeusnthaoeusn',
+  description: 'aoeusntahoeusnhaoeu',
+  city: 'Kathmandu',
   workingDays: [
     {
       day: 'Sunday',
@@ -63,14 +63,14 @@ export const defaultFormValues: FormInputs = {
       endTime: '5:00 PM',
     },
   ],
-  contactNumber: '',
-  email: '',
-  coordinates: null,
-  directions: [{ value: '' }],
-  category: '',
-  subcategory: '',
-  features: [],
-  socials: [{ value: '' }],
+  contactNumber: '9803939558',
+  email: 'prajwalad101@gmail.com',
+  coordinates: [100, 100],
+  directions: [{ value: 'direction1' }],
+  category: 'category1',
+  subcategory: 'aeounthaeu',
+  features: ['aeunthaeuoc'],
+  socials: [{ value: 'aeonu' }],
   images: null,
 };
 

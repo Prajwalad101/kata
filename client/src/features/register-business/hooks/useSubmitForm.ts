@@ -1,19 +1,29 @@
 import { IBusiness } from '@destiny/common/types';
-import axios from 'axios';
+import { AxiosInstance } from 'axios';
 import { useMutation } from 'react-query';
+import useCreateApi from 'src/api/useCreateApi';
 
 interface Data {
   data: IBusiness;
   status: string;
 }
 
+const submitBusinessForm = async (
+  newBusiness: FormData,
+  api: AxiosInstance
+): Promise<Data> => {
+  const result = await api.post('/business', newBusiness);
+  console.log(result.data);
+
+  return result.data;
+};
+
 function useSubmitForm() {
-  const mutation = useMutation((newBusiness: FormData) =>
-    axios.post<Data>(
-      `${process.env.NEXT_PUBLIC_HOST}/api/business`,
-      newBusiness
-    )
-  );
+  const api = useCreateApi();
+
+  const mutation = useMutation({
+    mutationFn: (newBusiness: FormData) => submitBusinessForm(newBusiness, api),
+  });
   return mutation;
 }
 

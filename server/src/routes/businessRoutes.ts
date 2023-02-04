@@ -6,7 +6,7 @@ const router = express.Router();
 
 const upload = uploadFiles({
   path: '../client/public/uploads/images/business/',
-  maxCount: 20,
+  maxCount: 30,
   fieldName: 'image',
 });
 

@@ -1,5 +1,7 @@
 import FormStep3 from '@features/register-business/components/FormStep3/FormStep3';
 import FormStep4 from '@features/register-business/components/FormStep4/FormStep4';
+import { useSubmitForm } from '@features/register-business/hooks';
+import { dataToFormData } from '@features/register-business/utils/objects/dataToFormData';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -11,7 +13,7 @@ import {
   registerBusinessFormStep3,
   registerBusinessFormStep4,
 } from '../schemas/registerBusinessFormSchema';
-import { defaultFormValues, FormInputs } from './data';
+import { defaultFormValues } from './data';
 
 const validationSchemas = [
   registerBusinessFormStep1,
@@ -29,19 +31,29 @@ function FormContainer() {
     resolver,
   });
 
+  const submitFormMutation = useSubmitForm();
+
   // holds the highest validated form step
   const maxStepRef = useRef<number>(1);
 
-  const onSubmit = (data: FormInputs) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onSubmit = (data: any) => {
     if (step < 4) {
       setStep((prev) => {
         const newStep = prev + 1;
         maxStepRef.current = Math.max(newStep, maxStepRef.current);
         return newStep;
       });
-      return;
+    } else {
+      data.directions = data.directions.map(
+        (direction: { value: string }) => direction.value
+      );
+      data.socials = data.socials.map(
+        (social: { value: string }) => social.value
+      );
+      const formData = dataToFormData(data);
+      submitFormMutation.mutate(formData);
     }
-    console.log('Data', data);
   };
 
   const handleBack = () => {
