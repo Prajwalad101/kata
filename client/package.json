@@ -21,7 +21,7 @@
     "react-lottie": "^1.2.3",
     "react-query": "^3.39.1",
     "react-select": "^5.7.0",
-    "react-spinner": "^0.2.7",
+    "react-spinners": "^0.13.8",
     "yup": "^0.32.11"
   },
   "devDependencies": {
