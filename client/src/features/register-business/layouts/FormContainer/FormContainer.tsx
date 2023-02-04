@@ -6,24 +6,25 @@ import { useForm } from 'react-hook-form';
 import { Divider, PrimaryButton, SecondaryButton } from 'src/components';
 import { Breadcrumbs, FormStep1, FormStep2, Header } from '../../components';
 import {
-  regiserBusinessFormStep2,
   registerBusinessFormStep1,
+  registerBusinessFormStep2,
   registerBusinessFormStep3,
+  registerBusinessFormStep4,
 } from '../schemas/registerBusinessFormSchema';
 import { defaultFormValues, FormInputs } from './data';
 
 const validationSchemas = [
   registerBusinessFormStep1,
-  regiserBusinessFormStep2,
+  registerBusinessFormStep2,
   registerBusinessFormStep3,
+  registerBusinessFormStep4,
 ];
 
 function FormContainer() {
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(4);
 
   const resolver = yupResolver(validationSchemas[step - 1]);
   const { register, control, handleSubmit, setValue } = useForm({
-    mode: 'onBlur',
     defaultValues: defaultFormValues,
     resolver,
   });

@@ -9,8 +9,10 @@ import {
   Control,
   UseFormRegister,
   UseFormSetValue,
+  useFormState,
   useWatch,
 } from 'react-hook-form';
+import FormErrorMessage from 'src/components/FormErrorMessage/FormErrorMessage';
 import { readFilesAsDataURL } from 'src/utils/browser';
 import { classNames } from 'src/utils/tailwind';
 
@@ -27,6 +29,8 @@ export default function UploadBusinessImage({
 }: UploadBusinessImageProps) {
   const [images, setImages] = useState<string[]>();
   const [error, setError] = useState<string>('');
+
+  const { errors } = useFormState({ control, name: 'images' });
 
   const imagesFiles = useWatch({ control, name: 'images' });
   if (imagesFiles) {
@@ -113,6 +117,7 @@ export default function UploadBusinessImage({
             </div>
           ))}
         </div>
+        <FormErrorMessage className="mt-2" error={errors.images} />
       </div>
     </FieldLayout>
   );

@@ -24,7 +24,7 @@ export const registerBusinessFormStep1 = yup.object({
   workingDays: yup.array().min(1, 'Please select at least 1 working day'),
 });
 
-export const regiserBusinessFormStep2 = yup.object({
+export const registerBusinessFormStep2 = yup.object({
   email: yup
     .string()
     .required('Please provide your business email')
@@ -60,4 +60,25 @@ export const registerBusinessFormStep3 = yup.object({
     .string()
     .required('Please provide the subcategory of your business'),
   features: yup.array().min(1, 'Please select at least one feature'),
+});
+
+export const registerBusinessFormStep4 = yup.object({
+  email: yup
+    .string()
+    .required('Please provide your business email')
+    .matches(emailReg, 'Please provide a valid email'),
+  socials: yup
+    .array()
+    .of(
+      yup.object().shape({
+        value: yup.string().required('Field cannot be empty'),
+      })
+    )
+    .max(3, 'Cannot add more than 4 socials')
+    .min(1, 'Please provide at least one social'),
+  images: yup
+    .array()
+    .min(3, 'Please upload at least three images')
+    .max(30, 'You cannot upload more than 30 images')
+    .typeError('Please upload images of your business'),
 });
