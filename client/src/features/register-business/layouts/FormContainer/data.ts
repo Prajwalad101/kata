@@ -22,10 +22,10 @@ export type FormInputs = {
 };
 
 export const defaultFormValues: FormInputs = {
-  name: 'businesseaeou',
-  address: 'aoeusnthaoeusn',
-  description: 'aoeusntahoeusnhaoeu',
-  city: 'Kathmandu',
+  name: '',
+  address: '',
+  description: '',
+  city: '',
   workingDays: [
     {
       day: 'Sunday',
@@ -63,14 +63,14 @@ export const defaultFormValues: FormInputs = {
       endTime: '5:00 PM',
     },
   ],
-  contactNumber: '9803939558',
-  email: 'prajwalad101@gmail.com',
-  coordinates: [100, 100],
-  directions: [{ value: 'direction1' }],
-  category: 'category1',
-  subcategory: 'aeounthaeu',
-  features: ['aeunthaeuoc'],
-  socials: [{ value: 'aeonu' }],
+  contactNumber: '',
+  email: '',
+  coordinates: null,
+  directions: [{ value: '' }],
+  category: '',
+  subcategory: '',
+  features: [],
+  socials: [{ value: '' }],
   images: null,
 };
 

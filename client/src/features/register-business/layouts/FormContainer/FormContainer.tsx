@@ -3,9 +3,11 @@ import FormStep4 from '@features/register-business/components/FormStep4/FormStep
 import { SubmitFormResponse } from '@features/register-business/hooks/useSubmitForm';
 import { dataToFormData } from '@features/register-business/utils/objects/dataToFormData';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { AxiosError } from 'axios';
 import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { UseMutationResult } from 'react-query';
+import { toast } from 'react-toastify';
 import { Divider, PrimaryButton, SecondaryButton } from 'src/components';
 import { Breadcrumbs, FormStep1, FormStep2, Header } from '../../components';
 import {
@@ -55,7 +57,13 @@ function FormContainer({ mutation }: FormContainerProps) {
         (social: { value: string }) => social.value
       );
       const formData = dataToFormData(data);
-      mutation.mutate(formData);
+      mutation.mutate(formData, {
+        onError: (error) => {
+          if (error instanceof AxiosError) {
+            toast.error('Error while registering business');
+          }
+        },
+      });
     }
   };
 
