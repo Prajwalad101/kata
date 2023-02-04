@@ -19,12 +19,10 @@ function uploadFiles({ path, maxCount, fieldName }: UploadFilesProps) {
       cb(null, path);
     },
     filename: (_req, file, cb) => {
-      const currentDate = new Date().toISOString().split('')[0];
+      const currentDate = new Date().toISOString();
       const fileExtension = file.originalname.split('.').pop();
       //! Suffix might not be 100% unique
-      const uniqueSuffix =
-        currentDate + '-' + Date.now() + Math.round(Math.random() * 1e9);
-
+      const uniqueSuffix = currentDate + '-' + Math.round(Math.random() * 1e9);
       cb(null, file.fieldname + '-' + uniqueSuffix + '.' + fileExtension);
     },
   });
