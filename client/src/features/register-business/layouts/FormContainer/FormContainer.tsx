@@ -1,10 +1,11 @@
 import FormStep3 from '@features/register-business/components/FormStep3/FormStep3';
 import FormStep4 from '@features/register-business/components/FormStep4/FormStep4';
-import { useSubmitForm } from '@features/register-business/hooks';
+import { SubmitFormResponse } from '@features/register-business/hooks/useSubmitForm';
 import { dataToFormData } from '@features/register-business/utils/objects/dataToFormData';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { UseMutationResult } from 'react-query';
 import { Divider, PrimaryButton, SecondaryButton } from 'src/components';
 import { Breadcrumbs, FormStep1, FormStep2, Header } from '../../components';
 import {
@@ -22,7 +23,11 @@ const validationSchemas = [
   registerBusinessFormStep4,
 ];
 
-function FormContainer() {
+interface FormContainerProps {
+  mutation: UseMutationResult<SubmitFormResponse, unknown, FormData, unknown>;
+}
+
+function FormContainer({ mutation }: FormContainerProps) {
   const [step, setStep] = useState(4);
 
   const resolver = yupResolver(validationSchemas[step - 1]);
@@ -30,8 +35,6 @@ function FormContainer() {
     defaultValues: defaultFormValues,
     resolver,
   });
-
-  const submitFormMutation = useSubmitForm();
 
   // holds the highest validated form step
   const maxStepRef = useRef<number>(1);
@@ -52,7 +55,7 @@ function FormContainer() {
         (social: { value: string }) => social.value
       );
       const formData = dataToFormData(data);
-      submitFormMutation.mutate(formData);
+      mutation.mutate(formData);
     }
   };
 
@@ -109,8 +112,8 @@ function FormContainer() {
           >
             {step === 1 ? 'Cancel' : 'Back'}
           </SecondaryButton>
-          <PrimaryButton type="submit" className="px-10 py-2">
-            Next
+          <PrimaryButton isLoading type="submit" className="w-32 py-2.5">
+            {step === 4 ? 'Submit' : 'Next'}
           </PrimaryButton>
         </div>
       </form>

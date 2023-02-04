@@ -3,7 +3,7 @@ import { AxiosInstance } from 'axios';
 import { useMutation } from 'react-query';
 import useCreateApi from 'src/api/useCreateApi';
 
-interface Data {
+export interface SubmitFormResponse {
   data: IBusiness;
   status: string;
 }
@@ -11,7 +11,7 @@ interface Data {
 const submitBusinessForm = async (
   newBusiness: FormData,
   api: AxiosInstance
-): Promise<Data> => {
+): Promise<SubmitFormResponse> => {
   const result = await api.post('/business', newBusiness);
   console.log(result.data);
 
