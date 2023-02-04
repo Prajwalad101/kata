@@ -59,4 +59,5 @@ export const registerBusinessFormStep3 = yup.object({
   subcategory: yup
     .string()
     .required('Please provide the subcategory of your business'),
+  features: yup.array().min(1, 'Please select at least one feature'),
 });

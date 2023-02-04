@@ -19,7 +19,7 @@ const validationSchemas = [
 ];
 
 function FormContainer() {
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(3);
 
   const resolver = yupResolver(validationSchemas[step - 1]);
   const { register, control, handleSubmit, setValue } = useForm({
@@ -32,8 +32,6 @@ function FormContainer() {
   const maxStepRef = useRef<number>(1);
 
   const onSubmit = (data: FormInputs) => {
-    console.log('submit');
-
     if (step < 4) {
       setStep((prev) => {
         const newStep = prev + 1;

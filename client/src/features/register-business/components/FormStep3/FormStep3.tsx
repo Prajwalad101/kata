@@ -3,6 +3,7 @@ import { FieldLayout } from '@features/register-business/layouts';
 import { FormInputs } from '@features/register-business/layouts/FormContainer';
 import { Control, Controller, useFormState, useWatch } from 'react-hook-form';
 import CustomSelect from 'src/components/CustomSelect/CustomSelect';
+import FormErrorMessage from 'src/components/FormErrorMessage/FormErrorMessage';
 import { classNames } from 'src/utils/tailwind';
 import capitalizeWord from 'src/utils/text/capitalizeWord';
 import MyLabel from '../MyLabel/MyLabel';
@@ -46,14 +47,17 @@ export default function FormStep3({ control, className = '' }: FormStep3Props) {
         <Controller
           control={control}
           name="category"
-          render={({ field: { value, onChange } }) => (
-            <CustomSelect
-              placeholder="Select a category"
-              options={categoryOptions}
-              value={categoryOptions.find((option) => option.value === value)}
-              onChange={(selected) => onChange(selected?.value)}
-              error={errors.category}
-            />
+          render={({ field: { value, onChange }, fieldState }) => (
+            <div>
+              <CustomSelect
+                placeholder="Select a category"
+                options={categoryOptions}
+                value={categoryOptions.find((option) => option.value === value)}
+                onChange={(selected) => onChange(selected?.value)}
+                error={errors.category}
+              />
+              <FormErrorMessage className="mt-2" error={fieldState.error} />
+            </div>
           )}
         />
       </FieldLayout>
@@ -63,16 +67,19 @@ export default function FormStep3({ control, className = '' }: FormStep3Props) {
         <Controller
           control={control}
           name="subcategory"
-          render={({ field: { value, onChange } }) => (
-            <CustomSelect
-              placeholder="Select a subcategory"
-              options={subcategoryOptions}
-              value={subcategoryOptions?.find(
-                (option) => option.value === value
-              )}
-              onChange={(selected) => onChange(selected?.value)}
-              error={errors.subcategory}
-            />
+          render={({ field: { value, onChange }, fieldState }) => (
+            <div>
+              <CustomSelect
+                placeholder="Select a subcategory"
+                options={subcategoryOptions}
+                value={subcategoryOptions?.find(
+                  (option) => option.value === value
+                )}
+                onChange={(selected) => onChange(selected?.value)}
+                error={errors.subcategory}
+              />
+              <FormErrorMessage className="mt-2" error={fieldState.error} />
+            </div>
           )}
         />
       </FieldLayout>
@@ -82,20 +89,23 @@ export default function FormStep3({ control, className = '' }: FormStep3Props) {
         <Controller
           control={control}
           name="features"
-          render={({ field: { value, onChange } }) => (
-            <CustomSelect
-              placeholder="Select features"
-              options={featureOptions}
-              value={featureOptions?.filter((option) =>
-                value?.includes(option.value)
-              )}
-              onChange={(selected) => {
-                const selectedValues = selected.map(({ value }) => value);
-                onChange(selectedValues);
-              }}
-              error={errors.features && errors.features[0]}
-              isMulti
-            />
+          render={({ field: { value, onChange }, fieldState }) => (
+            <div>
+              <CustomSelect
+                placeholder="Select features"
+                options={featureOptions}
+                value={featureOptions?.filter((option) =>
+                  value?.includes(option.value)
+                )}
+                onChange={(selected) => {
+                  const selectedValues = selected.map(({ value }) => value);
+                  onChange(selectedValues);
+                }}
+                error={errors.features && errors.features[0]}
+                isMulti
+              />
+              <FormErrorMessage className="mt-2" error={fieldState.error} />
+            </div>
           )}
         />
       </FieldLayout>
