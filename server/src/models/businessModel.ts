@@ -76,6 +76,7 @@ const businessSchema = new mongoose.Schema<IBusiness>(
         message: 'A business must contain 2 or more images',
       },
     },
+    verified: { type: Boolean, default: false },
     total_rating: { type: Number, default: 0 },
     rating_count: { type: Number, default: 0 },
     avgRating: { type: Number, default: 0 },
