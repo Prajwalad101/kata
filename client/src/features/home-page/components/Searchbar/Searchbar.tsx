@@ -9,8 +9,7 @@ function Searchbar() {
   const [searchText, setSearchText] = useState<string>();
   const [debouncedText, setDebouncedText] = useState<string>();
 
-  const { data, error, isLoading, isSuccess, isError } =
-    useSearchBusiness(debouncedText);
+  const { data, isError } = useSearchBusiness(debouncedText);
 
   const debounceCb = (text: string | undefined) => {
     setDebouncedText(text);
@@ -49,7 +48,7 @@ function Searchbar() {
       <div
         className={classNames(
           'absolute w-full rounded-md bg-white duration-500',
-          searchText ? 'top-[68px] z-0' : 'top-0 -z-10'
+          searchText ? 'top-[68px] z-10' : 'top-0 -z-10 h-full'
         )}
       >
         {isError && <p>Something went wrong. Please try again later</p>}
