@@ -1,7 +1,7 @@
 import { BusinessCard } from '@features/recommended-business/components';
 import { useBusinesses } from '@features/search-business/hooks';
 import Link from 'next/link';
-import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import AppLayout from 'src/components/layout/app/AppLayout';
 import Slider from 'src/components/slider/Slider';
 import { ButtonProps } from 'src/types/props';
@@ -53,26 +53,28 @@ function RecommendedSection({
   );
 }
 
-const RightButton = ({ onClick }: ButtonProps) => {
+const RightButton = ({ onClick, ...props }: ButtonProps) => {
   return (
     <button
+      {...props}
       onClick={onClick}
       type="button"
-      className="absolute right-[10px] top-[35%] z-10 translate-y-[-50%] rounded-full bg-gray-50 p-2 shadow-md transition-colors hover:bg-primaryred hover:text-xl hover:text-white md:right-[15px]"
+      className="absolute right-[10px] top-[38%] z-10 translate-y-[-50%] rounded-full bg-gray-50 p-1 shadow-md transition-colors hover:bg-primaryred hover:text-xl hover:text-white md:right-[15px]"
     >
-      <AiOutlineRight size={20} />
+      <MdKeyboardArrowRight size={25} />
     </button>
   );
 };
 
-const LeftButton = ({ onClick }: ButtonProps) => {
+const LeftButton = ({ onClick, ...props }: ButtonProps) => {
   return (
     <button
+      {...props}
       onClick={onClick}
       type="button"
-      className="absolute left-[10px] top-[35%] z-10 translate-y-[-50%] rounded-full bg-gray-50 p-2 shadow-md transition-colors hover:bg-primaryred hover:text-xl hover:text-white md:left-[15px]"
+      className="absolute left-[10px] top-[38%] z-10 translate-y-[-50%] rounded-full bg-gray-50 p-1 shadow-md transition-colors hover:bg-primaryred hover:text-xl hover:text-white md:left-[15px]"
     >
-      <AiOutlineLeft size={20} />
+      <MdKeyboardArrowLeft size={25} />
     </button>
   );
 };

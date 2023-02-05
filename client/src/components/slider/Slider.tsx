@@ -58,6 +58,7 @@ function Slider({
   ) : (
     <SliderLeftButton onClick={handleLeft} disabled={sliderIndex <= 1} />
   );
+
   const rightButton = RightButton ? (
     <RightButton
       onClick={handleRight}
