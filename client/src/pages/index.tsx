@@ -1,4 +1,8 @@
-import { MainHeading, Searchbar } from '@features/home-page/components';
+import {
+  CategoriesDropdown,
+  MainHeading,
+  Searchbar,
+} from '@features/home-page/components';
 import { RecommendedSection } from '@features/recommended-business/layouts';
 import { QueryProvider } from 'src/components/context-provider';
 import { NavigationProvider } from 'src/components/context-provider/NavigationProvider/NavigationProvider';
@@ -17,7 +21,7 @@ const Home: NextPageWithLayout = () => {
             Find and support local businesses
           </MainHeading>
           <Searchbar />
-          {/* <CategoriesDropdown /> */}
+          <CategoriesDropdown />
         </section>
       </div>
       <div>
