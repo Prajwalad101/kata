@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { BsChevronDown } from 'react-icons/bs';
 import { ISubcategoryDropdown } from 'src/types/business';
 
 interface CategoryDropdownProps {
@@ -37,8 +38,9 @@ export default function CategoryDropdown({
   return (
     <div className="relative h-max capitalize">
       {/* Dropdown heading */}
-      <div className="peer cursor-pointer hover:opacity-70">
+      <div className="peer flex cursor-pointer items-center gap-1 text-white hover:opacity-70">
         <span className="inline-block text-white">{name}</span>
+        <BsChevronDown />
       </div>
 
       <div className="peer h-2" />
