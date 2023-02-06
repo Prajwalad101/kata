@@ -8,7 +8,7 @@ import { fetchBusinesses } from '@features/search-business/hooks/useBusinesses';
 import { SearchBusinessSection } from '@features/search-business/layouts';
 import { FilterFields } from '@features/search-business/types';
 import { GetServerSideProps } from 'next';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { dehydrate, QueryClient } from 'react-query';
 import { NavigationProvider } from 'src/components/context-provider';
 import { AppLayout } from 'src/components/layout';
@@ -17,7 +17,6 @@ import { NextPageWithLayout } from 'src/pages/_app';
 import { isString } from 'src/utils/text';
 
 const SearchBusiness: NextPageWithLayout = () => {
-  const [_isEnabled, setIsEnabled] = useState(true);
   const [selectedSort, setSelectedSort] = useState(sortItemData[0]);
   const [selectedFilters, setSelectedFilters] = useState<FilterFields>({
     features: [],
@@ -30,11 +29,6 @@ const SearchBusiness: NextPageWithLayout = () => {
     filters: selectedFilters,
   });
 
-  // when fetch settles, change the filter state back to false
-  useEffect(() => {
-    setIsEnabled(false);
-  }, [businessResult]);
-
   const filterComponent = (
     <SearchFilter
       //! Temporary Fix: This can lead to run time error
@@ -42,14 +36,11 @@ const SearchBusiness: NextPageWithLayout = () => {
       filterBy={searchFilterOptions.resturant!}
       selectedFilters={selectedFilters}
       setSelectedFilters={setSelectedFilters}
-      setIsEnabled={setIsEnabled}
     />
   );
 
   const sortComponent = (
-    <SortItems
-      {...{ sortItemData, selectedSort, setSelectedSort, setIsEnabled }}
-    />
+    <SortItems {...{ sortItemData, selectedSort, setSelectedSort }} />
   );
 
   return (

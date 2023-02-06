@@ -4,7 +4,6 @@ import {
   Searchbar,
 } from '@features/home-page/components';
 import { RecommendedSection } from '@features/recommended-business/layouts';
-import { QueryProvider } from 'src/components/context-provider';
 import { NavigationProvider } from 'src/components/context-provider/NavigationProvider/NavigationProvider';
 import { AppLayout } from 'src/components/layout';
 import { Navbar } from 'src/components/navigation';
@@ -42,15 +41,13 @@ const Home: NextPageWithLayout = () => {
 };
 
 // since navbar should render with background image, it is present inside the hero section
-Home.getLayout = (page, pageProps) => (
-  <QueryProvider pageProps={pageProps}>
-    <AppLayout size="sm">
-      <NavigationProvider>
-        <Navbar theme="dark" />
-      </NavigationProvider>
-      {page}
-    </AppLayout>
-  </QueryProvider>
+Home.getLayout = (page) => (
+  <AppLayout size="sm">
+    <NavigationProvider>
+      <Navbar theme="dark" />
+    </NavigationProvider>
+    {page}
+  </AppLayout>
 );
 
 export default Home;
