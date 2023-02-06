@@ -8,6 +8,15 @@ import catchAsync from '../utils/catchAsync';
 const getAllBusinesses = catchAsync(
   async (req: Request, res: Response, _next: NextFunction) => {
     const businessQuery = Business.find();
+    const defaultFields = [
+      'name',
+      'location',
+      'images',
+      'total_rating',
+      'rating_count',
+      'avgRating',
+    ];
+    req.query.fields = defaultFields.join(',');
 
     const customFilters = ['features']; // these filters are excluded on APIFeatures
 

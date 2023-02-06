@@ -16,9 +16,6 @@ import { Navbar, Sidebar } from 'src/components/navigation';
 import { NextPageWithLayout } from 'src/pages/_app';
 import { isString } from 'src/utils/text';
 
-// fields to not query for when fetching businesses
-const businessFields = ['-description', '-features', '-total_rating'];
-
 const SearchBusiness: NextPageWithLayout = () => {
   const [_isEnabled, setIsEnabled] = useState(true);
   const [selectedSort, setSelectedSort] = useState(sortItemData[0]);
@@ -31,7 +28,6 @@ const SearchBusiness: NextPageWithLayout = () => {
   const businessResult = useBusinesses({
     sort,
     filters: selectedFilters,
-    fields: businessFields,
   });
 
   // when fetch settles, change the filter state back to false
@@ -68,16 +64,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const sort = sortItemData[0].sortField;
   const subcategory = context.query.name;
-  const fields = businessFields.join(',');
 
   const params = {
     sort,
-    fields,
     ...(isString(subcategory) && { subcategory }),
   };
 
   await queryClient.prefetchQuery(
-    ['business', sort, subcategory, businessFields],
+    ['business', sort, subcategory],
     () => fetchBusinesses(params),
     { staleTime: 1000 * 10 }
   );
