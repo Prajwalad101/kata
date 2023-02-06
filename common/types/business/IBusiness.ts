@@ -5,7 +5,7 @@ export interface IBusiness {
   name: string;
   description: string;
   city: string;
-  workingDays: { day: string; startTime: string; endTime: string };
+  workingDays: { day: string; startTime: string; endTime: string }[];
   contactNumber: string;
   email: string;
   directions: string[];
