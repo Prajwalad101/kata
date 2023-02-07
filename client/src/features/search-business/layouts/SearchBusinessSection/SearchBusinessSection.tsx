@@ -38,8 +38,9 @@ function SearchBusinessSection({
           </div>
         </div>
         {/* List of business cards */}
-        {isLoading && <BusinessListSkeleton />}
-        {isSuccess && <MemoBusinessList businessData={businessResult.data} />}
+        <BusinessListSkeleton />
+        {/* {isLoading && <BusinessListSkeleton />}
+        {isSuccess && <MemoBusinessList businessData={businessResult.data} />} */}
       </div>
     </div>
   );
