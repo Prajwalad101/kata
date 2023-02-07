@@ -1,8 +1,8 @@
 import { IBusiness } from '@destiny/common/types';
+import { isString } from '@destiny/common/utils';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
-import { isString } from 'src/utils/text';
 
 export type SearchBusinessResponse = Pick<
   IBusiness,
@@ -31,12 +31,12 @@ export const fetchBusinesses = async (
 
 type UseBusinessesProps = {
   sort: string; // sort items based on this field(eg:-createdAt)
-  filters: string[]; // filter items based on this property
+  features: string[]; // filter items based on this property
   enabled?: boolean; // only fetch if true,
 };
 
 function useBusinesses(props: UseBusinessesProps) {
-  const { sort, filters, enabled } = props;
+  const { sort, features, enabled } = props;
   const {
     query: { subcategory },
   } = useRouter();
@@ -44,13 +44,20 @@ function useBusinesses(props: UseBusinessesProps) {
   const params = {
     sort,
     ...(isString(subcategory) && { subcategory }),
+    ...(features.length !== 0 && {
+      features: features.join(','),
+    }),
   };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const featuresQueryKey = {} as any;
+  features.forEach((feature) => (featuresQueryKey[feature] = true));
 
   // if no enabled variable passed, enable automatic refetching
   const isEnabled = enabled === undefined ? true : enabled;
 
   const query = useQuery(
-    ['business', sort, filters],
+    ['business', sort, featuresQueryKey],
     () => fetchBusinesses(params),
     {
       enabled: isEnabled, // only run when the filter button is clicked
