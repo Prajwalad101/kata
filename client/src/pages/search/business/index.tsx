@@ -1,12 +1,8 @@
 import { SearchFilter, SortItems } from '@features/search-business/components';
-import {
-  searchFilterOptions,
-  sortItemData,
-} from '@features/search-business/data';
+import { sortItemData } from '@features/search-business/data';
 import { useBusinesses } from '@features/search-business/hooks';
 import { fetchBusinesses } from '@features/search-business/hooks/useBusinesses';
 import { SearchBusinessSection } from '@features/search-business/layouts';
-import { FilterFields } from '@features/search-business/types';
 import { GetServerSideProps } from 'next';
 import { useState } from 'react';
 import { dehydrate, QueryClient } from 'react-query';
@@ -18,24 +14,19 @@ import { isString } from 'src/utils/text';
 
 const SearchBusiness: NextPageWithLayout = () => {
   const [selectedSort, setSelectedSort] = useState(sortItemData[0]);
-  const [selectedFilters, setSelectedFilters] = useState<FilterFields>({
-    features: [],
-  });
+  const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
 
   const sort = selectedSort.sortField;
 
   const businessResult = useBusinesses({
     sort,
-    filters: selectedFilters,
+    filters: selectedFeatures,
   });
 
   const filterComponent = (
     <SearchFilter
-      //! Temporary Fix: This can lead to run time error
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      filterBy={searchFilterOptions.resturant!}
-      selectedFilters={selectedFilters}
-      setSelectedFilters={setSelectedFilters}
+      selectedFeatures={selectedFeatures}
+      setSelectedFeatures={setSelectedFeatures}
     />
   );
 
