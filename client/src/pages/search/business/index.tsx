@@ -1,3 +1,4 @@
+import { isString } from '@destiny/common/utils';
 import { SearchFilter, SortItems } from '@features/search-business/components';
 import { sortItemData } from '@features/search-business/data';
 import { useBusinesses } from '@features/search-business/hooks';
@@ -10,7 +11,6 @@ import { NavigationProvider } from 'src/components/context-provider';
 import { AppLayout } from 'src/components/layout';
 import { Navbar, Sidebar } from 'src/components/navigation';
 import { NextPageWithLayout } from 'src/pages/_app';
-import { isString } from 'src/utils/text';
 
 const SearchBusiness: NextPageWithLayout = () => {
   const [selectedSort, setSelectedSort] = useState(sortItemData[0]);
@@ -20,7 +20,7 @@ const SearchBusiness: NextPageWithLayout = () => {
 
   const businessResult = useBusinesses({
     sort,
-    filters: selectedFeatures,
+    features: selectedFeatures,
   });
 
   const filterComponent = (
