@@ -9,12 +9,10 @@ class APIFeatures {
   }
 
   // takes in custom fields to exclude
-  filter(excludeFields: string[] = []) {
+  filter() {
     // copy queryString
     const queryObj = { ...this.queryString };
-    const excludedFields = ['page', 'sort', 'limit', 'fields'].concat(
-      excludeFields
-    );
+    const excludedFields = ['page', 'sort', 'limit', 'fields', 'features'];
     excludedFields.forEach((el) => delete queryObj[el]);
 
     let queryStr = JSON.stringify(queryObj);
