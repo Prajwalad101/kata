@@ -1,10 +1,10 @@
-import { IBusiness } from '@destiny/common/types';
+import { SearchBusinessResponse } from '@features/search-business/hooks/useBusinesses';
 import Image from 'next/image';
 import RatingIcons from 'src/components/icons/ratings/RatingIcons';
 import { getPublicFilePath } from 'src/utils/text';
 
 export interface BusinessCardProps {
-  business: IBusiness;
+  business: SearchBusinessResponse[number];
 }
 
 function BusinessCard({ business }: BusinessCardProps) {

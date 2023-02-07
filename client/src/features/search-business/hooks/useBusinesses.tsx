@@ -35,35 +35,36 @@ type UseBusinessesProps = {
   enabled?: boolean; // only fetch if true,
 };
 
-function useBusinesses(props: UseBusinessesProps) {
-  const { sort, features, enabled } = props;
+function useBusinesses(props?: UseBusinessesProps) {
   const {
     query: { subcategory },
   } = useRouter();
 
-  const params = {
-    sort,
-    ...(isString(subcategory) && { subcategory }),
-    ...(features.length !== 0 && {
-      features: features.join(','),
-    }),
-  };
+  let params = {};
+  if (props) {
+    params = {
+      ...(props.sort && { sort: props.sort }),
+      ...(isString(subcategory) && { subcategory }),
+      ...(props.features &&
+        props.features.length !== 0 && {
+          features: props.features.join(','),
+        }),
+    };
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const featuresQueryKey = {} as any;
-  features.forEach((feature) => (featuresQueryKey[feature] = true));
+  // const featuresQueryKey = {} as any;
+  // if (props?.features && props.features.length !== 0) {
+  //   props.features.forEach((feature) => (featuresQueryKey[feature] = true));
+  // }
 
   // if no enabled variable passed, enable automatic refetching
-  const isEnabled = enabled === undefined ? true : enabled;
+  const isEnabled = props?.enabled === undefined ? true : props.enabled;
 
-  const query = useQuery(
-    ['business', sort, featuresQueryKey],
-    () => fetchBusinesses(params),
-    {
-      enabled: isEnabled, // only run when the filter button is clicked
-      staleTime: 1000 * 10,
-    }
-  );
+  const query = useQuery(['business', params], () => fetchBusinesses(params), {
+    enabled: isEnabled, // only run when the filter button is clicked
+    staleTime: 1000 * 10,
+  });
 
   return query;
 }

@@ -18,7 +18,7 @@ function RecommendedSection({
   groupBy: _groupBy,
 }: IRecommendedSection) {
   const businessResult = useBusinesses();
-  const businesses = businessResult.data?.data;
+  const businesses = businessResult.data;
 
   if (!businesses || businesses?.length <= 0) {
     return <></>;

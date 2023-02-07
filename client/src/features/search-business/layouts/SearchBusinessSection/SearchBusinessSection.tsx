@@ -1,9 +1,9 @@
 import { BusinessListSkeleton } from '@features/search-business/components';
-import { BusinessList } from '@features/search-business/layouts';
+import { SearchBusinessResponse } from '@features/search-business/hooks/useBusinesses';
 import { useRouter } from 'next/router';
 import { memo } from 'react';
 import { UseQueryResult } from 'react-query';
-import { SearchBusinessResponse } from '../../hooks/useBusinesses';
+import BusinessList from '../BusinessList/BusinessList';
 
 interface SearchBusinessSectionProps {
   filterComponent: JSX.Element;
