@@ -1,3 +1,4 @@
+import { isString } from '@destiny/common/utils';
 import { NextFunction, Request, Response } from 'express';
 import Business from '../models/businessModel';
 import { APIFeatures } from '../utils/apiFeatures';
@@ -8,12 +9,20 @@ import catchAsync from '../utils/catchAsync';
 const getAllBusinesses = catchAsync(
   async (req: Request, res: Response, _next: NextFunction) => {
     const businessQuery = Business.find();
-
-    const customFilters = ['features']; // these filters are excluded on APIFeatures
+    const defaultFields = [
+      'name',
+      'location',
+      'images',
+      'total_rating',
+      'rating_count',
+      'avgRating',
+    ];
+    req.query.fields = defaultFields.join(',');
 
     // filter documents by "features" field
-    const features = req.query.features as string | undefined;
-    filterFeatures(businessQuery, features);
+    if (isString(req.query.features)) {
+      filterFeatures(businessQuery, req.query.features);
+    }
 
     businessQuery.populate({
       path: 'reviews',
@@ -23,7 +32,7 @@ const getAllBusinesses = catchAsync(
     });
 
     const apiFeatures = new APIFeatures(businessQuery, req.query)
-      .filter(customFilters)
+      .filter()
       .sort()
       .limitFields()
       .paginate();

@@ -2,7 +2,6 @@ import express, { NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
 import passport from 'passport';
 import globalErrorHandler from './controllers/errorController';
-import { jwtAuth } from './middlewares/jwtAuthMiddleware';
 import authRouter from './routes/authRoutes';
 import businessRouter from './routes/businessRoutes';
 import reviewRouter from './routes/reviewRoutes';
@@ -17,8 +16,8 @@ app.use(morgan('dev'));
 app.use(passport.initialize());
 
 // Routes
-app.use('/api/business', jwtAuth(), businessRouter);
-app.use('/api/reviews', jwtAuth(), reviewRouter);
+app.use('/api/business', businessRouter);
+app.use('/api/reviews', reviewRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
 

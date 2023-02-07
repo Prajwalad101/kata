@@ -58,6 +58,7 @@ function Slider({
   ) : (
     <SliderLeftButton onClick={handleLeft} disabled={sliderIndex <= 1} />
   );
+
   const rightButton = RightButton ? (
     <RightButton
       onClick={handleRight}
@@ -104,7 +105,7 @@ const SliderLeftButton = ({ onClick, disabled }: ButtonProps) => {
       )}
       disabled={disabled}
     >
-      <BiChevronLeft size={30} />
+      <BiChevronLeft size={25} />
     </button>
   );
 };
@@ -120,7 +121,7 @@ const SilderRightButton = ({ onClick, disabled }: ButtonProps) => {
       )}
       disabled={disabled}
     >
-      <BiChevronRight size={30} />
+      <BiChevronRight size={25} />
     </button>
   );
 };

@@ -4,7 +4,7 @@
  * @param features field passed into the query params
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const filterFeatures = (query: any, features: string | undefined) => {
+export const filterFeatures = (query: any, features: string) => {
   let featuresArr: string[] = [];
 
   // if features is not passed, do not query by that field
