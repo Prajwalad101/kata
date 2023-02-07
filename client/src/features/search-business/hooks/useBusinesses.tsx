@@ -1,11 +1,24 @@
-import { FilterFields, IQueryData } from '@features/search-business/types';
+import { IBusiness } from '@destiny/common/types';
+import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 import { isString } from 'src/utils/text';
 
-import axios from 'axios';
+export type SearchBusinessResponse = Pick<
+  IBusiness,
+  | '_id'
+  | 'avgRating'
+  | 'images'
+  | 'location'
+  | 'name'
+  | 'rating_count'
+  | 'reviews'
+  | 'total_rating'
+>[];
 
-export const fetchBusinesses = async (params: object) => {
+export const fetchBusinesses = async (
+  params: object
+): Promise<SearchBusinessResponse> => {
   const baseURL = process.env.NEXT_PUBLIC_HOST;
 
   const response = await axios.get(`${baseURL}/api/business`, {
@@ -13,33 +26,31 @@ export const fetchBusinesses = async (params: object) => {
   });
 
   console.log(response.data);
-  return response.data;
+  return response.data.data;
 };
 
 type UseBusinessesProps = {
   sort: string; // sort items based on this field(eg:-createdAt)
-  filters: FilterFields; // filter items based on this property
-  fields: string[]; // fields to select when fetching items
+  filters: string[]; // filter items based on this property
   enabled?: boolean; // only fetch if true,
 };
 
-function useBusinesses(props?: UseBusinessesProps) {
-  const { sort, filters, fields, enabled } = props || {};
+function useBusinesses(props: UseBusinessesProps) {
+  const { sort, filters, enabled } = props;
   const {
     query: { subcategory },
   } = useRouter();
 
   const params = {
     sort,
-    fields: fields?.join(','),
     ...(isString(subcategory) && { subcategory }),
   };
 
   // if no enabled variable passed, enable automatic refetching
   const isEnabled = enabled === undefined ? true : enabled;
 
-  const query = useQuery<IQueryData, Error>(
-    ['business', sort, filters, fields],
+  const query = useQuery(
+    ['business', sort, filters],
     () => fetchBusinesses(params),
     {
       enabled: isEnabled, // only run when the filter button is clicked
