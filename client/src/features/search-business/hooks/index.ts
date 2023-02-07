@@ -1,3 +1,4 @@
-import useBusinesses from './useBusinesses';
+import useFetchBusinesses from './useFetchBusinesses';
+import useFetchRecommendBusiness from './useFetchRecommendBusiness';
 
-export { useBusinesses };
+export { useFetchRecommendBusiness, useFetchBusinesses };

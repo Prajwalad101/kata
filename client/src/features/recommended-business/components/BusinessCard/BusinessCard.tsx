@@ -1,4 +1,4 @@
-import { SearchBusinessResponse } from '@features/search-business/hooks/useBusinesses';
+import { SearchBusinessResponse } from '@features/search-business/hooks/useFetchRecommendBusiness';
 import Image from 'next/image';
 import RatingIcons from 'src/components/icons/ratings/RatingIcons';
 import { getPublicFilePath } from 'src/utils/text';

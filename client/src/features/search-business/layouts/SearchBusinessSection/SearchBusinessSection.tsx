@@ -1,5 +1,5 @@
 import { BusinessListSkeleton } from '@features/search-business/components';
-import { SearchBusinessResponse } from '@features/search-business/hooks/useBusinesses';
+import { SearchBusinessResponse } from '@features/search-business/hooks/useFetchRecommendBusiness';
 import { useRouter } from 'next/router';
 import { memo } from 'react';
 import { UseQueryResult } from 'react-query';
@@ -38,9 +38,8 @@ function SearchBusinessSection({
           </div>
         </div>
         {/* List of business cards */}
-        <BusinessListSkeleton />
-        {/* {isLoading && <BusinessListSkeleton />}
-        {isSuccess && <MemoBusinessList businessData={businessResult.data} />} */}
+        {isLoading && <BusinessListSkeleton />}
+        {isSuccess && <MemoBusinessList businessData={businessResult.data} />}
       </div>
     </div>
   );

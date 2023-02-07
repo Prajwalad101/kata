@@ -16,7 +16,7 @@ export type SearchBusinessResponse = Pick<
   | 'total_rating'
 >[];
 
-export const fetchBusinesses = async (
+export const fetchRecommendBusiness = async (
   params: object
 ): Promise<SearchBusinessResponse> => {
   const baseURL = process.env.NEXT_PUBLIC_HOST;
@@ -35,7 +35,7 @@ type UseBusinessesProps = {
   enabled?: boolean; // only fetch if true,
 };
 
-function useBusinesses(props?: UseBusinessesProps) {
+function useFetchRecommendBusiness(props?: UseBusinessesProps) {
   const {
     query: { subcategory },
   } = useRouter();
@@ -52,21 +52,19 @@ function useBusinesses(props?: UseBusinessesProps) {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // const featuresQueryKey = {} as any;
-  // if (props?.features && props.features.length !== 0) {
-  //   props.features.forEach((feature) => (featuresQueryKey[feature] = true));
-  // }
-
   // if no enabled variable passed, enable automatic refetching
   const isEnabled = props?.enabled === undefined ? true : props.enabled;
 
-  const query = useQuery(['business', params], () => fetchBusinesses(params), {
-    enabled: isEnabled, // only run when the filter button is clicked
-    staleTime: 1000 * 10,
-  });
+  const query = useQuery(
+    ['business', params],
+    () => fetchRecommendBusiness(params),
+    {
+      enabled: isEnabled, // only run when the filter button is clicked
+      staleTime: 1000 * 10,
+    }
+  );
 
   return query;
 }
 
-export default useBusinesses;
+export default useFetchRecommendBusiness;

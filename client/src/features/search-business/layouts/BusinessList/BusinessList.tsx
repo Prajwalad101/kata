@@ -1,5 +1,5 @@
 import { BusinessCard } from '@features/search-business/components';
-import { SearchBusinessResponse } from '@features/search-business/hooks/useBusinesses';
+import { SearchBusinessResponse } from '@features/search-business/hooks/useFetchRecommendBusiness';
 
 function BusinessList({
   businessData,

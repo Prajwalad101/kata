@@ -1,12 +1,14 @@
 import { isString } from '@destiny/common/utils';
 import { SearchFilter, SortItems } from '@features/search-business/components';
 import { sortItemData } from '@features/search-business/data';
-import { useBusinesses } from '@features/search-business/hooks';
-import { fetchBusinesses } from '@features/search-business/hooks/useBusinesses';
+import { useFetchBusinesses } from '@features/search-business/hooks';
+import { fetchBusinesses } from '@features/search-business/hooks/useFetchBusinesses';
 import { SearchBusinessSection } from '@features/search-business/layouts';
 import { GetServerSideProps } from 'next';
 import { useState } from 'react';
+import { useInView } from 'react-intersection-observer';
 import { dehydrate, QueryClient } from 'react-query';
+import { PrimaryButton } from 'src/components';
 import { NavigationProvider } from 'src/components/context-provider';
 import { AppLayout } from 'src/components/layout';
 import { Navbar, Sidebar } from 'src/components/navigation';
@@ -15,10 +17,13 @@ import { NextPageWithLayout } from 'src/pages/_app';
 const SearchBusiness: NextPageWithLayout = () => {
   const [selectedSort, setSelectedSort] = useState(sortItemData[0]);
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
+  const { ref, inView } = useInView();
 
   const sort = selectedSort.sortField;
 
-  const businessResult = useBusinesses({
+  console.log(inView);
+
+  const businessResult = useFetchBusinesses({
     sort,
     features: selectedFeatures,
   });
@@ -35,9 +40,16 @@ const SearchBusiness: NextPageWithLayout = () => {
   );
 
   return (
-    <SearchBusinessSection
-      {...{ filterComponent, sortComponent, businessResult }}
-    />
+    <>
+      <SearchBusinessSection
+        {...{ filterComponent, sortComponent, businessResult }}
+      />
+      <div className="mb-10 mt-5 flex justify-end">
+        <PrimaryButton ref={ref} isLoading className="py-2 px-10">
+          Loading More ...
+        </PrimaryButton>
+      </div>
+    </>
   );
 };
 
