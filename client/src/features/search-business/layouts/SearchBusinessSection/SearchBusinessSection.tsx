@@ -1,8 +1,8 @@
+import { BusinessListSkeleton } from '@features/search-business/components';
 import { BusinessList } from '@features/search-business/layouts';
 import { useRouter } from 'next/router';
 import { memo } from 'react';
 import { UseQueryResult } from 'react-query';
-import ConditionalRender from 'src/components/conditional-render/ConditionalRender';
 import { SearchBusinessResponse } from '../../hooks/useBusinesses';
 
 interface SearchBusinessSectionProps {
@@ -19,19 +19,7 @@ function SearchBusinessSection({
   const router = useRouter();
   const { name, city } = router.query;
 
-  // const [businessData, setBusinessData] = useState(businessResult.data);
-
-  // set data after a successful query
-  // useIsomorphicLayoutEffect(() => {
-  //   if (businessResult.isSuccess) {
-  //     setBusinessData(businessResult.data);
-  //   }
-  // }, [businessResult]);
-
-  // only render layout if businessData exists
-  // if (businessData === undefined) return null;
-
-  const { isLoading, isError } = businessResult;
+  const { isLoading, isSuccess } = businessResult;
 
   return (
     <div className="mt-5 flex gap-10 md:mt-10">
@@ -50,9 +38,8 @@ function SearchBusinessSection({
           </div>
         </div>
         {/* List of business cards */}
-        <ConditionalRender isLoading={isLoading} isError={isError}>
-          <MemoBusinessList businessData={businessResult.data} />
-        </ConditionalRender>
+        {isLoading && <BusinessListSkeleton />}
+        {isSuccess && <MemoBusinessList businessData={businessResult.data} />}
       </div>
     </div>
   );
