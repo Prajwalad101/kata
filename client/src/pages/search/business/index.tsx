@@ -12,10 +12,10 @@ import {
   SearchBusinessSection,
 } from '@features/search-business/layouts';
 import { GetServerSideProps } from 'next';
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { dehydrate, QueryClient } from 'react-query';
-import { PrimaryButton } from 'src/components';
+import { PropagateLoader } from 'react-spinners';
 import { NavigationProvider } from 'src/components/context-provider';
 import { AppLayout } from 'src/components/layout';
 import { Navbar, Sidebar } from 'src/components/navigation';
@@ -40,11 +40,11 @@ const SearchBusiness: NextPageWithLayout = () => {
     features: selectedFeatures,
   });
 
-  // useEffect(() => {
-  //   if (inView) {
-  //     fetchNextPage();
-  //   }
-  // });
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  });
 
   const filterComponent = (
     <SearchFilter
@@ -69,22 +69,21 @@ const SearchBusiness: NextPageWithLayout = () => {
             data.pages.map(({ page, data }) => (
               <MemoBusinessList key={page} businessData={data} />
             ))}
+
+          <div ref={ref} className="mb-10 mt-8 flex justify-center">
+            {isFetchingNextPage && (
+              <PropagateLoader speedMultiplier={0.8} color="#F55A5A" />
+            )}
+            {!hasNextPage && (
+              <p className="text-lg text-gray-700">
+                You&apos;ve reached{' '}
+                <span className="font-medium text-black">THE END</span>.
+                There&apos;s nothing more to show.
+              </p>
+            )}
+          </div>
         </>
       </SearchBusinessSection>
-      <div className="mb-10 mt-5 flex justify-end">
-        <PrimaryButton
-          ref={ref}
-          disabled={!hasNextPage || isFetchingNextPage}
-          className="py-2 px-10"
-          onClick={() => fetchNextPage()}
-        >
-          {isFetchingNextPage
-            ? 'Loading more ...'
-            : hasNextPage
-            ? 'Load Newer'
-            : 'Nothing more to load'}
-        </PrimaryButton>
-      </div>
     </>
   );
 };
