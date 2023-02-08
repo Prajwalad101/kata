@@ -37,6 +37,9 @@ class APIFeatures {
       this.query = this.query.sort('-createdAt');
     }
 
+    // if sort fields are the same, this ensures that the sort order never changes
+    this.query.sort('-_id');
+
     return this;
   }
 
