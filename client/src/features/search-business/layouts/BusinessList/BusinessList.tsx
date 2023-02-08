@@ -1,10 +1,10 @@
 import { BusinessCard } from '@features/search-business/components';
-import { SearchBusinessResponse } from '@features/search-business/hooks/useFetchRecommendBusiness';
+import { BusinessPage } from '@features/search-business/hooks/useFetchRecommendBusiness';
 
 function BusinessList({
   businessData,
 }: {
-  businessData: SearchBusinessResponse | undefined;
+  businessData: BusinessPage | undefined;
 }) {
   if (!businessData) return <></>;
 

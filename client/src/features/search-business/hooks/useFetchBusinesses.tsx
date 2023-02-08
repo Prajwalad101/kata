@@ -1,8 +1,15 @@
 import { isString } from '@destiny/common/utils';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { useQuery } from 'react-query';
-import { SearchBusinessResponse } from './useFetchRecommendBusiness';
+import { useInfiniteQuery } from 'react-query';
+import { BusinessPage } from './useFetchRecommendBusiness';
+
+interface SearchBusinessResponse {
+  status: string;
+  documentCount: number;
+  page: number;
+  data: BusinessPage;
+}
 
 export const fetchBusinesses = async (
   params: object
@@ -13,7 +20,7 @@ export const fetchBusinesses = async (
     params,
   });
 
-  return response.data.data;
+  return response.data;
 };
 
 type UseFetchBusinessesProps = {
@@ -42,10 +49,18 @@ function useFetchBusinesses(props?: UseFetchBusinessesProps) {
   // if no enabled variable passed, enable automatic refetching
   const isEnabled = props?.enabled === undefined ? true : props.enabled;
 
-  const query = useQuery(['business', params], () => fetchBusinesses(params), {
-    enabled: isEnabled, // only run when the filter button is clicked
-    staleTime: 1000 * 10,
-  });
+  const query = useInfiniteQuery(
+    ['business', params],
+    ({ pageParam = 1 }) => {
+      return fetchBusinesses({ ...params, page: pageParam });
+    },
+    {
+      enabled: isEnabled, // only run when the filter button is clicked
+      staleTime: 1000 * 10,
+      getNextPageParam: (lastPage) =>
+        lastPage.documentCount === 0 ? undefined : lastPage.page + 1,
+    }
+  );
 
   return query;
 }

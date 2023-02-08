@@ -1,11 +1,18 @@
 import { isString } from '@destiny/common/utils';
-import { SearchFilter, SortItems } from '@features/search-business/components';
+import {
+  BusinessListSkeleton,
+  SearchFilter,
+  SortItems,
+} from '@features/search-business/components';
 import { sortItemData } from '@features/search-business/data';
 import { useFetchBusinesses } from '@features/search-business/hooks';
 import { fetchBusinesses } from '@features/search-business/hooks/useFetchBusinesses';
-import { SearchBusinessSection } from '@features/search-business/layouts';
+import {
+  BusinessList,
+  SearchBusinessSection,
+} from '@features/search-business/layouts';
 import { GetServerSideProps } from 'next';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { dehydrate, QueryClient } from 'react-query';
 import { PrimaryButton } from 'src/components';
@@ -21,12 +28,23 @@ const SearchBusiness: NextPageWithLayout = () => {
 
   const sort = selectedSort.sortField;
 
-  console.log(inView);
-
-  const businessResult = useFetchBusinesses({
+  const {
+    data,
+    isLoading,
+    isSuccess,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useFetchBusinesses({
     sort,
     features: selectedFeatures,
   });
+
+  // useEffect(() => {
+  //   if (inView) {
+  //     fetchNextPage();
+  //   }
+  // });
 
   const filterComponent = (
     <SearchFilter
@@ -42,16 +60,36 @@ const SearchBusiness: NextPageWithLayout = () => {
   return (
     <>
       <SearchBusinessSection
-        {...{ filterComponent, sortComponent, businessResult }}
-      />
+        filterComponent={filterComponent}
+        sortComponent={sortComponent}
+      >
+        <>
+          {isLoading && <BusinessListSkeleton />}
+          {isSuccess &&
+            data.pages.map(({ page, data }) => (
+              <MemoBusinessList key={page} businessData={data} />
+            ))}
+        </>
+      </SearchBusinessSection>
       <div className="mb-10 mt-5 flex justify-end">
-        <PrimaryButton ref={ref} isLoading className="py-2 px-10">
-          Loading More ...
+        <PrimaryButton
+          ref={ref}
+          disabled={!hasNextPage || isFetchingNextPage}
+          className="py-2 px-10"
+          onClick={() => fetchNextPage()}
+        >
+          {isFetchingNextPage
+            ? 'Loading more ...'
+            : hasNextPage
+            ? 'Load Newer'
+            : 'Nothing more to load'}
         </PrimaryButton>
       </div>
     </>
   );
 };
+
+const MemoBusinessList = memo(BusinessList);
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();

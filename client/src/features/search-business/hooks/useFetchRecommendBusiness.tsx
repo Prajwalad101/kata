@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 
-export type SearchBusinessResponse = Pick<
+export type BusinessPage = Pick<
   IBusiness,
   | '_id'
   | 'avgRating'
@@ -16,6 +16,13 @@ export type SearchBusinessResponse = Pick<
   | 'total_rating'
 >[];
 
+interface SearchBusinessResponse {
+  status: string;
+  documentCount: number;
+  page: number;
+  data: BusinessPage;
+}
+
 export const fetchRecommendBusiness = async (
   params: object
 ): Promise<SearchBusinessResponse> => {
@@ -25,8 +32,7 @@ export const fetchRecommendBusiness = async (
     params,
   });
 
-  console.log(response.data);
-  return response.data.data;
+  return response.data;
 };
 
 type UseBusinessesProps = {
