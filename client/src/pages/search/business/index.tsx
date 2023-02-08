@@ -4,6 +4,7 @@ import {
   SearchFilter,
   SortItems,
 } from '@features/search-business/components';
+import BusinessSearchEnd from '@features/search-business/components/BusinessSearchEnd/BusinessSearchEnd';
 import { sortItemData } from '@features/search-business/data';
 import { useFetchBusinesses } from '@features/search-business/hooks';
 import { fetchBusinesses } from '@features/search-business/hooks/useFetchBusinesses';
@@ -70,17 +71,11 @@ const SearchBusiness: NextPageWithLayout = () => {
               <MemoBusinessList key={page} businessData={data} />
             ))}
 
-          <div ref={ref} className="mb-10 mt-8 flex justify-center">
+          <div ref={ref} className="mb-10 flex justify-center">
             {isFetchingNextPage && (
               <PropagateLoader speedMultiplier={0.8} color="#F55A5A" />
             )}
-            {!hasNextPage && (
-              <p className="text-lg text-gray-700">
-                You&apos;ve reached{' '}
-                <span className="font-medium text-black">THE END</span>.
-                There&apos;s nothing more to show.
-              </p>
-            )}
+            {!hasNextPage && <BusinessSearchEnd />}
           </div>
         </>
       </SearchBusinessSection>
