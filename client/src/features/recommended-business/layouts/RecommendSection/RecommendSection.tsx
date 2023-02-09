@@ -1,5 +1,5 @@
 import { BusinessCard } from '@features/recommended-business/components';
-import { useBusinesses } from '@features/search-business/hooks';
+import { useFetchRecommendBusiness } from '@features/search-business/hooks';
 import Link from 'next/link';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import AppLayout from 'src/components/layout/app/AppLayout';
@@ -17,10 +17,10 @@ function RecommendedSection({
   description,
   groupBy: _groupBy,
 }: IRecommendedSection) {
-  const businessResult = useBusinesses();
-  const businesses = businessResult.data?.data;
+  const businessResult = useFetchRecommendBusiness();
+  const businesses = businessResult.data;
 
-  if (!businesses || businesses?.length <= 0) {
+  if (!businesses || businesses.documentCount <= 0) {
     return <></>;
   }
 
@@ -33,12 +33,12 @@ function RecommendedSection({
         <p className="mb-5 text-base text-gray-800 md:block">{description}</p>
 
         <Slider
-          numItems={businesses.length}
+          numItems={businesses.documentCount}
           LeftButton={LeftButton}
           RightButton={RightButton}
           className="sm:-mx-2"
         >
-          {businesses.map((business, index) => (
+          {businesses.data.map((business, index) => (
             <div key={index} className="w-full sm:w-1/2 sm:px-2 lg:w-1/4">
               <Link href="/">
                 <a>

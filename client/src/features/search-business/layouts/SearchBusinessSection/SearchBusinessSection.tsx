@@ -1,25 +1,22 @@
-import { BusinessListSkeleton } from '@features/search-business/components';
-import { BusinessList } from '@features/search-business/layouts';
 import { useRouter } from 'next/router';
-import { memo } from 'react';
-import { UseQueryResult } from 'react-query';
-import { SearchBusinessResponse } from '../../hooks/useBusinesses';
 
 interface SearchBusinessSectionProps {
   filterComponent: JSX.Element;
   sortComponent: JSX.Element;
-  businessResult: UseQueryResult<SearchBusinessResponse, unknown>;
+  children: JSX.Element;
+  // businessResult: UseQueryResult<SearchBusinessResponse, unknown>;
 }
 
 function SearchBusinessSection({
   filterComponent,
   sortComponent,
-  businessResult,
-}: SearchBusinessSectionProps) {
+  children,
+}: // businessResult,
+SearchBusinessSectionProps) {
   const router = useRouter();
   const { name, city } = router.query;
 
-  const { isLoading, isSuccess } = businessResult;
+  // const { isLoading, isSuccess } = businessResult;
 
   return (
     <div className="mt-5 flex gap-10 md:mt-10">
@@ -37,14 +34,11 @@ function SearchBusinessSection({
             <div className="w-72">{sortComponent}</div>
           </div>
         </div>
-        {/* List of business cards */}
-        {isLoading && <BusinessListSkeleton />}
-        {isSuccess && <MemoBusinessList businessData={businessResult.data} />}
+        {/* List of businesses */}
+        {children}
       </div>
     </div>
   );
 }
-
-const MemoBusinessList = memo(BusinessList);
 
 export default SearchBusinessSection;

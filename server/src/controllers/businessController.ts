@@ -42,6 +42,7 @@ const getAllBusinesses = catchAsync(
     res.json({
       status: 'success',
       documentCount: allBusiness.length,
+      page: Number(req.query.page) || 1,
       data: allBusiness,
     });
   }

@@ -1,5 +1,5 @@
 import { IReview } from '@destiny/common/types';
-import { SearchBusinessResponse } from '@features/search-business/hooks/useBusinesses';
+import { SearchBusinessResponse } from '@features/search-business/hooks/useFetchRecommendBusiness';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaQuoteLeft } from 'react-icons/fa';

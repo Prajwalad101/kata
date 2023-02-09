@@ -1,27 +1,51 @@
 import { isString } from '@destiny/common/utils';
-import { SearchFilter, SortItems } from '@features/search-business/components';
+import {
+  BusinessListSkeleton,
+  SearchFilter,
+  SortItems,
+} from '@features/search-business/components';
+import BusinessNotFound from '@features/search-business/components/BusinessNotFound/BusinessNotFound';
 import { sortItemData } from '@features/search-business/data';
-import { useBusinesses } from '@features/search-business/hooks';
-import { fetchBusinesses } from '@features/search-business/hooks/useBusinesses';
-import { SearchBusinessSection } from '@features/search-business/layouts';
+import { useFetchBusinesses } from '@features/search-business/hooks';
+import { fetchBusinesses } from '@features/search-business/hooks/useFetchBusinesses';
+import {
+  BusinessList,
+  SearchBusinessSection,
+} from '@features/search-business/layouts';
 import { GetServerSideProps } from 'next';
-import { useState } from 'react';
+import { memo, useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
 import { dehydrate, QueryClient } from 'react-query';
+import { PropagateLoader } from 'react-spinners';
 import { NavigationProvider } from 'src/components/context-provider';
 import { AppLayout } from 'src/components/layout';
 import { Navbar, Sidebar } from 'src/components/navigation';
 import { NextPageWithLayout } from 'src/pages/_app';
 
 const SearchBusiness: NextPageWithLayout = () => {
-  const [selectedSort, setSelectedSort] = useState(sortItemData[0]);
+  const [selectedSort, setSelectedSort] = useState<string>(
+    sortItemData[0].sortField
+  );
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
+  const { ref, inView } = useInView();
 
-  const sort = selectedSort.sortField;
-
-  const businessResult = useBusinesses({
-    sort,
+  const {
+    data,
+    isLoading,
+    isSuccess,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useFetchBusinesses({
+    sort: selectedSort,
     features: selectedFeatures,
   });
+
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage]);
 
   const filterComponent = (
     <SearchFilter
@@ -30,16 +54,40 @@ const SearchBusiness: NextPageWithLayout = () => {
     />
   );
 
-  const sortComponent = (
-    <SortItems {...{ sortItemData, selectedSort, setSelectedSort }} />
+  const SortComponent = (
+    <SortItems selectedSort={selectedSort} setSelectedSort={setSelectedSort} />
   );
 
   return (
-    <SearchBusinessSection
-      {...{ filterComponent, sortComponent, businessResult }}
-    />
+    <>
+      <SearchBusinessSection
+        filterComponent={filterComponent}
+        sortComponent={SortComponent}
+      >
+        <>
+          {isLoading && <BusinessListSkeleton />}
+          {isSuccess && data.pages[0].documentCount === 0 ? (
+            <BusinessNotFound />
+          ) : (
+            data?.pages.map(({ page, data }) => (
+              <MemoBusinessList key={page} businessData={data} />
+            ))
+          )}
+          {data?.pages.length === 0 && <div>NOT FOUND</div>}
+          <div className="mb-10 flex justify-center">
+            <div ref={ref}>
+              {isFetchingNextPage && (
+                <PropagateLoader speedMultiplier={0.8} color="#F55A5A" />
+              )}
+            </div>
+          </div>
+        </>
+      </SearchBusinessSection>
+    </>
   );
 };
+
+const MemoBusinessList = memo(BusinessList);
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
