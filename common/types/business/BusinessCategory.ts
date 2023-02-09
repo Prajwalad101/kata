@@ -14,7 +14,7 @@ export const businessCategories = [
       { value: 'homedelivery', tag: 'suggested' },
       { value: 'finedining', tag: 'suggested' },
       { value: 'kids friendly', tag: 'suggested' },
-      { value: 'good parking', tag: 'suggested' },
+      { value: 'good parking', tag: 'popular' },
     ],
   },
   {

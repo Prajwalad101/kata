@@ -25,6 +25,7 @@ export default function FilterFeatures({
     }
   }, [query.name]);
 
+  // if no categoryName present, don't render filter
   if (!categoryName) {
     return <></>;
   }
@@ -33,6 +34,7 @@ export default function FilterFeatures({
     category.subcategories.includes(categoryName)
   );
 
+  // if no businessCategory found, don't render filter
   if (!businessCategory) {
     return <></>;
   }
@@ -42,12 +44,12 @@ export default function FilterFeatures({
   featureTypes = [...new Set(featureTypes)];
 
   return (
-    <div className="hidden h-max rounded-md bg-gray-100 font-rubik lg:block">
+    <div className="hidden h-max rounded-md bg-gray-200 font-rubik shadow-sm lg:block">
       <div className=" w-[340px] px-8 py-6">
         <div className="mb-12 flex w-full flex-col gap-y-7">
           {featureTypes.map((featureType, index) => (
             <div key={index}>
-              <p className="mb-5 text-lg font-medium capitalize">
+              <p className="mb-5 text-lg font-medium capitalize text-gray-800">
                 {featureType}
               </p>
               <FilterGroup
