@@ -37,7 +37,7 @@ function useFetchBusinesses(props?: UseFetchBusinessesProps) {
   if (props) {
     params = {
       ...(props.sort && { sort: props.sort }),
-      ...(isString(name) && { name }),
+      ...(isString(name) && { subcategory: name }),
       ...(props.features &&
         props.features.length !== 0 && {
           features: props.features.join(','),

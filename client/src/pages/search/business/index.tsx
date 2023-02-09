@@ -4,7 +4,7 @@ import {
   SearchFilter,
   SortItems,
 } from '@features/search-business/components';
-import BusinessSearchEnd from '@features/search-business/components/BusinessSearchEnd/BusinessSearchEnd';
+import BusinessNotFound from '@features/search-business/components/BusinessNotFound/BusinessNotFound';
 import { sortItemData } from '@features/search-business/data';
 import { useFetchBusinesses } from '@features/search-business/hooks';
 import { fetchBusinesses } from '@features/search-business/hooks/useFetchBusinesses';
@@ -45,7 +45,7 @@ const SearchBusiness: NextPageWithLayout = () => {
     if (inView) {
       fetchNextPage();
     }
-  });
+  }, [inView, fetchNextPage]);
 
   const filterComponent = (
     <SearchFilter
@@ -58,12 +58,6 @@ const SearchBusiness: NextPageWithLayout = () => {
     <SortItems selectedSort={selectedSort} setSelectedSort={setSelectedSort} />
   );
 
-  // const BusinessList = data?.pages.map(({ page, data }) => (
-  //             <MemoBusinessList key={page} businessData={data} />
-  //           ))}
-
-  console.log('hello');
-
   return (
     <>
       <SearchBusinessSection
@@ -72,18 +66,20 @@ const SearchBusiness: NextPageWithLayout = () => {
       >
         <>
           {isLoading && <BusinessListSkeleton />}
-          {isSuccess &&
-            data.pages.map(({ page, data }) => (
+          {isSuccess && data.pages[0].documentCount === 0 ? (
+            <BusinessNotFound />
+          ) : (
+            data?.pages.map(({ page, data }) => (
               <MemoBusinessList key={page} businessData={data} />
-            ))}
+            ))
+          )}
           {data?.pages.length === 0 && <div>NOT FOUND</div>}
           <div className="mb-10 flex justify-center">
-            {isFetchingNextPage && (
-              <div ref={ref}>
+            <div ref={ref}>
+              {isFetchingNextPage && (
                 <PropagateLoader speedMultiplier={0.8} color="#F55A5A" />
-              </div>
-            )}
-            {!hasNextPage && <BusinessSearchEnd />}
+              )}
+            </div>
           </div>
         </>
       </SearchBusinessSection>
