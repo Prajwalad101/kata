@@ -1,4 +1,10 @@
-import { businessCategories } from '@destiny/common/types/business/BusinessCategory';
+import {
+  BusinessCategories,
+  businessCategories,
+} from '@destiny/common/types/business/BusinessCategory';
+import { isString } from '@destiny/common/utils';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import Checkbox from '../Checkbox/Checkbox';
 
 interface FilterFeaturesProps {
@@ -10,10 +16,29 @@ export default function FilterFeatures({
   selectedFeatures,
   setSelectedFeatures,
 }: FilterFeaturesProps) {
-  const category = businessCategories[0];
+  const { query } = useRouter();
+  const [categoryName, setCategoryName] = useState<string>();
+
+  useEffect(() => {
+    if (isString(query.name)) {
+      setCategoryName(query.name);
+    }
+  }, [query.name]);
+
+  if (!categoryName) {
+    return <></>;
+  }
+
+  const businessCategory = businessCategories.find((category) =>
+    category.subcategories.includes(categoryName)
+  );
+
+  if (!businessCategory) {
+    return <></>;
+  }
 
   // grab all the featureTypes and remove duplicates
-  let featureTypes = category.features.map((feature) => feature.tag);
+  let featureTypes = businessCategory.features.map((feature) => feature.tag);
   featureTypes = [...new Set(featureTypes)];
 
   return (
@@ -26,9 +51,10 @@ export default function FilterFeatures({
                 {featureType}
               </p>
               <FilterGroup
+                featureType={featureType}
+                businessCategory={businessCategory}
                 selectedFeatures={selectedFeatures}
                 setSelectedFeatures={setSelectedFeatures}
-                filterType={featureType}
               />
             </div>
           ))}
@@ -39,18 +65,21 @@ export default function FilterFeatures({
 }
 
 interface FilterGroupProps {
-  filterType: string;
+  businessCategory: BusinessCategories[number];
+  featureType: string;
   selectedFeatures: string[];
   setSelectedFeatures: (_features: string[]) => void;
 }
 
+// contains filters for each feature type
 function FilterGroup({
-  filterType,
+  businessCategory,
+  featureType,
   selectedFeatures,
   setSelectedFeatures,
 }: FilterGroupProps) {
-  const features = businessCategories[0].features.filter(
-    (feature) => feature.tag === filterType
+  const features = businessCategory.features.filter(
+    (feature) => feature.tag === featureType
   );
 
   return (
@@ -58,7 +87,7 @@ function FilterGroup({
       {features.map((feature, index) => (
         <div key={index}>
           <Checkbox
-            className="mb-2"
+            className="mb-4"
             feature={feature.value}
             selectedFeatures={selectedFeatures}
             setSelectedFilters={setSelectedFeatures}

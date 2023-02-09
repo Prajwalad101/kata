@@ -1,7 +1,13 @@
 export const businessCategories = [
   {
     name: 'food and drinks',
-    subcategories: ['resturant', 'cafe', 'fast food', 'hotel', 'bakery'],
+    subcategories: [
+      'resturant',
+      'cafe',
+      'fast food',
+      'hotel',
+      'bakery',
+    ] as string[],
     features: [
       { value: 'outdoors', tag: 'suggested' },
       { value: 'takeout', tag: 'popular' },
@@ -13,7 +19,7 @@ export const businessCategories = [
   },
   {
     name: 'sports and fitness',
-    subcategories: ['gym', 'futsal', 'tennis', 'zumba', 'swimming'],
+    subcategories: ['gym', 'futsal', 'tennis', 'zumba', 'swimming'] as string[],
     features: [
       { value: 'good parking', tag: 'suggested' },
       { value: 'memberships', tag: 'suggested' },
@@ -23,7 +29,12 @@ export const businessCategories = [
   },
   {
     name: 'home services',
-    subcategories: ['plumbing', 'electricity', 'cleaning', 'repairs'],
+    subcategories: [
+      'plumbing',
+      'electricity',
+      'cleaning',
+      'repairs',
+    ] as string[],
     features: [
       { value: 'feature1', tag: 'suggested' },
       { value: 'feature2', tag: 'suggested' },
@@ -31,14 +42,19 @@ export const businessCategories = [
   },
   {
     name: 'others',
-    subcategories: ['entertainment', 'shopping', 'essential', 'vehicles'],
+    subcategories: [
+      'entertainment',
+      'shopping',
+      'essential',
+      'vehicles',
+    ] as string[],
     features: [
       { value: 'feature3', tag: 'suggested' },
       { value: 'feature4', tag: 'suggested' },
     ],
   },
-] as const;
+];
 
-type BusinessCategories = typeof businessCategories;
+export type BusinessCategories = typeof businessCategories;
 
 export type BusinessCategory = BusinessCategories[number]['name'];
