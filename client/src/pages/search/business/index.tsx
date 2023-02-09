@@ -23,11 +23,11 @@ import { Navbar, Sidebar } from 'src/components/navigation';
 import { NextPageWithLayout } from 'src/pages/_app';
 
 const SearchBusiness: NextPageWithLayout = () => {
-  const [selectedSort, setSelectedSort] = useState(sortItemData[0]);
+  const [selectedSort, setSelectedSort] = useState<string>(
+    sortItemData[0].sortField
+  );
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
   const { ref, inView } = useInView();
-
-  const sort = selectedSort.sortField;
 
   const {
     data,
@@ -37,7 +37,7 @@ const SearchBusiness: NextPageWithLayout = () => {
     hasNextPage,
     isFetchingNextPage,
   } = useFetchBusinesses({
-    sort,
+    sort: selectedSort,
     features: selectedFeatures,
   });
 
@@ -54,15 +54,15 @@ const SearchBusiness: NextPageWithLayout = () => {
     />
   );
 
-  const sortComponent = (
-    <SortItems {...{ sortItemData, selectedSort, setSelectedSort }} />
+  const SortComponent = (
+    <SortItems selectedSort={selectedSort} setSelectedSort={setSelectedSort} />
   );
 
   return (
     <>
       <SearchBusinessSection
         filterComponent={filterComponent}
-        sortComponent={sortComponent}
+        sortComponent={SortComponent}
       >
         <>
           {isLoading && <BusinessListSkeleton />}
