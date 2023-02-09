@@ -29,17 +29,11 @@ const SearchBusiness: NextPageWithLayout = () => {
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
   const { ref, inView } = useInView();
 
-  const {
-    data,
-    isLoading,
-    isSuccess,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useFetchBusinesses({
-    sort: selectedSort,
-    features: selectedFeatures,
-  });
+  const { data, isLoading, isSuccess, fetchNextPage, isFetchingNextPage } =
+    useFetchBusinesses({
+      sort: selectedSort,
+      features: selectedFeatures,
+    });
 
   useEffect(() => {
     if (inView) {

@@ -1,15 +1,18 @@
 import Link from 'next/link';
 import { BsChevronDown } from 'react-icons/bs';
 import { ISubcategoryDropdown } from 'src/types/business';
+import { classNames } from 'src/utils/tailwind';
 
 interface CategoryDropdownProps {
   name: string;
+  headingColor?: 'black' | 'white';
   subcategories: ISubcategoryDropdown[];
 }
 
 export default function CategoryDropdown({
   name,
   subcategories,
+  headingColor = 'white',
 }: CategoryDropdownProps) {
   // to display items in two columns
   const evenItems = subcategories.filter(
@@ -38,8 +41,13 @@ export default function CategoryDropdown({
   return (
     <div className="relative h-max capitalize">
       {/* Dropdown heading */}
-      <div className="peer flex cursor-pointer items-center gap-1 text-white hover:opacity-70">
-        <span className="inline-block text-white">{name}</span>
+      <div
+        className={classNames(
+          'peer flex cursor-pointer items-center gap-1 text-white hover:opacity-70',
+          headingColor === 'white' ? 'text-white' : 'text-black'
+        )}
+      >
+        <span className="inline-block">{name}</span>
         <BsChevronDown />
       </div>
 

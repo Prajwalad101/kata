@@ -1,7 +1,6 @@
 import {
   BreadCrumbs,
   BusinessAttributes,
-  CategoriesDropdown,
   LocationAndContact,
   Services,
 } from '@features/business-details/components';
@@ -11,6 +10,7 @@ import {
 } from '@features/business-details/layouts';
 import { useBusiness } from '@features/business-details/queries';
 import { fetchBusiness } from '@features/business-details/queries/useBusiness';
+import { CategoriesDropdown } from '@features/home-page/components';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from 'react-query';
@@ -35,7 +35,14 @@ const Business: NextPageWithLayout = () => {
 
   return (
     <ConditionalRender isLoading={isLoading} isError={isError}>
-      <CategoriesDropdown />
+      <div className="mb-7">
+        <div className="absolute left-0 right-0 border-t-[1px] border-gray-300" />
+        <CategoriesDropdown
+          className="!gap-12 pt-4 pb-2"
+          headingColor="black"
+        />
+        <div className="absolute left-0 right-0 border-t-[1px] border-gray-300" />
+      </div>
       <BreadCrumbs />
       <BusinessInfoSection
         business={businessData}
