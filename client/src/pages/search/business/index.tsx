@@ -58,6 +58,12 @@ const SearchBusiness: NextPageWithLayout = () => {
     <SortItems selectedSort={selectedSort} setSelectedSort={setSelectedSort} />
   );
 
+  // const BusinessList = data?.pages.map(({ page, data }) => (
+  //             <MemoBusinessList key={page} businessData={data} />
+  //           ))}
+
+  console.log('hello');
+
   return (
     <>
       <SearchBusinessSection
@@ -70,10 +76,12 @@ const SearchBusiness: NextPageWithLayout = () => {
             data.pages.map(({ page, data }) => (
               <MemoBusinessList key={page} businessData={data} />
             ))}
-
-          <div ref={ref} className="mb-10 flex justify-center">
+          {data?.pages.length === 0 && <div>NOT FOUND</div>}
+          <div className="mb-10 flex justify-center">
             {isFetchingNextPage && (
-              <PropagateLoader speedMultiplier={0.8} color="#F55A5A" />
+              <div ref={ref}>
+                <PropagateLoader speedMultiplier={0.8} color="#F55A5A" />
+              </div>
             )}
             {!hasNextPage && <BusinessSearchEnd />}
           </div>
