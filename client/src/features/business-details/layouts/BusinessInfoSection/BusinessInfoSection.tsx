@@ -19,7 +19,7 @@ export default function BusinessInfoSection({
   return (
     <div className={className}>
       <div className="mb-5 flex flex-col gap-5 md:mb-0 md:flex-row">
-        <BusinessImage images={business.images} />
+        <BusinessImage />
         <div>
           <h4 className="mb-2 text-[23px] font-medium">{business.name}</h4>
           <div className="mb-5 flex items-center gap-10">
@@ -35,7 +35,7 @@ export default function BusinessInfoSection({
             className="mb-7"
           />
           <div className="mb-4 flex flex-col gap-2 text-gray-800 sm:flex-row sm:gap-7">
-            <span>$$-$$$</span>
+            {/* <span>$$-$$$</span> */}
             <span>Healthy, Authentic, Vegeterian Friendly</span>
           </div>
           <div className="flex items-center gap-3 text-gray-800">

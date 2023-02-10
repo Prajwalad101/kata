@@ -12,7 +12,6 @@ import { useBusiness } from '@features/business-details/queries';
 import { fetchBusiness } from '@features/business-details/queries/useBusiness';
 import { CategoriesDropdown } from '@features/home-page/components';
 import { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from 'react-query';
 import ConditionalRender from 'src/components/conditional-render/ConditionalRender';
 import {
@@ -24,14 +23,10 @@ import { Navbar, Sidebar } from 'src/components/navigation';
 import { NextPageWithLayout } from 'src/pages/_app';
 
 const Business: NextPageWithLayout = () => {
-  const { query } = useRouter();
-  const businessId = query.businessId as string;
+  const businessResult = useBusiness();
+  const { data: businessData, isLoading, isError } = businessResult;
 
-  const businessResult = useBusiness(businessId);
-  const { isLoading, isError } = businessResult;
-
-  const businessData = businessResult.data?.data;
-  if (!businessData) return null;
+  if (!businessData) return <></>;
 
   return (
     <ConditionalRender isLoading={isLoading} isError={isError}>
