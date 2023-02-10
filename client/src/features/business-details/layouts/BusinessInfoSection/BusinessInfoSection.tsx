@@ -2,6 +2,7 @@ import { IBusiness } from '@destiny/common/types';
 import {
   BusinessDescription,
   BusinessImage,
+  OpenOrClosed,
 } from '@features/business-details/components';
 import { FaPhoneAlt } from 'react-icons/fa';
 import RatingIcons from 'src/components/icons/ratings/RatingIcons';
@@ -28,11 +29,7 @@ export default function BusinessInfoSection({
             </span>
           </div>
           <span className="mb-2 inline-block">{business.location.address}</span>
-          {/* <OpenOrClosed
-            openingTime={business.businessHours.open}
-            closingTime={business.businessHours.close}
-            className="mb-5"
-          /> */}
+          <OpenOrClosed workingDays={business.workingDays} className="mb-5" />
           <BusinessDescription
             description={business.description}
             className="mb-7"
