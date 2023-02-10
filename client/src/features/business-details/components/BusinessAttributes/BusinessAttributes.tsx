@@ -1,21 +1,28 @@
-import { businessFeatures } from '@destiny/common/types';
+import { businessCategories } from '@destiny/common/types/business/BusinessCategory';
 import { useState } from 'react';
 import { FiCheck, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import { IoMdClose } from 'react-icons/io';
 import { classNames } from 'src/utils/tailwind';
 
 interface BusinessAttributesProps {
-  attributes: string[];
+  categoryName: string;
+  features: string[];
   className?: string;
 }
 
-const allAttributes = Object.values(businessFeatures);
-
 export default function BusinessAttributes({
-  attributes,
+  features,
+  categoryName,
   className = '',
 }: BusinessAttributesProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const businessCategory = businessCategories.find(
+    (category) => category.name === categoryName
+  );
+
+  const allFeatures = businessCategory?.features.map(
+    (feature) => feature.value
+  );
 
   return (
     <div className={classNames(className)}>
@@ -37,24 +44,25 @@ export default function BusinessAttributes({
         </div>
       </div>
       <div className="grid grid-cols-[repeat(auto-fill,minmax(max(150px,25%),1fr))]">
-        {allAttributes.map((attribute, i) => {
+        {allFeatures?.map((feature, i) => {
+          // display max 4 items when not expanded
           if (!isExpanded && i > 3) return;
-          const doesExist = attributes.includes(attribute);
+
+          const doesExist = features.includes(feature);
           return (
             <div key={i} className="flex items-center gap-2 rounded-md py-4">
               {doesExist ? (
-                <FiCheck size={20} />
+                <FiCheck className="text-green-500" size={20} />
               ) : (
                 <IoMdClose size={20} className="text-red-600" />
               )}
-
               <p
                 className={classNames(
                   'capitalize',
                   !doesExist ? 'text-gray-500' : ''
                 )}
               >
-                {attribute}
+                {feature}
               </p>
             </div>
           );
