@@ -1,3 +1,4 @@
+import { useBusiness } from '@features/business-details/queries';
 import Image from 'next/image';
 import { useState } from 'react';
 import { MdOutlinePhotoSizeSelectActual } from 'react-icons/md';
@@ -5,19 +6,23 @@ import Slider from 'src/components/slider/Slider';
 import { getPublicFilePath } from 'src/utils/text';
 import ImagePreview from '../modals/ImagePreview/ImagePreview';
 
-interface BusinessImageProps {
-  images: string[];
-}
-
-export default function BusinessImage({
-  images: businessImages,
-}: BusinessImageProps) {
+export default function BusinessImage() {
   const [isOpen, setIsOpen] = useState(false);
-  const images = businessImages.map((image) => getPublicFilePath(image));
+
+  const { data, isError, isLoading, isSuccess } = useBusiness();
+
+  if (isError) return <div>ERROR</div>;
+  if (isLoading) return <div>LOADING</div>;
+
+  if (!isSuccess) return <></>;
+
+  const images = data.images.map((image) => getPublicFilePath(image));
+  const businessName = data.name;
 
   return (
     <>
       <ImagePreview
+        businessName={businessName}
         isOpen={isOpen}
         closeModal={() => setIsOpen(false)}
         images={images}

@@ -6,12 +6,14 @@ import { ButtonProps } from 'src/types/props';
 import { classNames } from 'src/utils/tailwind';
 
 interface ImagePreviewProps {
+  businessName: string;
   isOpen: boolean;
   closeModal: () => void;
   images: string[];
 }
 
 export default function ImagePreview({
+  businessName,
   isOpen,
   closeModal,
   images,
@@ -51,6 +53,7 @@ export default function ImagePreview({
                 <div className="h-full rounded-sm bg-white p-4">
                   {viewMode === 'slideshow' && (
                     <SlideShow
+                      businessName={businessName}
                       images={images}
                       selectedIndex={selectedIndex}
                       setSelectedIndex={setSelectedIndex}
@@ -79,6 +82,7 @@ export default function ImagePreview({
 }
 
 interface SlideShowProps {
+  businessName: string;
   images: string[];
   selectedIndex: number;
   setSelectedIndex: Dispatch<SetStateAction<number>>;
@@ -86,6 +90,7 @@ interface SlideShowProps {
 }
 
 function SlideShow({
+  businessName,
   images,
   selectedIndex,
   setSelectedIndex,
@@ -112,13 +117,9 @@ function SlideShow({
       <div className="relative h-full basis-[75%]">
         <div className="relative z-10 ml-6 mt-4">
           <h3 className="mb-1 font-merriweather text-lg font-bold text-white/90">
-            The Burger House
+            {businessName}
           </h3>
-          <div className="mb-3 flex items-center gap-5 text-white/70">
-            <p>27 total photos</p>
-            <div className="h-[5px] w-[5px] rounded-full bg-gray-300" />
-            <p>27 Oct</p>
-          </div>
+          <p className="mb-3 text-white/70">{images.length} total images</p>
           <button
             onClick={() => onClick(selectedImage)}
             className="text-white/80 underline hover:text-white"
