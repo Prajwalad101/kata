@@ -12,26 +12,18 @@ import { useBusiness } from '@features/business-details/queries';
 import { fetchBusiness } from '@features/business-details/queries/useBusiness';
 import { CategoriesDropdown } from '@features/home-page/components';
 import { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
 import { dehydrate, QueryClient } from 'react-query';
 import ConditionalRender from 'src/components/conditional-render/ConditionalRender';
-import {
-  NavigationProvider,
-  QueryProvider,
-} from 'src/components/context-provider';
+import { NavigationProvider } from 'src/components/context-provider';
 import { AppLayout } from 'src/components/layout';
 import { Navbar, Sidebar } from 'src/components/navigation';
 import { NextPageWithLayout } from 'src/pages/_app';
 
 const Business: NextPageWithLayout = () => {
-  const { query } = useRouter();
-  const businessId = query.businessId as string;
+  const businessResult = useBusiness();
+  const { data: businessData, isLoading, isError } = businessResult;
 
-  const businessResult = useBusiness(businessId);
-  const { isLoading, isError } = businessResult;
-
-  const businessData = businessResult.data?.data;
-  if (!businessData) return null;
+  if (!businessData) return <></>;
 
   return (
     <ConditionalRender isLoading={isLoading} isError={isError}>
@@ -51,8 +43,17 @@ const Business: NextPageWithLayout = () => {
       <div className="flex flex-col items-start gap-x-16 gap-y-7 md:flex-row-reverse">
         <Services businessId={businessData._id} />
         <div className="w-full overflow-y-auto">
-          <BusinessAttributes attributes={businessData.features} />
-          <LocationAndContact className="mb-10 md:mb-16" />
+          <BusinessAttributes
+            categoryName={businessData.category}
+            features={businessData.features}
+          />
+          <LocationAndContact
+            location={businessData.location}
+            directions={businessData.directions}
+            email={businessData.email}
+            contactNumber={businessData.contactNumber}
+            className="mb-10 md:mb-16"
+          />
           <CommunitySection className="mb-10" />
         </div>
       </div>
@@ -69,7 +70,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   await queryClient.prefetchQuery(
     ['business', businessId],
     () => fetchBusiness(businessId),
-    { staleTime: 1000 * 10 }
+    { staleTime: 1000 * 10 * 10 } // 10 mins
   );
 
   return {
@@ -81,14 +82,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 export default Business;
 
-Business.getLayout = (page, pageProps) => (
-  <QueryProvider pageProps={pageProps}>
-    <AppLayout size="sm">
-      <NavigationProvider>
-        <Navbar theme="light" />
-        <Sidebar />
-      </NavigationProvider>
-      {page}
-    </AppLayout>
-  </QueryProvider>
+Business.getLayout = (page) => (
+  <AppLayout size="sm">
+    <NavigationProvider>
+      <Navbar theme="light" />
+      <Sidebar />
+    </NavigationProvider>
+    {page}
+  </AppLayout>
 );
