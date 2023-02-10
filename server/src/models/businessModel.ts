@@ -40,20 +40,21 @@ const businessSchema = new mongoose.Schema<IBusiness>(
       type: String,
       required: [true, 'subcategory is required'],
     },
-    location: [
-      {
-        type: {
-          type: String,
-          enum: ['Point'],
-          required: true,
-        },
-        coordinates: {
-          type: [Number],
-          required: true,
-        },
-        address: String,
+    location: {
+      type: {
+        type: String,
+        enum: ['Point'],
+        required: true,
       },
-    ],
+      coordinates: {
+        type: [Number],
+        required: [true, 'Please provide coordinates'],
+      },
+      address: {
+        type: String,
+        required: [true, 'Please provide location address'],
+      },
+    },
     features: {
       type: [String],
       validate: {
