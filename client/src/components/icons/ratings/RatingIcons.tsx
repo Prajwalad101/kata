@@ -13,7 +13,7 @@ function RatingIcons({ className = '', rating, size = 17 }: IRatingIcons) {
 
   if (rating === 0) {
     return (
-      <div className="flex text-primaryred">
+      <div className={classNames('flex text-primaryred', className)}>
         {emptyArr.map((item) => (
           <BsStar size={size} key={item} />
         ))}
