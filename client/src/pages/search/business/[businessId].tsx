@@ -47,7 +47,13 @@ const Business: NextPageWithLayout = () => {
             categoryName={businessData.category}
             features={businessData.features}
           />
-          <LocationAndContact className="mb-10 md:mb-16" />
+          <LocationAndContact
+            location={businessData.location}
+            directions={businessData.directions}
+            email={businessData.email}
+            contactNumber={businessData.contactNumber}
+            className="mb-10 md:mb-16"
+          />
           <CommunitySection className="mb-10" />
         </div>
       </div>
