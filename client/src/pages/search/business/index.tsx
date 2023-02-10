@@ -97,7 +97,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   await queryClient.prefetchQuery(
     ['business', sort, subcategory],
     () => fetchBusinesses(params),
-    { staleTime: 1000 * 10 * 10 } // 10 mins
+    { staleTime: 1000 * 10 } // 10 mins
   );
 
   return {

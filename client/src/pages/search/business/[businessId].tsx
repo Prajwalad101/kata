@@ -14,10 +14,7 @@ import { CategoriesDropdown } from '@features/home-page/components';
 import { GetServerSideProps } from 'next';
 import { dehydrate, QueryClient } from 'react-query';
 import ConditionalRender from 'src/components/conditional-render/ConditionalRender';
-import {
-  NavigationProvider,
-  QueryProvider,
-} from 'src/components/context-provider';
+import { NavigationProvider } from 'src/components/context-provider';
 import { AppLayout } from 'src/components/layout';
 import { Navbar, Sidebar } from 'src/components/navigation';
 import { NextPageWithLayout } from 'src/pages/_app';
@@ -64,7 +61,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   await queryClient.prefetchQuery(
     ['business', businessId],
     () => fetchBusiness(businessId),
-    { staleTime: 1000 * 10 }
+    { staleTime: 1000 * 10 * 10 } // 10 mins
   );
 
   return {
@@ -76,14 +73,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 export default Business;
 
-Business.getLayout = (page, pageProps) => (
-  <QueryProvider pageProps={pageProps}>
-    <AppLayout size="sm">
-      <NavigationProvider>
-        <Navbar theme="light" />
-        <Sidebar />
-      </NavigationProvider>
-      {page}
-    </AppLayout>
-  </QueryProvider>
+Business.getLayout = (page) => (
+  <AppLayout size="sm">
+    <NavigationProvider>
+      <Navbar theme="light" />
+      <Sidebar />
+    </NavigationProvider>
+    {page}
+  </AppLayout>
 );
