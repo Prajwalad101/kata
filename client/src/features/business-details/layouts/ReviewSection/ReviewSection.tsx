@@ -39,14 +39,8 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
 
   const businessResult = useBusiness();
 
-  if (reviewsResult.isError) {
-    return <div>Some error occurred while getting reviews</div>;
-  }
-
   const reviews = reviewsResult.data || [];
   const business = businessResult.data;
-
-  // If there are no reviews
 
   if (!business) return <></>;
 
