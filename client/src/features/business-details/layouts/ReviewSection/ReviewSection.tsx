@@ -2,7 +2,7 @@ import {
   Ratings,
   ReviewSkeleton,
   SortReview,
-  StartReview,
+  StartReviewForm,
   UserReview,
 } from '@features/business-details/components';
 import ReviewsNotFound from '@features/business-details/components/ReviewsNotFound.ts/ReviewsNotFound';
@@ -46,7 +46,7 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
 
   return (
     <>
-      <StartReview
+      <StartReviewForm
         isOpen={reviewModalOpen}
         closeModal={() => setReviewModalOpen(false)}
       />

@@ -17,7 +17,7 @@ export default function Buttons({ onCancel, isLoading }: ButtonsProps) {
         Cancel
       </SecondaryButton>
       <PrimaryButton
-        disabled={isLoading}
+        isLoading={isLoading}
         type="submit"
         className={classNames(
           'h-[45px] w-[120px]',
