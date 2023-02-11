@@ -5,10 +5,11 @@ import {
   StartReview,
   UserReview,
 } from '@features/business-details/components';
+import ReviewsNotFound from '@features/business-details/components/ReviewsNotFound.ts/ReviewsNotFound';
 import { reviewSortOptions } from '@features/business-details/data';
 import { useBusiness, useReviews } from '@features/business-details/queries';
 import { useRouter } from 'next/router';
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { Portal, SecondaryButton } from 'src/components';
 import { addOrRemove } from 'src/utils/array';
@@ -46,13 +47,6 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
   const business = businessResult.data;
 
   // If there are no reviews
-  if (!reviews) {
-    return (
-      <div className="flex justify-center">
-        <h2 className="text-xl font-medium">No reviews found</h2>
-      </div>
-    );
-  }
 
   if (!business) return <></>;
 
@@ -99,18 +93,14 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
           }}
         />
         <div className="mb-10 border-b border-gray-300" />
-        {reviewsResult.isLoading ? (
-          <ReviewSkeleton items={5} />
+        {reviewsResult.isLoading && <ReviewSkeleton items={5} />}
+        {reviewsResult.isError && <ReviewsNotFound />}
+        {reviewsResult.isSuccess && reviews.length === 0 ? (
+          <ReviewsNotFound />
         ) : (
-          <>
-            <div className="child-notlast:mb-7">
-              {reviews.map((review) => (
-                <Fragment key={review._id.toString()}>
-                  <UserReview review={review} />
-                </Fragment>
-              ))}
-            </div>
-          </>
+          reviews.map((review) => (
+            <UserReview key={review._id.toString()} review={review} />
+          ))
         )}
       </div>
     </>
