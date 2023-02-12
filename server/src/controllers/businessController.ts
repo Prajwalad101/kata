@@ -9,14 +9,7 @@ import catchAsync from '../utils/catchAsync';
 const getAllBusinesses = catchAsync(
   async (req: Request, res: Response, _next: NextFunction) => {
     const businessQuery = Business.find();
-    const defaultFields = [
-      'name',
-      'location',
-      'images',
-      'total_rating',
-      'rating_count',
-      'avgRating',
-    ];
+    const defaultFields = ['name', 'location', 'images', 'ratings'];
     req.query.fields = defaultFields.join(',');
 
     // filter documents by "features" field

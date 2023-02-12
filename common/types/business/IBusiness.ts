@@ -18,8 +18,5 @@ export interface IBusiness {
   images: string[];
   reviews?: IReview[];
   verified: boolean;
-  total_rating: number;
-  rating_count: number;
-  avgRating: number;
   ratings: [number, number, number, number, number];
 }
