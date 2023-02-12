@@ -80,12 +80,7 @@ export default function StartReview({ isOpen, closeModal }: StartReviewProps) {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel
-                className={classNames(
-                  'w-full max-w-3xl',
-                  mutation.isLoading ? 'cursor-wait' : 'cursor-default'
-                )}
-              >
+              <Dialog.Panel className="w-full max-w-3xl">
                 <div
                   className={classNames(
                     mutation.isLoading ? 'bg-gray-50' : 'bg-white',

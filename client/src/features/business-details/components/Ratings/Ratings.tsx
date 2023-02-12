@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
 import RatingIcons from 'src/components/icons/ratings/RatingIcons';
 import { classNames } from 'src/utils/tailwind';
 
@@ -20,9 +22,30 @@ export default function Ratings({
     0
   );
   const avgRating = totalRating / numRatings;
+  const { ref, inView } = useInView();
+
+  const [ratingPercentage, setRatingPercentage] = useState<number[]>([
+    0, 0, 0, 0, 0,
+  ]);
+
+  // update percentage if in view
+  useEffect(() => {
+    if (inView) {
+      const ratingPercentage = ratings.map((rating) => {
+        if (numRatings <= 0) return 0;
+        return (rating / numRatings) * 100;
+      });
+      setRatingPercentage(ratingPercentage);
+    } else {
+      setRatingPercentage([0, 0, 0, 0, 0]);
+    }
+  }, [inView, numRatings, ratings]);
 
   return (
-    <div className={classNames(className, 'rounded-md border-gray-300')}>
+    <div
+      ref={ref}
+      className={classNames(className, 'rounded-md border-gray-300')}
+    >
       <div className="mb-3 flex items-center gap-8">
         <h4 className="text-3xl font-medium">{avgRating.toFixed(1)}</h4>
         <RatingIcons rating={avgRating} size={19} className="gap-[6px]" />
@@ -30,14 +53,7 @@ export default function Ratings({
       <p className="mb-10 text-gray-500 underline">from {numRatings} reviews</p>
       <div className="flex flex-col gap-3">
         {ratings.map((rating, index) => {
-          let percentage = 0;
-          if (numRatings <= 0) {
-            percentage = 0;
-          } else {
-            percentage = (rating / numRatings) * 100;
-          }
           return (
-            // <div key={index} className="flex items-center gap-8">
             <div key={index} className="mb-1 items-center xs:flex">
               <div className="mb-1 flex gap-3 xs:mb-0">
                 <input
@@ -56,13 +72,21 @@ export default function Ratings({
               <div className="flex grow items-center gap-4">
                 <div className="relative h-[10px] w-full rounded-full bg-gray-300">
                   <div
-                    className="absolute left-0 top-0 bottom-0 h-full rounded-full bg-primaryred"
-                    style={{ width: `${percentage}%` }}
+                    className={classNames(
+                      'absolute left-0 top-0 bottom-0 h-full rounded-full bg-primaryred'
+                    )}
+                    style={{
+                      width: `${ratingPercentage[index]}%`,
+                      // only set duration for percentage increase
+                      transitionDuration: inView ? '1000ms' : '0ms',
+                      transitionProperty: 'all',
+                      transitionTimingFunction: 'ease-in-out',
+                    }}
                   />
                 </div>
                 {
                   <p className="w-[50px] text-gray-600">
-                    {percentage.toFixed(0)}%
+                    {ratingPercentage[index].toFixed(0)}%
                   </p>
                 }
               </div>
