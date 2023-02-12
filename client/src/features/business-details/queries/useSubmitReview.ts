@@ -28,9 +28,11 @@ export default function useSubmitReview() {
         ['business', newReview.business],
         (data) => {
           if (!data) return undefined;
-          const prevData = { ...data };
+          // deep clone object
+          const prevData = JSON.parse(JSON.stringify(data)) as IBusiness;
           const ratingIndex = newReview.rating - 1;
-          prevData.ratings[ratingIndex] = newReview.rating;
+
+          prevData.ratings[ratingIndex] += 1;
           return prevData;
         }
       );
