@@ -1,5 +1,5 @@
 import { IReview } from '@destiny/common/types';
-import { SearchBusinessResponse } from '@features/search-business/hooks/useFetchRecommendBusiness';
+import { BusinessPage } from '@features/search-business/hooks/useFetchRecommendBusiness';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaQuoteLeft } from 'react-icons/fa';
@@ -8,7 +8,7 @@ import Slider from 'src/components/slider/Slider';
 import { getPublicFilePath } from 'src/utils/text';
 
 export interface BusinessCardProps {
-  business: SearchBusinessResponse[number];
+  business: BusinessPage[number];
 }
 
 function BusinessCard({ business }: BusinessCardProps) {
@@ -16,10 +16,10 @@ function BusinessCard({ business }: BusinessCardProps) {
   const images = business.images.map((image) => getPublicFilePath(image));
 
   return (
-    <div className="font-rubik transition-colors hover:bg-gray-50 sm:flex">
+    <div className="h-48 font-rubik transition-colors hover:bg-gray-50 sm:flex">
       <Slider numItems={images.length} className="shrink-0 sm:w-[224px]">
         {images.map((image, index) => (
-          <div key={index} className="relative h-48 w-full">
+          <div key={index} className="relative h-full w-full">
             <Image src={image} alt="image" layout="fill" objectFit="cover" />
           </div>
         ))}
