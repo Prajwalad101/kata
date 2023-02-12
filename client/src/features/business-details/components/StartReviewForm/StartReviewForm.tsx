@@ -1,6 +1,7 @@
 import { useSubmitReview } from '@features/business-details/queries';
 import { IReviewFormValues } from '@features/business-details/types';
 import { Dialog, Transition } from '@headlessui/react';
+import { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
 import { Fragment, useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -49,7 +50,12 @@ export default function StartReview({ isOpen, closeModal }: StartReviewProps) {
         toast.success('Review successfully submitted.');
         closeModal();
       },
-      onError: () => {
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            return toast.error('You must be authenticated to submit a review');
+          }
+        }
         toast.error('Could not submit review.');
       },
     });

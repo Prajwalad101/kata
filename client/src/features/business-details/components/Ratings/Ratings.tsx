@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import RatingIcons from 'src/components/icons/ratings/RatingIcons';
+import getRatingStats from 'src/utils/getRatingStats';
 import { classNames } from 'src/utils/tailwind';
 
 const ratingLabels = ['very poor', 'poor', 'average', 'very good', 'excellent'];
@@ -16,12 +17,7 @@ export default function Ratings({
   className = '',
   onClick,
 }: RatingsProps) {
-  const numRatings = ratings.reduce((acc, current) => acc + current, 0);
-  const totalRating = ratings.reduce(
-    (acc, current, index) => acc + current * (index + 1),
-    0
-  );
-  const avgRating = totalRating / numRatings;
+  const { avgRating, numRatings } = getRatingStats(ratings);
   const { ref, inView } = useInView();
 
   const [ratingPercentage, setRatingPercentage] = useState<number[]>([
@@ -36,8 +32,6 @@ export default function Ratings({
         return (rating / numRatings) * 100;
       });
       setRatingPercentage(ratingPercentage);
-    } else {
-      setRatingPercentage([0, 0, 0, 0, 0]);
     }
   }, [inView, numRatings, ratings]);
 

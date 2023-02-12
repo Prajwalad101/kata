@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { FaQuoteLeft } from 'react-icons/fa';
 import RatingIcons from 'src/components/icons/ratings/RatingIcons';
 import Slider from 'src/components/slider/Slider';
+import getRatingStats from 'src/utils/getRatingStats';
 import { getPublicFilePath } from 'src/utils/text';
 
 export interface BusinessCardProps {
@@ -15,16 +16,7 @@ export interface BusinessCardProps {
 function BusinessCard({ business }: BusinessCardProps) {
   // get image path relative to the public folder
   const images = business.images.map((image) => getPublicFilePath(image));
-
-  const numRatings = business.ratings.reduce(
-    (acc, current) => acc + current,
-    0
-  );
-  const totalRating = business.ratings.reduce(
-    (acc, current, index) => acc + current * (index + 1),
-    0
-  );
-  const avgRating = totalRating / numRatings || 0;
+  const { avgRating, numRatings } = getRatingStats(business.ratings);
 
   return (
     <div className="h-48 font-rubik transition-colors hover:bg-gray-50 sm:flex">
