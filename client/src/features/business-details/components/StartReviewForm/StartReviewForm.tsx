@@ -4,6 +4,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { useRouter } from 'next/router';
 import { Fragment, useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { buildFormData } from 'src/utils/browser';
 import { classNames } from 'src/utils/tailwind';
 import Buttons from './Buttons';
@@ -20,7 +21,7 @@ export default function StartReview({ isOpen, closeModal }: StartReviewProps) {
   const { query } = useRouter();
   const businessId = query.businessId as string;
 
-  const mutation = useSubmitReview(businessId);
+  const mutation = useSubmitReview();
 
   const { register, control, setValue, getValues, handleSubmit, reset } =
     useForm<IReviewFormValues>({
@@ -41,9 +42,15 @@ export default function StartReview({ isOpen, closeModal }: StartReviewProps) {
     if (data.images) {
       data.images.forEach((image) => formData.append('image', image));
     }
+    formData.append('business', businessId);
+
     mutation.mutate(formData, {
       onSuccess: () => {
+        toast.success('Review successfully submitted.');
         closeModal();
+      },
+      onError: () => {
+        toast.error('Could not submit review.');
       },
     });
   };
