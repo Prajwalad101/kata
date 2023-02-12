@@ -11,7 +11,9 @@ import { useBusiness, useReviews } from '@features/business-details/queries';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
+import { toast } from 'react-toastify';
 import { Portal, SecondaryButton } from 'src/components';
+import { useUser } from 'src/layouts/UserProvider';
 import { addOrRemove } from 'src/utils/array';
 import { classNames } from 'src/utils/tailwind';
 
@@ -20,6 +22,8 @@ interface ReviewSectionProps {
 }
 
 export default function ReviewSection({ className = '' }: ReviewSectionProps) {
+  const user = useUser();
+
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [selectedReviewSort, setSelectedReviewSort] = useState(
     reviewSortOptions[0]
@@ -31,7 +35,8 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
 
   const reviewsResult = useReviews({
     filters: {
-      match: { business: businessId },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      match: { business: businessId as any },
       in: { rating: selectedRatings },
     },
     sort: selectedReviewSort.field,
@@ -54,7 +59,13 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
         <Portal selector="#start-review-button">
           <SecondaryButton
             className="px-6 py-2 sm:py-[10px]"
-            onClick={() => setReviewModalOpen(true)}
+            onClick={() => {
+              if (!user)
+                return toast.error(
+                  'You have to be logged in to submit a review.'
+                );
+              setReviewModalOpen(true);
+            }}
           >
             Start Review
           </SecondaryButton>
