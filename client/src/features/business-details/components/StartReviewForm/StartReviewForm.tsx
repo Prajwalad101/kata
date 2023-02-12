@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { Fragment, useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import { useUser } from 'src/layouts/UserProvider';
 import { buildFormData } from 'src/utils/browser';
 import { classNames } from 'src/utils/tailwind';
 import Buttons from './Buttons';
@@ -21,6 +22,7 @@ interface StartReviewProps {
 export default function StartReview({ isOpen, closeModal }: StartReviewProps) {
   const { query } = useRouter();
   const businessId = query.businessId as string;
+  const user = useUser();
 
   const mutation = useSubmitReview();
 
@@ -37,13 +39,18 @@ export default function StartReview({ isOpen, closeModal }: StartReviewProps) {
   }, [mutation.isSuccess, reset]);
 
   const onSubmit: SubmitHandler<IReviewFormValues> = (data) => {
+    const userId = user?._id;
+    if (!userId)
+      return toast.error('You have to be logged in to submit a review.');
+
     const formData = new FormData();
-    buildFormData({ formData, data: data });
+    buildFormData({ formData, data });
+    formData.append('business', businessId);
+    formData.append('user', userId);
 
     if (data.images) {
       data.images.forEach((image) => formData.append('image', image));
     }
-    formData.append('business', businessId);
 
     mutation.mutate(formData, {
       onSuccess: () => {
