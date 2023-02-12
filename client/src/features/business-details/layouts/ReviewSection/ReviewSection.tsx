@@ -78,8 +78,7 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
         </div>
         <div className="mb-7 border-b border-gray-300" />
         <Ratings
-          avgRating={business.avgRating}
-          numReviews={business.rating_count}
+          ratings={business.ratings}
           className="mb-7"
           onClick={(rating: number) => {
             const ratings = addOrRemove(selectedRatings, rating);
