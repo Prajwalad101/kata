@@ -1,6 +1,6 @@
 import { IReview } from '@destiny/common/types';
 import { ReviewQueryParams } from '@features/business-details/types';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 export default function useReviews(queryParams?: ReviewQueryParams) {
   // sort ratings array because order of keys in an array matters

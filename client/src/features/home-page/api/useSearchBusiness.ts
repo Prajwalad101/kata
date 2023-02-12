@@ -1,6 +1,6 @@
 import { IBusiness } from '@destiny/common/types';
+import { useQuery } from '@tanstack/react-query';
 import { AxiosInstance } from 'axios';
-import { useQuery } from 'react-query';
 import useCreateApi from 'src/api/useCreateApi';
 
 // properties of business returned by the server

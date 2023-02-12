@@ -12,10 +12,10 @@ import {
   BusinessList,
   SearchBusinessSection,
 } from '@features/search-business/layouts';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { GetServerSideProps } from 'next';
 import { memo, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { dehydrate, QueryClient } from 'react-query';
 import { PropagateLoader } from 'react-spinners';
 import { NavigationProvider } from 'src/components/context-provider';
 import { AppLayout } from 'src/components/layout';

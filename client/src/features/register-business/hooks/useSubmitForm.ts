@@ -1,6 +1,6 @@
 import { IBusiness } from '@destiny/common/types';
+import { useMutation } from '@tanstack/react-query';
 import { AxiosInstance } from 'axios';
-import { useMutation } from 'react-query';
 import useCreateApi from 'src/api/useCreateApi';
 
 export interface SubmitFormResponse {
