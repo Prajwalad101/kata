@@ -41,12 +41,10 @@ export default function LocationAndContact({
         </div>
         <div className="mb-4">
           {directions.map((direction, index) => (
-            <>
-              <div key={index} className="mb-2 flex items-center gap-4 ">
-                <AiOutlineAim size={20} className="shrink-0" />
-                <span className="text-gray-800">{direction}</span>
-              </div>
-            </>
+            <div key={index} className="mb-2 flex items-center gap-4 ">
+              <AiOutlineAim size={20} className="shrink-0" />
+              <span className="text-gray-800">{direction}</span>
+            </div>
           ))}
         </div>
       </div>
