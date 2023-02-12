@@ -21,4 +21,5 @@ export interface IBusiness {
   total_rating: number;
   rating_count: number;
   avgRating: number;
+  ratings: [number, number, number, number, number];
 }
