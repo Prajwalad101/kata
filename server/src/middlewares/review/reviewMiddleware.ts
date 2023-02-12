@@ -7,18 +7,23 @@ import catchAsync from '../../utils/catchAsync';
 // increments the fields (rating_count, total_rating) when a review is created
 export const incrementBusinessRating = catchAsync(
   async (req: Request, _res: Response, next: NextFunction) => {
-    // throw error if businessId is not provided
-    if (!req.query.business)
+    if (!req.body.business) {
       return next(new AppError('No business id found', 400));
+    }
+    if (!req.body.rating) {
+      return next(new AppError('No rating found', 400));
+    }
 
-    // throw error if rating is not provided
-    if (!req.body.rating) return next(new AppError('No rating found', 400));
-
-    const business = await Business.findById(req.query.business);
-    if (!business) return next();
+    const business = await Business.findById(req.body.business);
+    if (!business) {
+      return next(new AppError('No business with that id found', 400));
+    }
 
     business.rating_count += 1; //increment rating_count by 1
     business.total_rating += Number(req.body.rating); // increment total_rating by new rating
+
+    console.log('Business', business);
+
     await business.save();
 
     next();
@@ -66,17 +71,6 @@ export const deleteBusinessRating = catchAsync(
     business.rating_count -= 1; // decrement rating_count
     business.total_rating -= rating; // decrement total_rating by the current rating
     await business.save();
-
-    next();
-  }
-);
-
-export const setBusinessId = catchAsync(
-  async (req: Request, _res: Response, next: NextFunction) => {
-    // if request body has no business property set,
-    // create that property with businessId from params object
-    if (!req.body.business && req.params.businessId)
-      req.body.business = req.params.businessId;
 
     next();
   }

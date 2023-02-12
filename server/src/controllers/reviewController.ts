@@ -41,10 +41,6 @@ const getReview = catchAsync(
 
 const createReview = catchAsync(
   async (req: Request, res: Response, _next: NextFunction) => {
-    req.body.business = req.query.business;
-
-    console.log(req.body);
-
     const newReview = await Review.create(req.body);
 
     res.status(201).json({
