@@ -31,8 +31,7 @@ export default function buildFormData({
       })
     );
   } else {
-    if (!parentKey) return;
-    const value = data === null ? '' : data;
-    formData.append(parentKey, value);
+    if (!parentKey || !data) return;
+    formData.append(parentKey, data);
   }
 }
