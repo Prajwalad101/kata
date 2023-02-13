@@ -104,9 +104,9 @@ businessSchema.virtual('reviews', {
 // calculate the avgRating field from total_rating & rating_count
 // only runs when creating business and updating business through save (done in reviewMiddleware)
 // businessSchema.pre('save', function (next) {
-//   if (this.total_rating === 0 || this.rating_count === 0) return next();
+//   if (this.totalRating === 0 || this.numReviews === 0) return next();
 
-//   this.avgRating = this.total_rating / this.rating_count;
+//   this.avgRating = this.totalRating / this.numReviews;
 //   next();
 // });
 

@@ -20,18 +20,10 @@ export const incrementBusinessRating = catchAsync(
     }
 
     const rating = req.body.rating;
-    // if rating is 1, add that value to the 0th index
-    // if rating is 4, add that value to the 3rd index
-
     const ratingIndex = rating - 1;
 
     business.ratings[ratingIndex] += 1;
-
-    // business.rating_count += 1; //increment rating_count by 1
-    // business.total_rating += Number(req.body.rating); // increment total_rating by new rating
-    // console.log('Business', business);
     await business.save();
-
     next();
   }
 );

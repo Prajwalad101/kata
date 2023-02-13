@@ -1,5 +1,6 @@
 import express from 'express';
 import reviewController from '../controllers/reviewController';
+import { jwtAuth } from '../middlewares/jwtAuthMiddleware';
 import {
   deleteBusinessRating,
   incrementBusinessRating,
@@ -16,10 +17,12 @@ const upload = uploadFiles({
   fieldName: 'image',
 });
 
-router
-  .route('/')
-  .get(reviewController.getAllReviews)
-  .post(upload, incrementBusinessRating, reviewController.createReview);
+router.route('/').get(reviewController.getAllReviews).post(
+  jwtAuth(), // authenticate users before creating reviews
+  upload,
+  incrementBusinessRating,
+  reviewController.createReview
+);
 
 router
   .route('/:id')

@@ -6,6 +6,7 @@ export default function generateAccessToken(user: any) {
   const secret = process.env.AUTH_SECRET as string;
 
   const payload = {
+    _id: user._id,
     user: user.username,
     provider: user.provider,
     email: user.email,
