@@ -6,6 +6,7 @@ import {
 } from '@features/business-details/components';
 import { FaPhoneAlt } from 'react-icons/fa';
 import RatingIcons from 'src/components/icons/ratings/RatingIcons';
+import getRatingStats from 'src/utils/getRatingStats';
 
 interface BusinessInfoSectionProps {
   business: IBusiness;
@@ -16,16 +17,7 @@ export default function BusinessInfoSection({
   business,
   className = '',
 }: BusinessInfoSectionProps) {
-  const numRatings = business.ratings.reduce(
-    (acc, current) => acc + current,
-    0
-  );
-  const totalRating = business.ratings.reduce(
-    (acc, current, index) => acc + current * (index + 1),
-    0
-  );
-
-  const avgRating = totalRating / numRatings;
+  const { avgRating, numRatings } = getRatingStats(business.ratings);
 
   return (
     <div className={className}>

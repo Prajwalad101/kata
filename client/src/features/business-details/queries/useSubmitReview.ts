@@ -19,15 +19,21 @@ export default function useSubmitReview() {
 
   return useMutation((reviewForm: FormData) => postReview(reviewForm, api), {
     onSuccess(newReview) {
-      queryClient.setQueryData<IReview[]>(['reviews'], (oldData) => {
-        if (!oldData) return [newReview]; // if no data, return new data
-        return [newReview, ...oldData];
-      });
+      // set query data for reviews
+      queryClient.setQueriesData<IReview[]>(
+        ['reviews', newReview.business],
+        (oldData) => {
+          if (!oldData) return [newReview]; // if no data, return new data
+          const updatedData = [newReview, ...oldData];
+          return updatedData;
+        }
+      );
 
+      // set query data for business ratings
       queryClient.setQueryData<IBusiness>(
         ['business', newReview.business],
         (data) => {
-          if (!data) return undefined;
+          if (!data) return data;
           // deep clone object
           const prevData = JSON.parse(JSON.stringify(data)) as IBusiness;
           const ratingIndex = newReview.rating - 1;
