@@ -9,4 +9,5 @@ export interface IReview {
   business: Schema.Types.ObjectId;
   createdAt: string;
   author: Schema.Types.ObjectId;
+  images?: string[];
 }

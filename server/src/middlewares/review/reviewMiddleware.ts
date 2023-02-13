@@ -4,30 +4,6 @@ import Review from '../../models/reviewModel';
 import AppError from '../../utils/appError';
 import catchAsync from '../../utils/catchAsync';
 
-// increments the fields (rating_count, total_rating) when a review is created
-export const incrementBusinessRating = catchAsync(
-  async (req: Request, _res: Response, next: NextFunction) => {
-    if (!req.body.business) {
-      return next(new AppError('No business id found', 400));
-    }
-    if (!req.body.rating) {
-      return next(new AppError('No rating found', 400));
-    }
-
-    const business = await Business.findById(req.body.business);
-    if (!business) {
-      return next(new AppError('No business with that id found', 400));
-    }
-
-    const rating = req.body.rating;
-    const ratingIndex = rating - 1;
-
-    business.ratings[ratingIndex] += 1;
-    await business.save();
-    next();
-  }
-);
-
 // updates the field (total_rating) when a review is updated
 export const updateBusinessRating = catchAsync(
   async (req: Request, _res: Response, next: NextFunction) => {

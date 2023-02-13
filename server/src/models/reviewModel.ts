@@ -26,6 +26,9 @@ const reviewSchema = new Schema<IReview>(
       ref: 'User',
       required: [true, 'A review must have an author'],
     },
+    images: {
+      type: [String],
+    },
   },
   { timestamps: true }
 );
@@ -38,7 +41,7 @@ reviewSchema.post('save', async function (doc) {
   });
 });
 
-// update business fields
+// update business ratings
 reviewSchema.post('save', async function (doc) {
   const ratingIndex = doc.rating - 1;
 
