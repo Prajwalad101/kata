@@ -3,7 +3,7 @@ import { IReviewFormValues } from '@features/business-details/types';
 import { Dialog, Transition } from '@headlessui/react';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
-import { Fragment, useEffect } from 'react';
+import { Fragment } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { useUser } from 'src/layouts/UserProvider';
@@ -31,12 +31,9 @@ export default function StartReview({ isOpen, closeModal }: StartReviewProps) {
       defaultValues: { review: '', rating: 0 },
     });
 
-  // reset form after successful mutation
-  useEffect(() => {
-    if (mutation.isSuccess) {
-      reset({ review: '', rating: 0 });
-    }
-  }, [mutation.isSuccess, reset]);
+  const resetForm = () => {
+    reset({ review: '', rating: 0 });
+  };
 
   const onSubmit: SubmitHandler<IReviewFormValues> = (data) => {
     const userId = user?._id;
@@ -46,7 +43,7 @@ export default function StartReview({ isOpen, closeModal }: StartReviewProps) {
     const formData = new FormData();
     buildFormData({ formData, data });
     formData.append('business', businessId);
-    formData.append('user', userId);
+    formData.append('author', userId);
 
     if (data.images) {
       data.images.forEach((image) => formData.append('image', image));
@@ -55,9 +52,11 @@ export default function StartReview({ isOpen, closeModal }: StartReviewProps) {
     mutation.mutate(formData, {
       onSuccess: () => {
         toast.success('Review successfully submitted.');
+        resetForm();
         closeModal();
       },
       onError: (error) => {
+        resetForm();
         if (error instanceof AxiosError) {
           if (error.response?.status === 401) {
             return toast.error('You must be authenticated to submit a review');

@@ -15,7 +15,6 @@ export default function UserProvider({ children }: UserProviderProps) {
   const accessToken = useCookie('access-token', null);
 
   const user = accessToken ? parseJwt(accessToken) : undefined;
-  console.log(user);
   const value = user as UserSession | undefined;
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
