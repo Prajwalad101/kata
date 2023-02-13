@@ -89,6 +89,7 @@ const businessSchema = new mongoose.Schema<IBusiness>(
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
+    timestamps: true,
   }
 );
 
