@@ -2,6 +2,7 @@ import { FieldLayout } from '@features/register-business/layouts';
 import { FormInputs } from '@features/register-business/layouts/FormContainer';
 import { getUserCoordinates } from '@features/register-business/utils/api';
 import { Control, Controller } from 'react-hook-form';
+import { SecondaryButton } from 'src/components';
 import FormErrorMessage from 'src/components/FormErrorMessage/FormErrorMessage';
 import MyLabel from '../MyLabel/MyLabel';
 
@@ -24,13 +25,13 @@ export default function GeoLocationInput({ control }: GeoLocationInputProps) {
         name="coordinates"
         render={({ field, fieldState }) => (
           <div>
-            <button
-              className="mt-4 flex items-center gap-2 rounded-md bg-blue-500 px-6 py-3 text-white transition-all hover:bg-blue-400 hover:shadow-md"
+            <SecondaryButton
               type="button"
               onClick={() => handleClick(field.onChange)}
+              className="py-3 px-6"
             >
               Set Location
-            </button>
+            </SecondaryButton>
             <FormErrorMessage className="mt-2" error={fieldState.error} />
           </div>
         )}

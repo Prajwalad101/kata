@@ -30,7 +30,7 @@ interface FormContainerProps {
 }
 
 function FormContainer({ mutation }: FormContainerProps) {
-  const [step, setStep] = useState(4);
+  const [step, setStep] = useState(3);
 
   const resolver = yupResolver(validationSchemas[step - 1]);
   const { register, control, handleSubmit, setValue } = useForm({
@@ -56,6 +56,11 @@ function FormContainer({ mutation }: FormContainerProps) {
       data.socials = data.socials.map(
         (social: { value: string }) => social.value
       );
+      data.location = {
+        type: 'Point',
+        coordinates: data.coordinates,
+        address: data.address,
+      };
       const formData = dataToFormData(data);
       mutation.mutate(formData, {
         onError: (error) => {

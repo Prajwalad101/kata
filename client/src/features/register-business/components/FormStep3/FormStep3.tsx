@@ -33,8 +33,8 @@ export default function FormStep3({ control, className = '' }: FormStep3Props) {
   );
 
   const featureOptions = selectedCategory?.features.map((feature) => ({
-    label: capitalizeWord(feature),
-    value: feature,
+    label: capitalizeWord(feature.value),
+    value: feature.value,
   }));
 
   const { errors } = useFormState({ control });
