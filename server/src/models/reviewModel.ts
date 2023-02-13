@@ -1,5 +1,6 @@
 import { IReview } from '@destiny/common/types';
 import { model, Schema } from 'mongoose';
+import Business from './businessModel';
 import User from './userModel';
 
 const reviewSchema = new Schema<IReview>(
@@ -34,6 +35,15 @@ reviewSchema.post('save', async function (doc) {
   await User.findByIdAndUpdate(doc.author, {
     $inc: { trustPoints: 5 },
     $push: { reviews: doc._id },
+  });
+});
+
+// update business fields
+reviewSchema.post('save', async function (doc) {
+  const ratingIndex = doc.rating - 1;
+
+  await Business.findByIdAndUpdate(doc.business, {
+    $inc: { [`ratings.${ratingIndex}`]: 1 },
   });
 });
 

@@ -3,7 +3,6 @@ import reviewController from '../controllers/reviewController';
 import { jwtAuth } from '../middlewares/jwtAuthMiddleware';
 import {
   deleteBusinessRating,
-  incrementBusinessRating,
   updateBusinessRating,
 } from '../middlewares/review/reviewMiddleware';
 import uploadFiles from '../utils/multer/uploadFiles';
@@ -20,7 +19,7 @@ const upload = uploadFiles({
 router.route('/').get(reviewController.getAllReviews).post(
   jwtAuth(), // authenticate users before creating reviews
   upload,
-  incrementBusinessRating,
+  // incrementBusinessRating,
   reviewController.createReview
 );
 
