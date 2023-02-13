@@ -5,6 +5,7 @@
 @import '../features/search-business/styles/checkbox.css';
 @import '../features/business-details/styles/review-skeleton-animation.css';
 @import './line-clamp.css';
+@import '../features/business-details/styles/rating-hover.css';
 
 html,
 body {

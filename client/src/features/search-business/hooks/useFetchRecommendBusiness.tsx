@@ -1,19 +1,12 @@
 import { IBusiness } from '@destiny/common/types';
 import { isString } from '@destiny/common/utils';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { useQuery } from 'react-query';
 
 export type BusinessPage = Pick<
   IBusiness,
-  | '_id'
-  | 'avgRating'
-  | 'images'
-  | 'location'
-  | 'name'
-  | 'rating_count'
-  | 'reviews'
-  | 'total_rating'
+  '_id' | 'images' | 'location' | 'name' | 'reviews' | 'ratings' | 'workingDays'
 >[];
 
 interface SearchBusinessResponse {

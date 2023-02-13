@@ -41,10 +41,11 @@ const getReview = catchAsync(
 
 const createReview = catchAsync(
   async (req: Request, res: Response, _next: NextFunction) => {
-    req.body.business = req.query.business;
+    const files = req.files as Express.Multer.File[] | undefined;
 
-    console.log(req.body);
+    const filePaths = files?.map((file) => file.path);
 
+    req.body.images = filePaths;
     const newReview = await Review.create(req.body);
 
     res.status(201).json({

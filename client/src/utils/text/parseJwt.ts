@@ -1,4 +1,6 @@
 export default function parseJwt(token: string): object | undefined {
+  if (!token) return;
+
   const base64Url = token.split('.')[1];
   if (!base64Url) return;
 

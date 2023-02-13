@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 const userSchema = new mongoose.Schema({
   userName: {
@@ -19,6 +19,14 @@ const userSchema = new mongoose.Schema({
   providerId: {
     type: String,
     required: [true, 'A user must have a provider id'],
+  },
+  trustPoints: {
+    type: Number,
+    default: 0,
+  },
+  reviews: {
+    type: [Schema.Types.ObjectId],
+    ref: 'Review',
   },
 });
 

@@ -14,14 +14,12 @@ passport.use(
       if (!profile.email_verified) {
         return done(null, false); // triggers failure redirect
       }
-      console.log(profile);
 
       try {
         user = await findUser(profile.id);
         if (!user) {
           user = await createUser(profile);
         }
-
         return done(null, user);
       } catch (err) {
         return done(err, null);

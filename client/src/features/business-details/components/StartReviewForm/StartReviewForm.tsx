@@ -1,9 +1,12 @@
 import { useSubmitReview } from '@features/business-details/queries';
 import { IReviewFormValues } from '@features/business-details/types';
 import { Dialog, Transition } from '@headlessui/react';
+import { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
-import { Fragment, useEffect } from 'react';
+import { Fragment } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
+import { useUser } from 'src/layouts/UserProvider';
 import { buildFormData } from 'src/utils/browser';
 import { classNames } from 'src/utils/tailwind';
 import Buttons from './Buttons';
@@ -19,31 +22,47 @@ interface StartReviewProps {
 export default function StartReview({ isOpen, closeModal }: StartReviewProps) {
   const { query } = useRouter();
   const businessId = query.businessId as string;
+  const user = useUser();
 
-  const mutation = useSubmitReview(businessId);
+  const mutation = useSubmitReview();
 
   const { register, control, setValue, getValues, handleSubmit, reset } =
     useForm<IReviewFormValues>({
       defaultValues: { review: '', rating: 0 },
     });
 
-  // reset form after successful mutation
-  useEffect(() => {
-    if (mutation.isSuccess) {
-      reset({ review: '', rating: 0 });
-    }
-  }, [mutation.isSuccess, reset]);
+  const resetForm = () => {
+    reset({ review: '', rating: 0 });
+  };
 
   const onSubmit: SubmitHandler<IReviewFormValues> = (data) => {
+    const userId = user?._id;
+    if (!userId)
+      return toast.error('You have to be logged in to submit a review.');
+
     const formData = new FormData();
-    buildFormData({ formData, data: data });
+    buildFormData({ formData, data });
+    formData.append('business', businessId);
+    formData.append('author', userId);
 
     if (data.images) {
       data.images.forEach((image) => formData.append('image', image));
     }
+
     mutation.mutate(formData, {
       onSuccess: () => {
+        toast.success('Review successfully submitted.');
+        resetForm();
         closeModal();
+      },
+      onError: (error) => {
+        resetForm();
+        if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            return toast.error('You must be authenticated to submit a review');
+          }
+        }
+        toast.error('Could not submit review.');
       },
     });
   };
@@ -73,12 +92,7 @@ export default function StartReview({ isOpen, closeModal }: StartReviewProps) {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel
-                className={classNames(
-                  'w-full max-w-3xl',
-                  mutation.isLoading ? 'cursor-wait' : 'cursor-default'
-                )}
-              >
+              <Dialog.Panel className="w-full max-w-3xl">
                 <div
                   className={classNames(
                     mutation.isLoading ? 'bg-gray-50' : 'bg-white',

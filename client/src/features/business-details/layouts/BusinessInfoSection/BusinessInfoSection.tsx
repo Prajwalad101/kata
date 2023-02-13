@@ -6,6 +6,7 @@ import {
 } from '@features/business-details/components';
 import { FaPhoneAlt } from 'react-icons/fa';
 import RatingIcons from 'src/components/icons/ratings/RatingIcons';
+import getRatingStats from 'src/utils/getRatingStats';
 
 interface BusinessInfoSectionProps {
   business: IBusiness;
@@ -16,6 +17,8 @@ export default function BusinessInfoSection({
   business,
   className = '',
 }: BusinessInfoSectionProps) {
+  const { avgRating, numRatings } = getRatingStats(business.ratings);
+
   return (
     <div className={className}>
       <div className="mb-5 flex flex-col gap-5 md:mb-0 md:flex-row">
@@ -23,13 +26,9 @@ export default function BusinessInfoSection({
         <div>
           <h4 className="mb-2 text-[23px] font-medium">{business.name}</h4>
           <div className="mb-5 flex items-center gap-10">
-            <RatingIcons
-              className="gap-1"
-              rating={business.avgRating}
-              size={20}
-            />
+            <RatingIcons className="gap-1" rating={avgRating} size={20} />
             <span className="inline-block text-gray-800 underline">
-              {business.rating_count} reviews
+              {numRatings} reviews
             </span>
           </div>
           <span className="mb-2 inline-block">{business.location.address}</span>

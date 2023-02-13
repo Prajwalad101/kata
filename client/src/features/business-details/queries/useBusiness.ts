@@ -1,8 +1,8 @@
 import { IBusiness } from '@destiny/common/types';
 import { isString } from '@destiny/common/utils';
+import { useQuery } from '@tanstack/react-query';
 import axios, { AxiosInstance } from 'axios';
 import { useRouter } from 'next/router';
-import { useQuery } from 'react-query';
 import useCreateApi from 'src/api/useCreateApi';
 
 export interface Response {

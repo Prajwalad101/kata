@@ -1,50 +1,53 @@
 import { IReview } from '@destiny/common/types';
-import { SearchBusinessResponse } from '@features/search-business/hooks/useFetchRecommendBusiness';
+import { OpenOrClosed } from '@features/business-details/components';
+import { BusinessPage } from '@features/search-business/hooks/useFetchRecommendBusiness';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaQuoteLeft } from 'react-icons/fa';
 import RatingIcons from 'src/components/icons/ratings/RatingIcons';
 import Slider from 'src/components/slider/Slider';
+import getRatingStats from 'src/utils/getRatingStats';
 import { getPublicFilePath } from 'src/utils/text';
 
 export interface BusinessCardProps {
-  business: SearchBusinessResponse[number];
+  business: BusinessPage[number];
 }
 
 function BusinessCard({ business }: BusinessCardProps) {
   // get image path relative to the public folder
   const images = business.images.map((image) => getPublicFilePath(image));
+  const { avgRating, numRatings } = getRatingStats(business.ratings);
 
   return (
-    <div className="font-rubik transition-colors hover:bg-gray-50 sm:flex">
+    <div className="h-48 font-rubik transition-colors hover:bg-gray-50 sm:flex">
       <Slider numItems={images.length} className="shrink-0 sm:w-[224px]">
         {images.map((image, index) => (
-          <div key={index} className="relative h-48 w-full">
-            <Image src={image} alt="image" layout="fill" objectFit="cover" />
+          <div key={index} className="relative h-full w-full">
+            <Image
+              src={image}
+              alt="image"
+              layout="fill"
+              objectFit="cover"
+              className="rounded-l-sm"
+            />
           </div>
         ))}
       </Slider>
       {/* Body */}
-      <div className="min-w-0 grow border-2 border-t-0 sm:border-t-2 sm:border-l-0">
+      <div className="min-w-0 grow rounded-r-sm border-2 border-t-0 sm:border-t-2 sm:border-l-0">
         <Link href={`/search/business/${business._id}`}>
           <a>
             <div className="p-2 sm:p-3">
               <h3 className="mb-2 text-lg font-medium">{business.name}</h3>
               <div className="mb-2 flex items-center gap-4">
                 <div className="flex items-center gap-3">
-                  <RatingIcons rating={business.avgRating} />
-                  <p className="text-sm text-secondarytext">
-                    ({business.rating_count})
-                  </p>
+                  <RatingIcons rating={avgRating} />
+                  <p className="text-sm text-secondarytext">({numRatings})</p>
                 </div>
-                {/* <p className="text-[15px] font-medium text-secondarytext">
-                  {checkInterval(
-                    business.businessHours.open,
-                    business.businessHours.close
-                  )
-                    ? 'Open now'
-                    : 'Closed'}
-                </p> */}
+                <OpenOrClosed
+                  className="text-sm font-medium text-gray-600"
+                  workingDays={business.workingDays}
+                />
               </div>
               <p className="mb-4 text-sm text-secondarytext">
                 {business.location.address}

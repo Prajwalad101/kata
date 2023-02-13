@@ -78,13 +78,18 @@ const businessSchema = new mongoose.Schema<IBusiness>(
       },
     },
     verified: { type: Boolean, default: false },
-    total_rating: { type: Number, default: 0 },
-    rating_count: { type: Number, default: 0 },
-    avgRating: { type: Number, default: 0 },
+    // total_rating: { type: Number, default: 0 },
+    // rating_count: { type: Number, default: 0 },
+    // avgRating: { type: Number, default: 0 },
+    ratings: {
+      type: [Number],
+      default: [0, 0, 0, 0, 0],
+    },
   },
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
+    timestamps: true,
   }
 );
 
@@ -99,33 +104,10 @@ businessSchema.virtual('reviews', {
 
 // calculate the avgRating field from total_rating & rating_count
 // only runs when creating business and updating business through save (done in reviewMiddleware)
-businessSchema.pre('save', function (next) {
-  if (this.total_rating === 0 || this.rating_count === 0) return next();
+// businessSchema.pre('save', function (next) {
+//   if (this.totalRating === 0 || this.numReviews === 0) return next();
 
-  this.avgRating = this.total_rating / this.rating_count;
-  next();
-});
-
-//--------LEGACY CODE---------
-// businessSchema.pre('find', function (next) {
-//   this.populate({
-//     path: 'reviews',
-//     select: 'review -business',
-//     perDocumentLimit: 2,
-//     options: { sort: { likes: -1, createdAt: -1 } },
-//   });
-
-//   next();
-// });
-
-// businessSchema.pre('findOne', function (next) {
-//   this.populate({
-//     path: 'reviews',
-//     select: '-business review rating likes dislikes createdAt',
-//     options: { sort: '-likes' },
-//     perDocumentLimit: 10,
-//   });
-
+//   this.avgRating = this.totalRating / this.numReviews;
 //   next();
 // });
 

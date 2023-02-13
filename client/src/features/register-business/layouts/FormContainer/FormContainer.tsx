@@ -3,10 +3,10 @@ import FormStep4 from '@features/register-business/components/FormStep4/FormStep
 import { SubmitFormResponse } from '@features/register-business/hooks/useSubmitForm';
 import { dataToFormData } from '@features/register-business/utils/objects/dataToFormData';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { UseMutationResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { UseMutationResult } from 'react-query';
 import { toast } from 'react-toastify';
 import { Divider, PrimaryButton, SecondaryButton } from 'src/components';
 import { Breadcrumbs, FormStep1, FormStep2, Header } from '../../components';
@@ -30,7 +30,7 @@ interface FormContainerProps {
 }
 
 function FormContainer({ mutation }: FormContainerProps) {
-  const [step, setStep] = useState(4);
+  const [step, setStep] = useState(3);
 
   const resolver = yupResolver(validationSchemas[step - 1]);
   const { register, control, handleSubmit, setValue } = useForm({
@@ -56,6 +56,11 @@ function FormContainer({ mutation }: FormContainerProps) {
       data.socials = data.socials.map(
         (social: { value: string }) => social.value
       );
+      data.location = {
+        type: 'Point',
+        coordinates: data.coordinates,
+        address: data.address,
+      };
       const formData = dataToFormData(data);
       mutation.mutate(formData, {
         onError: (error) => {

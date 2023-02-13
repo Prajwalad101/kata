@@ -11,8 +11,8 @@ import {
 import { useBusiness } from '@features/business-details/queries';
 import { fetchBusiness } from '@features/business-details/queries/useBusiness';
 import { CategoriesDropdown } from '@features/home-page/components';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { GetServerSideProps } from 'next';
-import { dehydrate, QueryClient } from 'react-query';
 import ConditionalRender from 'src/components/conditional-render/ConditionalRender';
 import { NavigationProvider } from 'src/components/context-provider';
 import { AppLayout } from 'src/components/layout';

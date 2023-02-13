@@ -2,15 +2,18 @@ import {
   Ratings,
   ReviewSkeleton,
   SortReview,
-  StartReview,
+  StartReviewForm,
   UserReview,
 } from '@features/business-details/components';
+import ReviewsNotFound from '@features/business-details/components/ReviewsNotFound.ts/ReviewsNotFound';
 import { reviewSortOptions } from '@features/business-details/data';
 import { useBusiness, useReviews } from '@features/business-details/queries';
 import { useRouter } from 'next/router';
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
+import { toast } from 'react-toastify';
 import { Portal, SecondaryButton } from 'src/components';
+import { useUser } from 'src/layouts/UserProvider';
 import { addOrRemove } from 'src/utils/array';
 import { classNames } from 'src/utils/tailwind';
 
@@ -19,6 +22,8 @@ interface ReviewSectionProps {
 }
 
 export default function ReviewSection({ className = '' }: ReviewSectionProps) {
+  const user = useUser();
+
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [selectedReviewSort, setSelectedReviewSort] = useState(
     reviewSortOptions[0]
@@ -30,7 +35,8 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
 
   const reviewsResult = useReviews({
     filters: {
-      match: { business: businessId },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      match: { business: businessId as any },
       in: { rating: selectedRatings },
     },
     sort: selectedReviewSort.field,
@@ -38,27 +44,14 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
 
   const businessResult = useBusiness();
 
-  if (reviewsResult.isError) {
-    return <div>Some error occurred while getting reviews</div>;
-  }
-
   const reviews = reviewsResult.data || [];
   const business = businessResult.data;
-
-  // If there are no reviews
-  if (!reviews) {
-    return (
-      <div className="flex justify-center">
-        <h2 className="text-xl font-medium">No reviews found</h2>
-      </div>
-    );
-  }
 
   if (!business) return <></>;
 
   return (
     <>
-      <StartReview
+      <StartReviewForm
         isOpen={reviewModalOpen}
         closeModal={() => setReviewModalOpen(false)}
       />
@@ -66,7 +59,13 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
         <Portal selector="#start-review-button">
           <SecondaryButton
             className="px-6 py-2 sm:py-[10px]"
-            onClick={() => setReviewModalOpen(true)}
+            onClick={() => {
+              if (!user)
+                return toast.error(
+                  'You have to be logged in to submit a review.'
+                );
+              setReviewModalOpen(true);
+            }}
           >
             Start Review
           </SecondaryButton>
@@ -90,8 +89,7 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
         </div>
         <div className="mb-7 border-b border-gray-300" />
         <Ratings
-          avgRating={business.avgRating}
-          numReviews={business.rating_count}
+          ratings={business.ratings}
           className="mb-7"
           onClick={(rating: number) => {
             const ratings = addOrRemove(selectedRatings, rating);
@@ -99,18 +97,14 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
           }}
         />
         <div className="mb-10 border-b border-gray-300" />
-        {reviewsResult.isLoading ? (
-          <ReviewSkeleton items={5} />
+        {reviewsResult.isLoading && <ReviewSkeleton items={5} />}
+        {reviewsResult.isError && <ReviewsNotFound />}
+        {reviewsResult.isSuccess && reviews.length === 0 ? (
+          <ReviewsNotFound />
         ) : (
-          <>
-            <div className="child-notlast:mb-7">
-              {reviews.map((review) => (
-                <Fragment key={review._id.toString()}>
-                  <UserReview review={review} />
-                </Fragment>
-              ))}
-            </div>
-          </>
+          reviews.map((review) => (
+            <UserReview key={review._id.toString()} review={review} />
+          ))
         )}
       </div>
     </>

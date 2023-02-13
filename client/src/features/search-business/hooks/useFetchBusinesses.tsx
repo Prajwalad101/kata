@@ -1,7 +1,7 @@
 import { isString } from '@destiny/common/utils';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { useInfiniteQuery } from 'react-query';
 import { BusinessPage } from './useFetchRecommendBusiness';
 
 interface SearchBusinessResponse {

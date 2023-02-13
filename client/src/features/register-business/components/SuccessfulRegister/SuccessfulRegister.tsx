@@ -29,7 +29,7 @@ export default function SuccessfulRegister() {
   };
 
   const rocketAnimOptions = {
-    loop: true,
+    loop: false,
     autoplay: true,
     animationData: rocketLaunchAnimation,
     rendererSetting: { preserveAspectRatio: 'xMidYMid slice' },

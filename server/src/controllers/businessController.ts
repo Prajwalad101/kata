@@ -13,9 +13,8 @@ const getAllBusinesses = catchAsync(
       'name',
       'location',
       'images',
-      'total_rating',
-      'rating_count',
-      'avgRating',
+      'ratings',
+      'workingDays',
     ];
     req.query.fields = defaultFields.join(',');
 
