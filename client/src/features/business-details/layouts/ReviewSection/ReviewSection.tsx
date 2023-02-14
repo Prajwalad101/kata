@@ -30,7 +30,10 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
   const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
 
   const reviewsResult = useReviews({
-    'rating[in]': selectedRatings,
+    // sort array so that the order in querykey remains same
+    ...(selectedRatings.length > 0 && {
+      'rating[in]': selectedRatings.sort((a, b) => a - b),
+    }),
     ...(searchText && { 'text[search]': searchText }),
     sort: selectedSort.field,
   });
