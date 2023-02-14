@@ -1,0 +1,19 @@
+.ratings div:hover ~ div .star-empty {
+  display: none;
+}
+
+.ratings > div > .star-full {
+  display: none;
+}
+
+.ratings div:hover ~ div .star-full {
+  display: block;
+}
+
+rating-icon1 .star-full {
+  display: block;
+}
+
+rating-icon2 .star-empty {
+  display: none;
+}
