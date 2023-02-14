@@ -8,7 +8,6 @@ import {
 import ReviewsNotFound from '@features/business-details/components/ReviewsNotFound.ts/ReviewsNotFound';
 import { reviewSortOptions } from '@features/business-details/data';
 import { useBusiness, useReviews } from '@features/business-details/queries';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { toast } from 'react-toastify';
@@ -30,15 +29,9 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
   );
   const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
 
-  const { query } = useRouter();
-  const businessId = query.businessId as string;
-
   const reviewsResult = useReviews({
-    filters: {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      match: { business: businessId as any },
-      in: { rating: selectedRatings },
-    },
+    'rating[in]': selectedRatings,
+    'text[search]': 'hello',
     sort: selectedReviewSort.field,
   });
 
