@@ -6,11 +6,10 @@ import {
   UserReview,
 } from '@features/business-details/components';
 import ReviewsNotFound from '@features/business-details/components/ReviewsNotFound.ts/ReviewsNotFound';
+import SearchReviews from '@features/business-details/components/SearchReviews/SearchReviews';
 import { reviewSortOptions } from '@features/business-details/data';
 import { useBusiness, useReviews } from '@features/business-details/queries';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { AiOutlineSearch } from 'react-icons/ai';
 import { toast } from 'react-toastify';
 import { Portal, SecondaryButton } from 'src/components';
 import { useUser } from 'src/layouts/UserProvider';
@@ -23,23 +22,20 @@ interface ReviewSectionProps {
 
 export default function ReviewSection({ className = '' }: ReviewSectionProps) {
   const user = useUser();
-
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
-  const [selectedReviewSort, setSelectedReviewSort] = useState(
-    reviewSortOptions[0]
-  );
+
+  // Filters for reviews
+  const [searchText, setSearchText] = useState<string>();
+  const [selectedSort, setSelectedSort] = useState(reviewSortOptions[0]);
   const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
 
-  const { query } = useRouter();
-  const businessId = query.businessId as string;
-
   const reviewsResult = useReviews({
-    filters: {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      match: { business: businessId as any },
-      in: { rating: selectedRatings },
-    },
-    sort: selectedReviewSort.field,
+    // sort array so that the order in querykey remains same
+    ...(selectedRatings.length > 0 && {
+      'rating[in]': selectedRatings.sort((a, b) => a - b),
+    }),
+    ...(searchText && { 'text[search]': searchText }),
+    sort: selectedSort.field,
   });
 
   const businessResult = useBusiness();
@@ -74,18 +70,10 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
         <div className="mb-7 flex flex-wrap-reverse items-center justify-between gap-y-5 gap-x-2">
           <SortReview
             sortOptions={reviewSortOptions}
-            selectedSort={selectedReviewSort}
-            onSelect={(sortItem) => setSelectedReviewSort(sortItem)}
+            selectedSort={selectedSort}
+            onSelect={(sortItem) => setSelectedSort(sortItem)}
           />
-          {/* Search bar */}
-          <div className="relative mr-[2px] flex w-max items-center">
-            <input
-              type="text"
-              className="rounded-[4px] border border-gray-500 px-5 py-[9px]"
-              placeholder="Search for reviews"
-            />
-            <AiOutlineSearch className="absolute right-4 shrink-0" size={20} />
-          </div>
+          <SearchReviews onChange={(text) => setSearchText(text)} />
         </div>
         <div className="mb-7 border-b border-gray-300" />
         <Ratings

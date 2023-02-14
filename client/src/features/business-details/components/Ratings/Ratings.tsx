@@ -54,7 +54,7 @@ export default function Ratings({
                   type="checkbox"
                   id={ratingLabels[index]}
                   className="cursor-pointer"
-                  onClick={() => onClick(rating)}
+                  onClick={() => onClick(index + 1)}
                 />
                 <label
                   className="w-[120px] cursor-pointer capitalize"

@@ -33,6 +33,9 @@ const reviewSchema = new Schema<IReview>(
   { timestamps: true }
 );
 
+// index based on business name and address
+reviewSchema.index({ review: 'text' });
+
 // update the user model after saving
 reviewSchema.post('save', async function (doc) {
   await User.findByIdAndUpdate(doc.author, {
