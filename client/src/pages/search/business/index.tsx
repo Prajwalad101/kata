@@ -5,7 +5,7 @@ import {
   SortItems,
 } from '@features/search-business/components';
 import BusinessNotFound from '@features/search-business/components/BusinessNotFound/BusinessNotFound';
-import { sortItemData } from '@features/search-business/data';
+import { sortOptions } from '@features/search-business/components/SortItems/SortItems';
 import { useFetchBusinesses } from '@features/search-business/hooks';
 import { fetchBusinesses } from '@features/search-business/hooks/useFetchBusinesses';
 import {
@@ -24,7 +24,7 @@ import { NextPageWithLayout } from 'src/pages/_app';
 
 const SearchBusiness: NextPageWithLayout = () => {
   const [selectedSort, setSelectedSort] = useState<string>(
-    sortItemData[0].sortField
+    sortOptions[0].value
   );
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
   const { ref, inView } = useInView();
@@ -49,7 +49,10 @@ const SearchBusiness: NextPageWithLayout = () => {
   );
 
   const SortComponent = (
-    <SortItems selectedSort={selectedSort} setSelectedSort={setSelectedSort} />
+    <SortItems
+      sort={selectedSort}
+      onSelect={(selected) => setSelectedSort(selected)}
+    />
   );
 
   return (
@@ -86,7 +89,7 @@ const MemoBusinessList = memo(BusinessList);
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
 
-  const sort = sortItemData[0].sortField;
+  const sort = sortOptions[0].value;
   const subcategory = context.query.name;
 
   const params = {
