@@ -6,9 +6,13 @@ import catchAsync from '../utils/catchAsync';
 
 const getAllReviews = catchAsync(
   async (req: Request, res: Response, _next: NextFunction) => {
-    const query = Review.find();
+    const reviewQuery = Review.find();
 
-    const features = new APIFeatures(query, req.query)
+    reviewQuery.populate({
+      path: 'author',
+    });
+
+    const features = new APIFeatures(reviewQuery, req.query)
       .filter()
       .sort()
       .limitFields()
@@ -46,7 +50,8 @@ const createReview = catchAsync(
     const filePaths = files?.map((file) => file.path);
 
     req.body.images = filePaths;
-    const newReview = await Review.create(req.body);
+    let newReview = await Review.create(req.body);
+    newReview = await newReview.populate('author');
 
     res.status(201).json({
       status: 'success',
