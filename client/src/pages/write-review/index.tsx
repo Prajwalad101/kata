@@ -1,4 +1,5 @@
-import { ReviewCards, Searchbar } from '@features/write-review/components';
+import { Searchbar } from '@features/home-page/components';
+import { ReviewCards } from '@features/write-review/components';
 import Image from 'next/image';
 import PhoneIllustration from 'public/illustrations/review-business/phone.svg';
 import { NavigationProvider } from 'src/components/context-provider';
@@ -19,11 +20,9 @@ const WriteReview: NextPageWithLayout = () => {
           <span className="mb-8 inline-block font-merriweather font-semibold text-gray-500">
             Search for a business in order to create a review
           </span>
-          <Searchbar
-            placeholder1="Bajeko Sekuwa"
-            placeholder2="Kathmandu, Kapan"
-            className=" h-[60px] rounded-md shadow-md transition-shadow focus-within:shadow-lg"
-          />
+          <div className="pl-1">
+            <Searchbar />
+          </div>
         </div>
         <div className="relative -ml-10 hidden h-[400px] w-[400px] sm:block lg:-ml-0">
           <Image
