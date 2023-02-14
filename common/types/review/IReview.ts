@@ -1,4 +1,5 @@
 import { Schema } from 'mongoose';
+import { IUser } from '../IUser';
 
 export interface IReview {
   _id: string;
@@ -8,6 +9,6 @@ export interface IReview {
   dislikes: number;
   business: Schema.Types.ObjectId;
   createdAt: string;
-  author: Schema.Types.ObjectId;
+  author: IUser;
   images?: string[];
 }
