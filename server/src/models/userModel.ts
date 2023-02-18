@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
   userName: {
@@ -24,9 +24,9 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  reviews: {
-    type: [Schema.Types.ObjectId],
-    ref: 'Review',
+  numReviews: {
+    type: Number,
+    default: 0
   },
   numQuestions: {
     type: Number,
