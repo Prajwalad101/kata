@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Question from "../models/questionModel";
 import { APIFeatures } from "../utils/apiFeatures";
+import AppError from "../utils/appError";
 import catchAsync from "../utils/catchAsync";
 
 export const getAllQuestions = catchAsync(
@@ -23,6 +24,21 @@ export const getAllQuestions = catchAsync(
       status: 'success',
       documentCount: questions.length,
       data: questions,
+    });
+  }
+);
+
+export const getQuestion = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const question = await Question.findById(req.params.id);
+
+    if (!question) {
+      return next(new AppError('No document found with that ID', 404));
+    }
+
+    res.status(200).json({
+      status: 'success',
+      data: question,
     });
   }
 );

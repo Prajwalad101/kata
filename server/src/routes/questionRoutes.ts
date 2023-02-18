@@ -1,5 +1,5 @@
 import express from 'express';
-import { createQuestion, getAllQuestions } from '../controllers/questionController';
+import { createQuestion, getAllQuestions, getQuestion } from '../controllers/questionController';
 import { jwtAuth } from '../middlewares/jwtAuthMiddleware';
 
 const router = express.Router();
@@ -12,7 +12,7 @@ router.route('/').get(getAllQuestions).post(
 
 router
   .route('/:id')
-  .get()
+  .get(getQuestion)
   .patch()
   .delete();
 

@@ -7,4 +7,5 @@ export interface IUser {
   providerId: string;
   trustPoints: number;
   reviews: string[];
+  numQuestions: number;
 }
