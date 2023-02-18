@@ -1,12 +1,13 @@
 import { IQuestion } from '@destiny/common/types';
 import { model, Schema } from 'mongoose';
+import User from './userModel';
 
 const questionSchema = new Schema<IQuestion>(
   {
     question: {
       type: String,
     },
-    replies: {
+    replies: [{
       author: Schema.Types.ObjectId,
       likes: {
         type: Number,
@@ -15,42 +16,32 @@ const questionSchema = new Schema<IQuestion>(
       reply: {
         type: String,
       }
-    },
+    }],
     likes: { type: Number, default: 0 },
     business: {
       type: Schema.Types.ObjectId,
       ref: 'Business',
-      required: [true, 'A review must include a business'],
+      required: [true, 'A question must include a business'],
     },
     author: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      required: [true, 'A review must have an author'],
+      required: [true, 'A question must have an author'],
     },
   },
   { timestamps: true }
 );
 
 // index based on business name and address
-questionSchema.index({ review: 'text' });
+questionSchema.index({ question: 'text' });
 
 // update the user model after saving
-/* questionSchema.post('save', async function (doc) {
+questionSchema.post('save', async function (doc) {
   await User.findByIdAndUpdate(doc.author, {
-    $inc: { trustPoints: 5 },
-    $push: { reviews: doc._id },
+    $inc: { numQuestions: 1 },
   });
-}); */
+});
 
-// update business ratings
-/* questionSchema.post('save', async function (doc) {
-  const ratingIndex = doc.rating - 1;
-
-  await Business.findByIdAndUpdate(doc.business, {
-    $inc: { [`ratings.${ratingIndex}`]: 1 },
-  });
-}); */
-
-const Question = model<IQuestion>('Review', questionSchema);
+const Question = model<IQuestion>('Question', questionSchema);
 
 export default Question;

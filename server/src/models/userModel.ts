@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema({
     type: [Schema.Types.ObjectId],
     ref: 'Review',
   },
+  numQuestions: {
+    type: Number,
+    default: 0
+  }
 });
 
 const User = mongoose.model('User', userSchema);
