@@ -39,8 +39,7 @@ reviewSchema.index({ review: 'text' });
 // update the user model after saving
 reviewSchema.post('save', async function (doc) {
   await User.findByIdAndUpdate(doc.author, {
-    $inc: { trustPoints: 5 },
-    $push: { reviews: doc._id },
+    $inc: { trustPoints: 5, numReviews: 1 },
   });
 });
 

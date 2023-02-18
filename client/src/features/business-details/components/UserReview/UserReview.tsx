@@ -33,7 +33,7 @@ export default function UserReview({ review }: UserReviewProps) {
           <div>
             <p className="pb-1 font-medium capitalize">{author.userName}</p>
             <div className="flex flex-wrap items-center gap-x-4">
-              <p className="text-gray-600">{author.reviews.length} reviews</p>
+              <p className="text-gray-600">{author.numReviews} reviews</p>
               <Seperator />
               <p className="text-gray-600">{author.trustPoints} tp</p>
             </div>

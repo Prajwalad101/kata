@@ -5,16 +5,7 @@ export default function generateAccessToken(user: any) {
   const expiresIn = '10h';
   const secret = process.env.AUTH_SECRET as string;
 
-  const payload = {
-    _id: user._id,
-    user: user.username,
-    provider: user.provider,
-    email: user.email,
-    picture: user.picture,
-    providerId: user.providerId,
-  };
-
-  const token = jwt.sign(payload, secret, {
+  const token = jwt.sign(user.toJSON(), secret, {
     expiresIn: expiresIn,
     subject: user.providerId,
   });

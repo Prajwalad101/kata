@@ -9,6 +9,7 @@ import ReviewsNotFound from '@features/business-details/components/ReviewsNotFou
 import SearchReviews from '@features/business-details/components/SearchReviews/SearchReviews';
 import { reviewSortOptions } from '@features/business-details/data';
 import { useBusiness, useReviews } from '@features/business-details/queries';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { Portal, SecondaryButton } from 'src/components';
@@ -21,6 +22,7 @@ interface ReviewSectionProps {
 }
 
 export default function ReviewSection({ className = '' }: ReviewSectionProps) {
+  const { query: { businessId } } = useRouter();
   const user = useUser();
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
 
@@ -28,6 +30,9 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
   const [searchText, setSearchText] = useState<string>();
   const [selectedSort, setSelectedSort] = useState(reviewSortOptions[0]);
   const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
+
+
+  const businessResult = useBusiness();
 
   const reviewsResult = useReviews({
     // sort array so that the order in querykey remains same
@@ -37,8 +42,6 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
     ...(searchText && { 'text[search]': searchText }),
     sort: selectedSort.field,
   });
-
-  const businessResult = useBusiness();
 
   const reviews = reviewsResult.data || [];
   const business = businessResult.data;

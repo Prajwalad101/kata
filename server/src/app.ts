@@ -6,6 +6,7 @@ import authRouter from './routes/authRoutes';
 import businessRouter from './routes/businessRoutes';
 import reviewRouter from './routes/reviewRoutes';
 import userRouter from './routes/userRoutes';
+import questionRouter from './routes/questionRoutes'
 import AppError from './utils/appError';
 
 const app = express();
@@ -20,6 +21,7 @@ app.use('/api/business', businessRouter);
 app.use('/api/reviews', reviewRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
+app.use('/api/questions',questionRouter)
 
 app.all('*', (req: Request, _res: Response, next: NextFunction) => {
   const err = new AppError(

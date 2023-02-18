@@ -6,5 +6,6 @@ export interface IUser {
   picture: string;
   providerId: string;
   trustPoints: number;
-  reviews: string[];
+  numReviews: number;
+  numQuestions: number;
 }

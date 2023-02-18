@@ -3,10 +3,12 @@ import {
   SortQA,
   UserQuestion,
 } from '@features/business-details/components';
-import { useBusiness } from '@features/business-details/queries';
+import useQuestions from '@features/business-details/queries/useQuestions';
 import { useState } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
+import { toast } from 'react-toastify';
 import { Portal, SecondaryButton } from 'src/components';
+import { useUser } from 'src/layouts/UserProvider';
 import { classNames } from 'src/utils/tailwind';
 
 interface QASectionProps {
@@ -15,18 +17,23 @@ interface QASectionProps {
 
 export default function QASection({ className = '' }: QASectionProps) {
   const [qaDialogOpen, setQADialogOpen] = useState(false);
+  const user = useUser()
 
-  const result = useBusiness();
-  const businessData = result.data;
+  const questionsQuery = useQuestions({});
 
-  if (!businessData) return <></>;
+  const handleAskQuestion = () => {
+    if(!user){
+      return toast.error('You have to be logged in to ask a question');
+    }
+    setQADialogOpen(true)
+  }
 
   return (
     <div className={classNames(className)}>
       <Portal selector="#ask-question-button">
         <SecondaryButton
           className="px-6 py-2 sm:py-[10px]"
-          onClick={() => setQADialogOpen(true)}
+          onClick={handleAskQuestion}
         >
           Ask Question
         </SecondaryButton>
@@ -51,7 +58,9 @@ export default function QASection({ className = '' }: QASectionProps) {
       {qaDialogOpen && (
         <PostQuestion closeDialog={() => setQADialogOpen(false)} />
       )}
-      <UserQuestion />
+      {questionsQuery.data?.data.map((question) => 
+        <UserQuestion data={question} key={question._id.toString()} />
+      )}
     </div>
   );
 }
