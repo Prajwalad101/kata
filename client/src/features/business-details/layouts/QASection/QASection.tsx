@@ -3,7 +3,7 @@ import {
   SortQA,
   UserQuestion,
 } from '@features/business-details/components';
-import { useBusiness } from '@features/business-details/queries';
+import useQuestions from '@features/business-details/queries/useQuestions';
 import { useState } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { Portal, SecondaryButton } from 'src/components';
@@ -16,10 +16,7 @@ interface QASectionProps {
 export default function QASection({ className = '' }: QASectionProps) {
   const [qaDialogOpen, setQADialogOpen] = useState(false);
 
-  const result = useBusiness();
-  const businessData = result.data;
-
-  if (!businessData) return <></>;
+  const questionsQuery = useQuestions({});
 
   return (
     <div className={classNames(className)}>
@@ -51,7 +48,9 @@ export default function QASection({ className = '' }: QASectionProps) {
       {qaDialogOpen && (
         <PostQuestion closeDialog={() => setQADialogOpen(false)} />
       )}
-      <UserQuestion />
+      {questionsQuery.data?.data.map((question) => 
+        <UserQuestion data={question} key={question._id.toString()} />
+      )}
     </div>
   );
 }

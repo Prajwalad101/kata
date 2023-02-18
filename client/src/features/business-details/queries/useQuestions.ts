@@ -4,14 +4,14 @@ import { AxiosInstance } from "axios";
 import { useRouter } from "next/router";
 import useCreateApi from "src/api/useCreateApi";
 
-interface ResponseData {
+export interface QuestionsResponseData {
   status: string;
   documentCount: number;
   data: IQuestion[]
 }
 
 const getQuestions = async (params: object, api: AxiosInstance) => {
-  const response = await api.get<ResponseData>('/questions', {
+  const response = await api.get<QuestionsResponseData>('/questions', {
     params
   }); 
   return response.data;
