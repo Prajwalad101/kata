@@ -14,8 +14,6 @@ interface UserReviewProps {
 }
 
 export default function UserReview({ review }: UserReviewProps) {
-  console.log(review);
-  
   const author = review.author;
 
   return (

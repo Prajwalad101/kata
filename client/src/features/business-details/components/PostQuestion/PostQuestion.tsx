@@ -37,6 +37,8 @@ export default function PostQuestion({ closeDialog }: PostQuestionProps) {
         business,
         author: user?._id
       })
+    } else {
+      toast.error('Something went wrong.');
     }
   }
 
@@ -76,6 +78,7 @@ export default function PostQuestion({ closeDialog }: PostQuestionProps) {
         <textarea
           id="question"
           {...register('question', {
+            required: 'Please enter your question',
             maxLength: {
               value: 50,
               message: 'Question is too long' 
@@ -89,11 +92,13 @@ export default function PostQuestion({ closeDialog }: PostQuestionProps) {
           className="mb-3 w-full rounded-md bg-gray-200 py-4 px-5 ring-inset ring-blue-500 focus:outline-none focus:ring"
           placeholder="Write your question"
         />
-        <p className="text-right text-sm text-gray-600">
-          {question.length} / 200
-        </p>
+        <div className='flex justify-between items-center mb-4'>
+          <FormErrorMessage error={formState.errors.question} />
+          <p className="text-right text-sm text-gray-600 grow">
+            {question.length} / 200
+          </p>
+        </div>
       </div>
-      <FormErrorMessage error={formState.errors.question} />
       <div className="mb-8 flex flex-wrap gap-8">
         <SecondaryButton className="px-8 py-2" onClick={closeDialog}>
           Cancel
