@@ -3,7 +3,11 @@ import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import Lottie from 'react-lottie';
 
-export default function ReviewsNotFound() {
+interface CommunitySectionNotFoundProps {
+  message?: string;
+}
+
+export default function CommunitySectionNotFound({message}:CommunitySectionNotFoundProps) {
   const { ref, inView } = useInView();
   const [isStopped, setIsStopped] = useState(true);
 
@@ -24,7 +28,11 @@ export default function ReviewsNotFound() {
     <div ref={ref}>
       <Lottie options={animOptions} isStopped={isStopped} height={300} />
       <p className="text-center text-xl font-medium text-gray-600">
-        Sorry. We could not find any reviews
+        {message ? 
+          message
+          :
+          'Sorry. We could not find what you are looking for'
+        }
       </p>
     </div>
   );

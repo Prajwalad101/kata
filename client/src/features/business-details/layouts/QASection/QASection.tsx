@@ -3,6 +3,9 @@ import {
   SortQA,
   UserQuestion,
 } from '@features/business-details/components';
+import CommunitySearchSkeleton from '@features/business-details/components/ReviewSkeleton/ReviewSkeleton';
+import CommunitySectionNotFound from '@features/business-details/components/ReviewsNotFound.ts/ReviewsNotFound';
+import CommunitySectionSearch from '@features/business-details/components/SearchReviews/SearchReviews';
 import useQuestions from '@features/business-details/queries/useQuestions';
 import { useState } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
@@ -11,15 +14,29 @@ import { Portal, SecondaryButton } from 'src/components';
 import { useUser } from 'src/layouts/UserProvider';
 import { classNames } from 'src/utils/tailwind';
 
+const sortItems = [
+  { label: 'most helpful', value: 'likes' },
+  { label: 'newest', value: '-createdAt' },
+  { label: 'oldest', value: 'createdAt' },
+];
+
 interface QASectionProps {
   className?: string;
 }
 
 export default function QASection({ className = '' }: QASectionProps) {
-  const [qaDialogOpen, setQADialogOpen] = useState(false);
   const user = useUser()
+  
+  const [qaDialogOpen, setQADialogOpen] = useState(false);
 
-  const questionsQuery = useQuestions({});
+  // Filters
+  const [selectedSort, setSelectedSort] = useState(sortItems[0].value);
+  const [searchText, setSearchText] = useState<string>('');
+
+  const questionsQuery = useQuestions({
+    ...(searchText && { 'text[search]': searchText }),
+    sort: selectedSort,
+  });
 
   const handleAskQuestion = () => {
     if(!user){
@@ -27,6 +44,7 @@ export default function QASection({ className = '' }: QASectionProps) {
     }
     setQADialogOpen(true)
   }
+
 
   return (
     <div className={classNames(className)}>
@@ -39,15 +57,14 @@ export default function QASection({ className = '' }: QASectionProps) {
         </SecondaryButton>
       </Portal>
       <div className="mb-7 flex flex-wrap-reverse items-center justify-between gap-y-5 gap-x-2">
-        <SortQA />
-        <div className="relative mr-[2px] flex w-max items-center">
-          <input
-            type="text"
-            className="rounded-[4px] border border-gray-500 px-5 py-[9px]"
-            placeholder="Search for questions"
-          />
-          <AiOutlineSearch className="absolute right-4 shrink-0" size={20} />
-        </div>
+        <SortQA onSelect={(selected) => setSelectedSort(selected)}
+          sortItems={sortItems}
+          selectedSort={selectedSort} 
+        />
+        <CommunitySectionSearch 
+          placeholder='Search for questions'
+          onChange={(text) => setSearchText(text)} 
+        />
       </div>
       <div
         className={classNames(
@@ -58,9 +75,17 @@ export default function QASection({ className = '' }: QASectionProps) {
       {qaDialogOpen && (
         <PostQuestion closeDialog={() => setQADialogOpen(false)} />
       )}
-      {questionsQuery.data?.data.map((question) => 
+      {questionsQuery.isLoading && <CommunitySearchSkeleton/> }
+      {questionsQuery.isError &&
+        <CommunitySectionNotFound message='Sorry. Could not find any questions'/>
+      }
+      {questionsQuery.isSuccess && questionsQuery.data.documentCount === 0 ? 
+        <CommunitySectionNotFound message='Sorry. Could not find any questions' />
+        :
+      questionsQuery.data?.data.map((question) => 
         <UserQuestion data={question} key={question._id.toString()} />
-      )}
+      )
+      }
     </div>
   );
 }
