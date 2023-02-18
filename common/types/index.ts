@@ -6,12 +6,14 @@ import {
 import { IBusiness } from './business/IBusiness';
 import { IUser } from './IUser';
 import { IReview } from './review/IReview';
+import { IQuestion } from './IQuestion';
 import { ValueOf } from './utils/ValueOf';
 
 export type {
   IBusiness,
   IReview,
   IUser,
+  IQuestion,
   BusinessSubcategory,
   BusinessFeature,
   ValueOf,
