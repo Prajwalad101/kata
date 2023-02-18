@@ -1,8 +1,10 @@
 import { isString } from '@destiny/common/utils';
 import useSubmitQuestion from '@features/business-details/queries/useSubmitQuestion';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { BsDot } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { PrimaryButton, SecondaryButton } from 'src/components';
 import FormErrorMessage from 'src/components/FormErrorMessage/FormErrorMessage';
@@ -47,17 +49,28 @@ export default function PostQuestion({ closeDialog }: PostQuestionProps) {
   },[submitQuestionMutation.isSuccess])
 
   const question = watch('question')
-  console.log(user?.userName);
   
-
   return (
     <form className="mb-12" onSubmit={handleSubmit(onSubmit)}>
-      <div className="mb-5 flex items-center gap-5">
-        <div className="flex h-[40px] w-[40px] items-center justify-center rounded-full bg-blue-500 text-white">
-          <span>A</span>
+        {user && 
+        <div className="mb-5 flex items-center gap-5">
+          <Image
+            src={user?.picture || ''}
+            width={50}
+            height={50}
+            alt="user profile"
+            className="rounded-full"
+          />
+          <div>
+            <p>{user?.userName}</p>
+            <div className='flex gap-2 items-center'>
+              <p className='text-gray-600'>{user.numReviews} reviews</p>
+              <p><BsDot/></p>
+              <p className='text-gray-600'>{user.trustPoints} tp</p>
+            </div>
+          </div>
         </div>
-        <p>{user?.userName}</p>
-      </div>
+      }
 
       <div>
         <textarea
