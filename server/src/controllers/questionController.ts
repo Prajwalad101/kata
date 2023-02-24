@@ -57,19 +57,11 @@ export const createQuestion = catchAsync(
 
 export const createReply = catchAsync(
   async (req: Request, res: Response, _next: NextFunction) => {
-    const newReply = await Question.findByIdAndUpdate(
-      req.body.id,
-      {
-        $push: {
-          reply: { author: req.body.author, reply: req.body.reply },
-        },
+    await Question.findByIdAndUpdate(req.body.id, {
+      $push: {
+        replies: { author: req.body.author, reply: req.body.reply },
       },
-      { new: true }
-    );
-
-    res.status(201).json({
-      status: 'success',
-      data: newReply,
     });
+    res.status(201).json({});
   }
 );
