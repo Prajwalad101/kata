@@ -7,16 +7,18 @@ const questionSchema = new Schema<IQuestion>(
     question: {
       type: String,
     },
-    replies: [{
-      author: Schema.Types.ObjectId,
-      likes: {
-        type: Number,
-        default: 0
+    replies: [
+      {
+        author: Schema.Types.ObjectId,
+        likes: {
+          type: Number,
+          default: 0,
+        },
+        reply: {
+          type: String,
+        },
       },
-      reply: {
-        type: String,
-      }
-    }],
+    ],
     likes: { type: Number, default: 0 },
     business: {
       type: Schema.Types.ObjectId,
