@@ -8,7 +8,6 @@ import CommunitySectionNotFound from '@features/business-details/components/Revi
 import CommunitySectionSearch from '@features/business-details/components/SearchReviews/SearchReviews';
 import useQuestions from '@features/business-details/queries/useQuestions';
 import { useState } from 'react';
-import { AiOutlineSearch } from 'react-icons/ai';
 import { toast } from 'react-toastify';
 import { Portal, SecondaryButton } from 'src/components';
 import { useUser } from 'src/layouts/UserProvider';
@@ -44,7 +43,6 @@ export default function QASection({ className = '' }: QASectionProps) {
     }
     setQADialogOpen(true)
   }
-
 
   return (
     <div className={classNames(className)}>
