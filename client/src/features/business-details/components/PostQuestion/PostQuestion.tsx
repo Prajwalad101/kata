@@ -55,7 +55,7 @@ export default function PostQuestion({ closeDialog }: PostQuestionProps) {
   const question = watch('question');
 
   return (
-    <form className="mb-12" onSubmit={handleSubmit(onSubmit)}>
+    <form className="mt-5" onSubmit={handleSubmit(onSubmit)}>
       {user && (
         <div className="mb-5 flex items-center gap-5">
           <Image
@@ -96,7 +96,7 @@ export default function PostQuestion({ closeDialog }: PostQuestionProps) {
           className="mb-3 w-full rounded-md bg-gray-200 py-4 px-5 ring-inset ring-blue-500 focus:outline-none focus:ring"
           placeholder="Write your question"
         />
-        <div className="mb-4 flex items-center justify-between">
+        <div className="flex items-center justify-between">
           <FormErrorMessage error={formState.errors.question} />
           <p className="grow text-right text-sm text-gray-600">
             {question.length} / 200
