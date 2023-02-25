@@ -1,35 +1,37 @@
-import { IQuestion } from '@destiny/common/types';
+import { IUser } from '@destiny/common/types';
+import { IUserQuestion } from '@features/business-details/queries/useQuestions';
+import useSubmitReply from '@features/business-details/queries/useSubmitReply';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { BsReplyFill } from 'react-icons/bs';
 import { toast } from 'react-toastify';
-import { Divider, PrimaryButton, SecondaryButton } from 'src/components';
+import { PrimaryButton, SecondaryButton } from 'src/components';
 import FormErrorMessage from 'src/components/FormErrorMessage/FormErrorMessage';
 import { useUser } from 'src/layouts/UserProvider';
 import { getRelativeDate } from 'src/utils/date';
 import { getPublicFilePath } from 'src/utils/text';
 import ReportUserDropdown from '../ReportUserDropdown/ReportUserDropdown';
 
-const user1Img =
-  'https://images.unsplash.com/photo-1629425733761-caae3b5f2e50?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80';
-
 interface FormInputs {
   reply: string;
 }
 
 interface UserQuestionProps {
-  data: IQuestion;
+  data: IUserQuestion;
 }
 
 export default function UserQuestion({ data }: UserQuestionProps) {
   const user = useUser();
   const [showReplyBox, setShowReplyBox] = useState(false);
+
   const { register, handleSubmit, formState, reset } = useForm<FormInputs>({
     defaultValues: {
       reply: '',
     },
   });
+
+  const submitReply = useSubmitReply();
 
   const handleReply = () => {
     if (!user) {
@@ -43,9 +45,31 @@ export default function UserQuestion({ data }: UserQuestionProps) {
     setShowReplyBox(false);
   };
 
-  const onSubmit = (data: FormInputs) => {
-    alert('Form Submitted');
-    console.log(data);
+  useEffect(() => {
+    if (submitReply.isSuccess || submitReply.isError) {
+      reset({ reply: '' });
+    }
+  }, [submitReply.isSuccess, submitReply.isError, reset]);
+
+  const onSubmit = (formData: FormInputs) => {
+    if (!user?._id) return;
+
+    submitReply.mutate(
+      {
+        questionId: data._id.toString(),
+        author: user?._id,
+        reply: formData.reply,
+      },
+      {
+        onSuccess: () => {
+          toast.success('Successfully submitted reply');
+          setShowReplyBox(false);
+        },
+        onError: () => {
+          toast.error('Something went wrong');
+        },
+      }
+    );
   };
 
   return (
@@ -94,7 +118,15 @@ export default function UserQuestion({ data }: UserQuestionProps) {
             <Seperator />
             <p className="text-gray-600">{data.likes} likes</p>
           </div>
-          {data.replies.length > 0 && <UserReply />}
+          {data.replies.length > 0 &&
+            data.replies.map(({ reply, likes, author }, index) => (
+              <UserReply
+                key={index}
+                reply={reply}
+                author={author}
+                likes={likes}
+              />
+            ))}
         </div>
         {showReplyBox && (
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -131,26 +163,29 @@ export default function UserQuestion({ data }: UserQuestionProps) {
         )}
       </div>
       {data.replies.length > 0 && (
-        <p className="w-max cursor-pointer text-gray-600 underline transition-colors hover:text-black">
-          View 2 more replies
-        </p>
+        <p className="w-max cursor-pointer text-gray-600 underline transition-colors hover:text-black"></p>
       )}
-      <Divider />
+      {/* <Divider /> */}
     </div>
   );
 }
 
-function UserReply() {
+interface UserReplyProps {
+  reply: string;
+  likes: number;
+  author: IUser;
+}
+
+function UserReply({ reply, likes, author }: UserReplyProps) {
   return (
-    <div className="mb-5 flex">
-      <div className="ml-1 grow border-l-[4px] border-gray-300" />
-      <div className="ml-5">
+    <div className="flex border-l-[3px] border-b-0 border-gray-300 ">
+      <div className="grow border-b border-gray-200 py-2 pl-5">
         <div className="mb-4 flex justify-between">
           <div className="flex items-center gap-5">
             <div className="h-[40px] w-[40px] shrink-0 ">
               <Image
                 className="rounded-full"
-                src={user1Img}
+                src={author.picture}
                 alt="user-profile"
                 width={40}
                 height={40}
@@ -159,32 +194,25 @@ function UserReply() {
             </div>
             <div>
               <p className="font-medium capitalize text-gray-900">
-                suresh adhikari
+                {author.userName}
               </p>
               <div className="flex items-center gap-4">
-                <p className="text-gray-600">8 reviews</p>
+                <p className="text-gray-600">{author.numReviews} reviews</p>
                 <div className="h-[5px] w-[5px] shrink-0 rounded-full bg-gray-600" />
-                <p className="text-gray-600">3 d</p>
+                <p className="text-gray-600">{author.trustPoints} tp</p>
               </div>
             </div>
           </div>
           <ReportUserDropdown />
         </div>
-        <p className="mb-3">
-          Is everything in this place completely vegeterian. I’m asking because
-          my grandmother is strictly vegeterian and thought this was a cool
-          place to visit.
-        </p>
-        <div className="mb-5 flex items-center gap-4">
+        <p className="mb-5">{reply}</p>
+        <div className="mb-2 flex items-center gap-4">
           <button className="text-blue-600 hover:text-blue-800">Like</button>
           <Seperator />
-          <button className="text-blue-600 hover:text-blue-800">Reply</button>
-          <Seperator />
-          <p className="text-gray-600">18 likes</p>
+          {/* <button className="text-blue-600 hover:text-blue-800">Reply</button>
+          <Seperator /> */}
+          <p className="text-gray-600">{likes} likes</p>
         </div>
-        <p className="w-max cursor-pointer text-gray-600 underline transition-colors hover:text-black">
-          View 2 more replies
-        </p>
       </div>
     </div>
   );

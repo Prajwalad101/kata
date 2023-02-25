@@ -1,12 +1,11 @@
-import { IQuestion } from '@destiny/common/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosInstance } from 'axios';
 import useCreateApi from 'src/api/useCreateApi';
-import { QuestionsResponseData } from './useQuestions';
+import { QuestionsResponseData, IUserQuestion } from './useQuestions';
 
 interface ResponseData {
   status: string;
-  data: IQuestion;
+  data: IUserQuestion;
 }
 
 const submitQuestion = async (payload: MutationProps, api: AxiosInstance) => {
@@ -28,6 +27,8 @@ export default function useSubmitQuestion() {
   const mutation = useMutation({
     mutationFn: (payload: MutationProps) => submitQuestion(payload, api),
     onSuccess: (newQuestion) => {
+      console.log('NewQuestion', newQuestion);
+
       queryClient.setQueriesData<QuestionsResponseData>(
         ['questions', { business: newQuestion.business }],
         (oldData) => {
