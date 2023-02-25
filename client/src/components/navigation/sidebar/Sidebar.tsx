@@ -4,6 +4,7 @@ import { AiOutlineClose } from 'react-icons/ai';
 import { IoMdPerson } from 'react-icons/io';
 import { MdLogin } from 'react-icons/md';
 import { useSidebar } from 'src/components/context-provider';
+import Logo from 'src/components/logo/Logo';
 import Portal from 'src/components/Portal/Portal';
 import { categoryDropdownData } from 'src/data';
 import { classNames } from 'src/utils/tailwind';
@@ -21,7 +22,7 @@ export default function Sidebar() {
       >
         {/* Logo section */}
         <div className="mb-5 flex items-center justify-between">
-          <h3>Logo</h3>
+          <Logo />
           <AiOutlineClose
             size={25}
             className="cursor-pointer hover:text-gray-700"

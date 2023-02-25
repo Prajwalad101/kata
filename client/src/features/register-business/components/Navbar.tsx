@@ -13,7 +13,7 @@ function Navbar({ theme = 'light' }: NavbarProps) {
     <div className="py-4 font-rubik shadow-md md:pt-7 md:shadow-none">
       {/* FOR SMALLER(<md) SCREENS */}
       <div className="flex items-center justify-between md:hidden">
-        <Logo>Logo</Logo>
+        <Logo />
         <AiOutlineSearch
           size={30}
           className="cursor-pointer hover:text-gray-700"
@@ -27,7 +27,7 @@ function Navbar({ theme = 'light' }: NavbarProps) {
           'hidden items-center justify-between md:flex'
         )}
       >
-        <Logo>Logo</Logo>
+        <Logo />
         <div className="flex items-center gap-7 lg:gap-10">
           <div className="underline-offset-4 hover:underline">
             <Link href="/">
