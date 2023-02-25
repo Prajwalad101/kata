@@ -1,12 +1,16 @@
 import { IUser } from '@destiny/common/types';
+import { isString } from '@destiny/common/utils';
+import useHandleQuestionLikes from '@features/business-details/queries/useHandleQuestionLikes';
 import { IUserQuestion } from '@features/business-details/queries/useQuestions';
 import useSubmitReply from '@features/business-details/queries/useSubmitReply';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { BiLike } from 'react-icons/bi';
 import { BsReplyFill } from 'react-icons/bs';
 import { toast } from 'react-toastify';
-import { Divider, PrimaryButton, SecondaryButton } from 'src/components';
+import { PrimaryButton, SecondaryButton } from 'src/components';
 import FormErrorMessage from 'src/components/FormErrorMessage/FormErrorMessage';
 import { useUser } from 'src/layouts/UserProvider';
 import { getRelativeDate } from 'src/utils/date';
@@ -24,6 +28,7 @@ interface UserQuestionProps {
 
 export default function UserQuestion({ data }: UserQuestionProps) {
   const user = useUser();
+  const businessId = useRouter().query.businessId;
   const [showReplyBox, setShowReplyBox] = useState(false);
 
   const { register, handleSubmit, formState, reset } = useForm<FormInputs>({
@@ -33,12 +38,23 @@ export default function UserQuestion({ data }: UserQuestionProps) {
   });
 
   const submitReply = useSubmitReply();
+  const handleQuestionLikeMutation = useHandleQuestionLikes();
 
   const handleReply = () => {
     if (!user) {
       return toast.error('You have to be logged in to add a reply');
     }
     setShowReplyBox(true);
+  };
+
+  const handleQuestionLike = () => {
+    if (isString(businessId)) {
+      handleQuestionLikeMutation.mutate({
+        questionId: data._id.toString(),
+        businessId,
+        type: 'increment',
+      });
+    }
   };
 
   const handleReplyCancel = () => {
@@ -111,7 +127,13 @@ export default function UserQuestion({ data }: UserQuestionProps) {
               'flex items-center gap-4'
             )}
           >
-            <button className="text-blue-600 hover:text-blue-800">Like</button>
+            <div
+              onClick={handleQuestionLike}
+              className="flex cursor-pointer items-center gap-2 text-gray-700 hover:text-blue-800"
+            >
+              <BiLike size={20} />
+              <button>Like</button>
+            </div>
             <Seperator />
             <div
               onClick={handleReply}
@@ -221,7 +243,10 @@ function UserReply({ reply, likes, author }: UserReplyProps) {
         </div>
         <p className="mb-3">{reply}</p>
         <div className="mb-2 flex items-center gap-4">
-          <button className="text-blue-600 hover:text-blue-800">Like</button>
+          <div className="flex cursor-pointer items-center gap-2 text-gray-700 hover:text-blue-800">
+            <BiLike size={20} />
+            <button>Like</button>
+          </div>
           <Seperator />
           {/* <button className="text-blue-600 hover:text-blue-800">Reply</button>
           <Seperator /> */}

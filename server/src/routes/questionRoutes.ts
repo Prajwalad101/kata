@@ -4,6 +4,7 @@ import {
   createReply,
   getAllQuestions,
   getQuestion,
+  handleQuestionLikes,
 } from '../controllers/questionController';
 import { jwtAuth } from '../middlewares/jwtAuthMiddleware';
 
@@ -13,6 +14,10 @@ router.route('/').get(getAllQuestions).post(jwtAuth(), createQuestion);
 
 router.route('/reply').post(jwtAuth(), createReply);
 
-router.route('/:id').get(getQuestion).patch().delete();
+router
+  .route('/:id')
+  .get(getQuestion)
+  .patch(jwtAuth(), handleQuestionLikes)
+  .delete();
 
 export default router;
