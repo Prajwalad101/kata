@@ -79,7 +79,15 @@ export const handleQuestionLikes = catchAsync(
     const questionId = req.params.id;
 
     await Question.findByIdAndUpdate(questionId, {
-      $inc: { likes: req.body.type === 'increment' ? 1 : -1 },
+      // $inc: { 'likes.value': req.body.type === 'increment' ? 1 : -1 },
+      ...(req.body.type === 'increment' && {
+        $inc: { 'likes.value': 1 },
+        $addToSet: { 'likes.users': req.body.userId },
+      }),
+      ...(req.body.type === 'decrement' && {
+        $inc: { 'likes.value': -1 },
+        $pull: { 'likes.users': req.body.userId },
+      }),
     });
 
     res.status(204).json({});
