@@ -24,8 +24,8 @@ interface QASectionProps {
 }
 
 export default function QASection({ className = '' }: QASectionProps) {
-  const user = useUser()
-  
+  const user = useUser();
+
   const [qaDialogOpen, setQADialogOpen] = useState(false);
 
   // Filters
@@ -38,11 +38,11 @@ export default function QASection({ className = '' }: QASectionProps) {
   });
 
   const handleAskQuestion = () => {
-    if(!user){
+    if (!user) {
       return toast.error('You have to be logged in to ask a question');
     }
-    setQADialogOpen(true)
-  }
+    setQADialogOpen(true);
+  };
 
   return (
     <div className={classNames(className)}>
@@ -55,35 +55,31 @@ export default function QASection({ className = '' }: QASectionProps) {
         </SecondaryButton>
       </Portal>
       <div className="mb-7 flex flex-wrap-reverse items-center justify-between gap-y-5 gap-x-2">
-        <SortQA onSelect={(selected) => setSelectedSort(selected)}
+        <SortQA
+          onSelect={(selected) => setSelectedSort(selected)}
           sortItems={sortItems}
-          selectedSort={selectedSort} 
+          selectedSort={selectedSort}
         />
-        <CommunitySectionSearch 
-          placeholder='Search for questions'
-          onChange={(text) => setSearchText(text)} 
+        <CommunitySectionSearch
+          placeholder="Search for questions"
+          onChange={(text) => setSearchText(text)}
         />
       </div>
-      <div
-        className={classNames(
-          qaDialogOpen ? 'mb-5' : 'mb-12',
-          'border-b border-gray-300'
-        )}
-      />
+      <div className={classNames('border-b border-gray-300')} />
       {qaDialogOpen && (
         <PostQuestion closeDialog={() => setQADialogOpen(false)} />
       )}
-      {questionsQuery.isLoading && <CommunitySearchSkeleton/> }
-      {questionsQuery.isError &&
-        <CommunitySectionNotFound message='Sorry. Could not find any questions'/>
-      }
-      {questionsQuery.isSuccess && questionsQuery.data.documentCount === 0 ? 
-        <CommunitySectionNotFound message='Sorry. Could not find any questions' />
-        :
-      questionsQuery.data?.data.map((question) => 
-        <UserQuestion data={question} key={question._id.toString()} />
-      )
-      }
+      {questionsQuery.isLoading && <CommunitySearchSkeleton />}
+      {questionsQuery.isError && (
+        <CommunitySectionNotFound message="Sorry. Could not find any questions" />
+      )}
+      {questionsQuery.isSuccess && questionsQuery.data.documentCount === 0 ? (
+        <CommunitySectionNotFound message="Sorry. Could not find any questions" />
+      ) : (
+        questionsQuery.data?.data.map((question) => (
+          <UserQuestion data={question} key={question._id.toString()} />
+        ))
+      )}
     </div>
   );
 }
