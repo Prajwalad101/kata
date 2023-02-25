@@ -9,7 +9,11 @@ const questionSchema = new Schema<IQuestion>(
     },
     replies: [
       {
-        author: Schema.Types.ObjectId,
+        author: {
+          type: Schema.Types.ObjectId,
+          ref: 'User',
+          required: [true, 'A reply must have an author'],
+        },
         likes: {
           type: Number,
           default: 0,
