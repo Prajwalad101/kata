@@ -90,10 +90,30 @@ const deleteReview = catchAsync(
   }
 );
 
+const handleReviewLikes = catchAsync(
+  async (req: Request, res: Response, _next: NextFunction) => {
+    const reviewId = req.params.id;
+
+    await Review.findByIdAndUpdate(reviewId, {
+      ...(req.body.type === 'increment' && {
+        $inc: { 'likes.value': 1 },
+        $addToSet: { 'likes.users': req.body.userId },
+      }),
+      ...(req.body.type === 'decrement' && {
+        $inc: { 'likes.value': -1 },
+        $pull: { 'likes.users': req.body.userId },
+      }),
+    });
+
+    res.status(204).json({});
+  }
+);
+
 export default {
   getAllReviews,
   getReview,
   createReview,
   updateReview,
   deleteReview,
+  handleReviewLikes,
 };
