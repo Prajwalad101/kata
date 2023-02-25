@@ -8,9 +8,8 @@ export const getAllQuestions = catchAsync(
   async (req: Request, res: Response, _next: NextFunction) => {
     const questionQuery = Question.find();
 
-    questionQuery.populate({
-      path: 'author',
-    });
+    questionQuery.populate('author');
+    questionQuery.populate('replies.author');
 
     const features = new APIFeatures(questionQuery, req.query)
       .filter()
@@ -57,11 +56,20 @@ export const createQuestion = catchAsync(
 
 export const createReply = catchAsync(
   async (req: Request, res: Response, _next: NextFunction) => {
-    await Question.findByIdAndUpdate(req.body.id, {
-      $push: {
-        replies: { author: req.body.author, reply: req.body.reply },
+    const query = Question.findByIdAndUpdate(
+      req.body.questionId,
+      {
+        $push: {
+          replies: { author: req.body.author, reply: req.body.reply },
+        },
       },
-    });
-    res.status(201).json({});
+      { new: true }
+    );
+
+    query.populate('author');
+    query.populate('replies.author');
+    const updatedQuestion = await query.select(['replies']);
+
+    res.status(201).json(updatedQuestion);
   }
 );
