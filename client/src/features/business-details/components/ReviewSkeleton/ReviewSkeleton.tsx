@@ -1,17 +1,17 @@
-interface ReviewSkeletonProps {
+interface CommunitySearchSkeletonProps {
   items?: number;
   className?: string;
 }
 
-export default function ReviewSkeleton({
+export default function CommunitySearchSkeleton({
   items = 3,
   className = '',
-}: ReviewSkeletonProps) {
+}: CommunitySearchSkeletonProps) {
   const cards = Array.from(Array(items).keys());
 
   return (
     <div className={className}>
-      {cards.map((card, i) => (
+      {cards.map((_, i) => (
         <div
           key={i}
           className="animate mb-4 flex flex-col rounded-md bg-gray-200/60 px-6 py-8 xs:mb-6"

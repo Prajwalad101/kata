@@ -1,22 +1,21 @@
 import { Menu, Transition } from '@headlessui/react';
-import { useState } from 'react';
 import { FiChevronDown } from 'react-icons/fi';
 import { classNames } from 'src/utils/tailwind';
 
-const sortItems = [
-  { id: 1, name: 'frequently asked' },
-  { id: 2, name: 'most helpful' },
-  { id: 3, name: 'newest' },
-  { id: 4, name: 'oldest' },
-];
+interface SortQAProps {
+  sortItems: {label: string, value:string}[];
+  onSelect: (_value: string) => void;
+  selectedSort: string
+}
 
-export default function SortQA() {
-  const [selectedSort, setSelectedSort] = useState(sortItems[0]);
+
+export default function SortQA({onSelect, selectedSort, sortItems} : SortQAProps) {
+  const sort = sortItems.find((sortItem) => sortItem.value === selectedSort) 
 
   return (
     <Menu as="div" className="relative z-30">
       <Menu.Button className="flex w-max items-center gap-1 rounded-full border border-gray-500 px-7 py-[9px] capitalize">
-        <span className="text-sm">{selectedSort.name}</span>
+        <span className="text-sm">{sort?.label}</span>
         <FiChevronDown size={20} />
       </Menu.Button>
       <Transition
@@ -29,18 +28,18 @@ export default function SortQA() {
       >
         <Menu.Items className="absolute top-0 mt-2 rounded-md border border-gray-300 bg-white shadow-sm">
           {sortItems.map((sort) => {
-            if (sort.name === selectedSort.name) return;
+            if (sort.value === selectedSort) return;
             return (
-              <Menu.Item key={sort.id}>
+              <Menu.Item key={sort.value}>
                 {({ active }) => (
                   <button
                     className={classNames(
                       'w-full whitespace-nowrap px-7 py-[9px] text-left text-sm capitalize',
                       active ? 'bg-gray-100' : ''
                     )}
-                    onClick={() => setSelectedSort(sort)}
+                    onClick={() => onSelect(sort.value)}
                   >
-                    {sort.name}
+                    {sort.label}
                   </button>
                 )}
               </Menu.Item>

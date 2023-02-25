@@ -1,16 +1,15 @@
-import { NextFunction, Request, Response } from "express";
-import Question from "../models/questionModel";
-import { APIFeatures } from "../utils/apiFeatures";
-import AppError from "../utils/appError";
-import catchAsync from "../utils/catchAsync";
+import { NextFunction, Request, Response } from 'express';
+import Question from '../models/questionModel';
+import { APIFeatures } from '../utils/apiFeatures';
+import AppError from '../utils/appError';
+import catchAsync from '../utils/catchAsync';
 
 export const getAllQuestions = catchAsync(
   async (req: Request, res: Response, _next: NextFunction) => {
     const questionQuery = Question.find();
 
-    questionQuery.populate({
-      path: 'author',
-    });
+    questionQuery.populate('author');
+    questionQuery.populate('replies.author');
 
     const features = new APIFeatures(questionQuery, req.query)
       .filter()
@@ -46,12 +45,31 @@ export const getQuestion = catchAsync(
 export const createQuestion = catchAsync(
   async (req: Request, res: Response, _next: NextFunction) => {
     let newQuestion = await Question.create(req.body);
-    newQuestion = await newQuestion.populate('author')
-
+    newQuestion = await newQuestion.populate('author');
 
     res.status(201).json({
       status: 'success',
       data: newQuestion,
     });
+  }
+);
+
+export const createReply = catchAsync(
+  async (req: Request, res: Response, _next: NextFunction) => {
+    const query = Question.findByIdAndUpdate(
+      req.body.questionId,
+      {
+        $push: {
+          replies: { author: req.body.author, reply: req.body.reply },
+        },
+      },
+      { new: true }
+    );
+
+    query.populate('author');
+    query.populate('replies.author');
+    const updatedQuestion = await query.select(['replies']);
+
+    res.status(201).json(updatedQuestion);
   }
 );

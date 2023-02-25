@@ -1,48 +1,47 @@
-import { IQuestion } from "@destiny/common/types";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { AxiosInstance } from "axios";
-import useCreateApi from "src/api/useCreateApi";
-import { QuestionsResponseData } from "./useQuestions";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { AxiosInstance } from 'axios';
+import useCreateApi from 'src/api/useCreateApi';
+import { QuestionsResponseData, IUserQuestion } from './useQuestions';
 
 interface ResponseData {
   status: string;
-  data: IQuestion
+  data: IUserQuestion;
 }
 
 const submitQuestion = async (payload: MutationProps, api: AxiosInstance) => {
-  const response = await api.post<ResponseData>('/questions', payload)
-  console.log('response',response);
-  
-  return response.data.data
-}
+  const response = await api.post<ResponseData>('/questions', payload);
+
+  return response.data.data;
+};
 
 interface MutationProps {
   author: string;
-  business: string 
+  business: string;
   question: string;
 }
 
-export default function useSubmitQuestion(){
+export default function useSubmitQuestion() {
   const queryClient = useQueryClient();
   const api = useCreateApi();
 
   const mutation = useMutation({
     mutationFn: (payload: MutationProps) => submitQuestion(payload, api),
     onSuccess: (newQuestion) => {
+      console.log('NewQuestion', newQuestion);
+
       queryClient.setQueriesData<QuestionsResponseData>(
         ['questions', { business: newQuestion.business }],
         (oldData) => {
-          if(!oldData) return undefined;
+          if (!oldData) return undefined;
           const updatedData = {
             ...oldData,
-            data: [newQuestion, ...oldData.data]
-          }
-          return updatedData
+            data: [newQuestion, ...oldData.data],
+          };
+          return updatedData;
         }
-      )
-  }
-  })
+      );
+    },
+  });
 
-  return mutation
-
-} 
+  return mutation;
+}

@@ -39,7 +39,7 @@ function Navbar({ theme }: INavbar) {
             onClick={() => setOpen(!open)}
             className="cursor-pointer hover:text-gray-700"
           />
-          <Logo>Logo</Logo>
+          <Logo />
           <AiOutlineSearch
             size={30}
             className="cursor-pointer hover:text-gray-700"
@@ -52,7 +52,7 @@ function Navbar({ theme }: INavbar) {
             'hidden items-center justify-between md:flex'
           )}
         >
-          <Logo>Logo</Logo>
+          <Logo />
           <div className="flex items-center gap-7 lg:gap-10">
             <div className="underline-offset-4 hover:underline">
               <Link href="/register-business">

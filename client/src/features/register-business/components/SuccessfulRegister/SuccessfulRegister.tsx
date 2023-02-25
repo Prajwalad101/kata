@@ -40,12 +40,6 @@ export default function SuccessfulRegister() {
       eventName: 'complete',
       callback: () => setAnimationStep(1),
     },
-    {
-      eventName: 'loopComplete',
-      callback: () => {
-        console.log('loop complete');
-      },
-    },
   ] as const;
 
   if (!shouldRender) return <></>;

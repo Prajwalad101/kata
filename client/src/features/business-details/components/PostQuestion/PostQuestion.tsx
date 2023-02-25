@@ -11,12 +11,12 @@ import FormErrorMessage from 'src/components/FormErrorMessage/FormErrorMessage';
 import { useUser } from 'src/layouts/UserProvider';
 
 interface FormInputs {
-  question: string
+  question: string;
 }
 
 const defaultValues: FormInputs = {
-  question: ''
-}
+  question: '',
+};
 
 interface PostQuestionProps {
   closeDialog: () => void;
@@ -26,35 +26,37 @@ export default function PostQuestion({ closeDialog }: PostQuestionProps) {
   const business = useRouter().query.businessId;
   const user = useUser();
 
-  const {register, watch, handleSubmit, formState, reset} = useForm({defaultValues});
+  const { register, watch, handleSubmit, formState, reset } = useForm({
+    defaultValues,
+  });
   const submitQuestionMutation = useSubmitQuestion();
 
   const onSubmit = (data: FormInputs) => {
     // check if author and business exists
-    if(user?._id && isString(business)){
+    if (user?._id && isString(business)) {
       submitQuestionMutation.mutate({
         question: data.question,
         business,
-        author: user?._id
-      })
+        author: user?._id,
+      });
     } else {
       toast.error('Something went wrong.');
     }
-  }
+  };
 
   useEffect(() => {
-    if(submitQuestionMutation.isSuccess){
-      reset(defaultValues)
+    if (submitQuestionMutation.isSuccess) {
+      reset(defaultValues);
       toast.success('Successfully posted question');
-      closeDialog(); 
+      closeDialog();
     }
-  },[submitQuestionMutation.isSuccess])
+  }, [submitQuestionMutation.isSuccess]);
 
-  const question = watch('question')
-  
+  const question = watch('question');
+
   return (
     <form className="mb-12" onSubmit={handleSubmit(onSubmit)}>
-        {user && 
+      {user && (
         <div className="mb-5 flex items-center gap-5">
           <Image
             src={user?.picture || ''}
@@ -65,14 +67,16 @@ export default function PostQuestion({ closeDialog }: PostQuestionProps) {
           />
           <div>
             <p>{user?.userName}</p>
-            <div className='flex gap-2 items-center'>
-              <p className='text-gray-600'>{user.numReviews} reviews</p>
-              <p><BsDot/></p>
-              <p className='text-gray-600'>{user.trustPoints} tp</p>
+            <div className="flex items-center gap-2">
+              <p className="text-gray-600">{user.numReviews} reviews</p>
+              <p>
+                <BsDot />
+              </p>
+              <p className="text-gray-600">{user.trustPoints} tp</p>
             </div>
           </div>
         </div>
-      }
+      )}
 
       <div>
         <textarea
@@ -80,21 +84,21 @@ export default function PostQuestion({ closeDialog }: PostQuestionProps) {
           {...register('question', {
             required: 'Please enter your question',
             maxLength: {
-              value: 50,
-              message: 'Question is too long' 
+              value: 300,
+              message: 'Question is too long',
             },
             minLength: {
               value: 5,
-              message: 'Question is too short'
+              message: 'Question is too short',
             },
           })}
           rows={7}
           className="mb-3 w-full rounded-md bg-gray-200 py-4 px-5 ring-inset ring-blue-500 focus:outline-none focus:ring"
           placeholder="Write your question"
         />
-        <div className='flex justify-between items-center mb-4'>
+        <div className="mb-4 flex items-center justify-between">
           <FormErrorMessage error={formState.errors.question} />
-          <p className="text-right text-sm text-gray-600 grow">
+          <p className="grow text-right text-sm text-gray-600">
             {question.length} / 200
           </p>
         </div>
@@ -103,9 +107,11 @@ export default function PostQuestion({ closeDialog }: PostQuestionProps) {
         <SecondaryButton className="px-8 py-2" onClick={closeDialog}>
           Cancel
         </SecondaryButton>
-        <PrimaryButton isLoading={submitQuestionMutation.isLoading}
+        <PrimaryButton
+          isLoading={submitQuestionMutation.isLoading}
           className="px-10 py-2"
-          type="submit">
+          type="submit"
+        >
           Post
         </PrimaryButton>
       </div>
