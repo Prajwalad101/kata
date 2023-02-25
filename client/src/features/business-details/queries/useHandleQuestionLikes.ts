@@ -61,18 +61,10 @@ export default function useHandleQuestionLikes() {
             likedUsers.push(userId);
             questionToUpdate.likes.value++;
           } else if (type === 'decrement') {
-            console.log('liked users', likedUsers);
-
-            console.log('user to remove', userId);
-
             const index = likedUsers.indexOf(userId);
             likedUsers.splice(index, 1); // remove user from the array
             questionToUpdate.likes.value--;
           }
-
-          /* map.set(questionId, {
-            ...questionToUpdate,
-          }); */
 
           const updatedData = { ...old, data: [...map.values()] };
           return updatedData;
