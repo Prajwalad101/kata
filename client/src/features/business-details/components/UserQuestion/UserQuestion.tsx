@@ -99,7 +99,12 @@ export default function UserQuestion({ data }: UserQuestionProps) {
   };
 
   return (
-    <div className={classNames('border-b-2 border-gray-200 py-5')}>
+    <div
+      className={classNames(
+        data.replies.length > 0 ? 'pt-5' : 'py-5',
+        'border-b-2 border-gray-200'
+      )}
+    >
       <div>
         <div className="mb-4 flex justify-between">
           <div className="flex gap-5">
@@ -202,7 +207,7 @@ export default function UserQuestion({ data }: UserQuestionProps) {
               </div>
             </form>
           )}
-          {/* {data.replies.length > 0 &&
+          {data.replies.length > 0 &&
             data.replies.map(({ reply, likes, author }, index) => (
               <UserReply
                 key={index}
@@ -210,14 +215,9 @@ export default function UserQuestion({ data }: UserQuestionProps) {
                 author={author}
                 likes={likes.value}
               />
-            ))} */}
+            ))}
         </div>
       </div>
-      {/* {data.replies.length > 0 && (
-        <>
-          <p className="w-max cursor-pointer text-gray-600 underline transition-colors hover:text-black"></p>
-        </>
-      )} */}
     </div>
   );
 }

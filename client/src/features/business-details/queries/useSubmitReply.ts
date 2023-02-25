@@ -8,7 +8,12 @@ import { QuestionsResponseData } from './useQuestions';
 interface Response {
   _id: string;
   author: IUser;
-  replies: { _id: string; reply: string; likes: number; author: IUser }[];
+  replies: {
+    _id: string;
+    reply: string;
+    likes: { value: number; users: string[] };
+    author: IUser;
+  }[];
 }
 
 const submitReply = async (data: MutationProps, api: AxiosInstance) => {
