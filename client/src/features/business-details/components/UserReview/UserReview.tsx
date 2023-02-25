@@ -1,12 +1,18 @@
 import { IReview } from '@destiny/common/types';
+import { isString } from '@destiny/common/utils';
 import {
   ReportUserDropdown,
   ReviewText,
 } from '@features/business-details/components';
+import useHandleReviewLikes from '@features/business-details/queries/useHandleReviewLikes';
 import Image from 'next/image';
-import { BiHeart, BiLike } from 'react-icons/bi';
+import { useRouter } from 'next/router';
+import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
+import { toast } from 'react-toastify';
 import RatingIcons from 'src/components/icons/ratings/RatingIcons';
+import { useUser } from 'src/layouts/UserProvider';
 import { getRelativeDate } from 'src/utils/date';
+import { classNames } from 'src/utils/tailwind';
 import { getPublicFilePath } from 'src/utils/text';
 
 interface UserReviewProps {
@@ -78,29 +84,53 @@ export default function UserReview({ review }: UserReviewProps) {
         </div>
       )}
 
-      <Feedback likes={review.likes} />
+      <Feedback likes={review.likes} reviewId={review._id} />
       <div className="border border-gray-300" />
     </div>
   );
 }
 
-function Feedback({ likes }: { likes: number }) {
+interface FeedbackProps {
+  reviewId: string;
+  likes: { value: number; users: string[] };
+}
+
+function Feedback({ likes, reviewId }: FeedbackProps) {
+  const user = useUser();
+  const businessId = useRouter().query.businessId;
+
+  const handleReviewLikesMutation = useHandleReviewLikes();
+
+  const alreadyLiked = user?._id && likes.users.includes(user?._id);
+
+  const handleLike = () => {
+    if (!user?._id) {
+      return toast.error('You have to be logged in to like this post');
+    }
+
+    if (isString(businessId) && isString(user._id))
+      handleReviewLikesMutation.mutate({
+        businessId,
+        userId: user._id,
+        reviewId,
+        type: alreadyLiked ? 'decrement' : 'increment',
+      });
+  };
+
   return (
-    <div className="mb-2 flex items-center gap-12">
-      <div className="flex flex-col items-center gap-1">
-        <BiLike
-          size={24}
-          className="cursor-pointer transition-colors hover:text-blue-500"
-        />
-        <p className="text-gray-700">{likes}</p>
+    <div className="mb-2 flex items-center gap-5">
+      <div
+        onClick={handleLike}
+        className={classNames(
+          alreadyLiked ? 'text-blue-600' : '',
+          'flex cursor-pointer items-center gap-2 text-gray-700 hover:text-blue-600'
+        )}
+      >
+        {alreadyLiked ? <AiFillLike size={20} /> : <AiOutlineLike size={20} />}
+        <button>Like</button>
       </div>
-      <div className="flex flex-col items-center gap-1">
-        <BiHeart
-          size={24}
-          className="cursor-pointer transition-colors hover:text-primaryred"
-        />
-        <p className="text-gray-700">0</p>
-      </div>
+      <Seperator />
+      <p className="text-gray-700">{likes.value} likes</p>
     </div>
   );
 }

@@ -29,4 +29,6 @@ router
   .patch(updateBusinessRating, reviewController.updateReview)
   .delete(deleteBusinessRating, reviewController.deleteReview);
 
+router.route('/:id/likes').patch(jwtAuth(), reviewController.handleReviewLikes);
+
 export default router;

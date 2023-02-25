@@ -21,7 +21,7 @@ export default function useSubmitReview() {
     onSuccess(newReview) {
       // set query data for reviews
       queryClient.setQueriesData<IReview[]>(
-        ['reviews', newReview.business],
+        ['reviews', { business: newReview.business }],
         (oldData) => {
           if (!oldData) return [newReview]; // if no data, return new data
           const updatedData = [newReview, ...oldData];

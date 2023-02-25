@@ -14,7 +14,14 @@ const reviewSchema = new Schema<IReview>(
       max: 5,
       required: [true, 'Rating cannot be empty'],
     },
-    likes: { type: Number, default: 0 },
+    // likes: { type: Number, default: 0 },
+    likes: {
+      value: {
+        type: Number,
+        default: 0,
+      },
+      users: [{ type: Schema.Types.ObjectId }],
+    },
     dislikes: { type: Number, default: 0 },
     business: {
       type: Schema.Types.ObjectId,

@@ -15,15 +15,18 @@ const questionSchema = new Schema<IQuestion>(
           required: [true, 'A reply must have an author'],
         },
         likes: {
-          type: Number,
-          default: 0,
+          value: { type: Number, default: 0 },
+          users: [{ type: Schema.Types.ObjectId }],
         },
         reply: {
           type: String,
         },
       },
     ],
-    likes: { type: Number, default: 0 },
+    likes: {
+      value: { type: Number, default: 0 },
+      users: [{ type: Schema.Types.ObjectId }],
+    },
     business: {
       type: Schema.Types.ObjectId,
       ref: 'Business',

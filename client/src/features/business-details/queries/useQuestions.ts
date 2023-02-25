@@ -7,7 +7,7 @@ import useCreateApi from 'src/api/useCreateApi';
 export interface IUserQuestion extends Omit<IQuestion, 'replies'> {
   replies: {
     author: IUser;
-    likes: number;
+    likes: { value: number; users: string[] };
     reply: string;
   }[];
 }

@@ -27,8 +27,6 @@ export default function useSubmitQuestion() {
   const mutation = useMutation({
     mutationFn: (payload: MutationProps) => submitQuestion(payload, api),
     onSuccess: (newQuestion) => {
-      console.log('NewQuestion', newQuestion);
-
       queryClient.setQueriesData<QuestionsResponseData>(
         ['questions', { business: newQuestion.business }],
         (oldData) => {

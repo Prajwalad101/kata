@@ -1,11 +1,11 @@
-import { Schema } from 'mongoose';
-import { IUser } from '../IUser';
+import { Schema } from "mongoose";
+import { IUser } from "../IUser";
 
 export interface IReview {
   _id: string;
   review: string;
   rating: number;
-  likes: number;
+  likes: { value: number; users: string[] };
   dislikes: number;
   business: Schema.Types.ObjectId;
   createdAt: string;

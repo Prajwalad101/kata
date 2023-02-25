@@ -73,3 +73,23 @@ export const createReply = catchAsync(
     res.status(201).json(updatedQuestion);
   }
 );
+
+export const handleQuestionLikes = catchAsync(
+  async (req: Request, res: Response, _next: NextFunction) => {
+    const questionId = req.params.id;
+
+    await Question.findByIdAndUpdate(questionId, {
+      // $inc: { 'likes.value': req.body.type === 'increment' ? 1 : -1 },
+      ...(req.body.type === 'increment' && {
+        $inc: { 'likes.value': 1 },
+        $addToSet: { 'likes.users': req.body.userId },
+      }),
+      ...(req.body.type === 'decrement' && {
+        $inc: { 'likes.value': -1 },
+        $pull: { 'likes.users': req.body.userId },
+      }),
+    });
+
+    res.status(204).json({});
+  }
+);
