@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
 import { BiLike } from 'react-icons/bi';
 import { BsReplyFill } from 'react-icons/bs';
 import { toast } from 'react-toastify';
@@ -47,12 +48,20 @@ export default function UserQuestion({ data }: UserQuestionProps) {
     setShowReplyBox(true);
   };
 
+  // check if user has already liked the post
+  const alreadyLiked = user?._id && data.likes.users.includes(user?._id);
+
   const handleQuestionLike = () => {
+    const userId = user?._id;
+
+    if (!userId) return toast.error('You must be logged in to like this post');
+
     if (isString(businessId)) {
       handleQuestionLikeMutation.mutate({
+        userId,
         questionId: data._id.toString(),
         businessId,
-        type: 'increment',
+        type: alreadyLiked ? 'decrement' : 'increment',
       });
     }
   };
@@ -129,9 +138,16 @@ export default function UserQuestion({ data }: UserQuestionProps) {
           >
             <div
               onClick={handleQuestionLike}
-              className="flex cursor-pointer items-center gap-2 text-gray-700 hover:text-blue-800"
+              className={classNames(
+                alreadyLiked ? 'text-blue-600' : '',
+                'flex cursor-pointer items-center gap-2 text-gray-700 hover:text-blue-600'
+              )}
             >
-              <BiLike size={20} />
+              {alreadyLiked ? (
+                <AiFillLike size={20} />
+              ) : (
+                <AiOutlineLike size={20} />
+              )}
               <button>Like</button>
             </div>
             <Seperator />
@@ -144,7 +160,7 @@ export default function UserQuestion({ data }: UserQuestionProps) {
               <button>Reply</button>
             </div>
             <Seperator />
-            <p className="text-gray-600">{data.likes} likes</p>
+            <p className="text-gray-600">{data.likes.value} likes</p>
           </div>
           {showReplyBox && (
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -186,15 +202,15 @@ export default function UserQuestion({ data }: UserQuestionProps) {
               </div>
             </form>
           )}
-          {data.replies.length > 0 &&
+          {/* {data.replies.length > 0 &&
             data.replies.map(({ reply, likes, author }, index) => (
               <UserReply
                 key={index}
                 reply={reply}
                 author={author}
-                likes={likes}
+                likes={likes.value}
               />
-            ))}
+            ))} */}
         </div>
       </div>
       {/* {data.replies.length > 0 && (
@@ -213,6 +229,8 @@ interface UserReplyProps {
 }
 
 function UserReply({ reply, likes, author }: UserReplyProps) {
+  console.log(likes);
+
   return (
     <div className="flex border-l-[3px] border-b-0 border-gray-200 py-2">
       <div className="grow border-gray-200 pl-5">

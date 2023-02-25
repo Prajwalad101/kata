@@ -6,6 +6,7 @@ import { IUserQuestion, QuestionsResponseData } from './useQuestions';
 const handleQuestionLikes = async (data: MutationProps, api: AxiosInstance) => {
   const response = await api.patch(`/questions/${data.questionId}`, {
     type: data.type,
+    userId: data.userId,
   });
 
   return response;
@@ -14,6 +15,7 @@ const handleQuestionLikes = async (data: MutationProps, api: AxiosInstance) => {
 interface MutationProps {
   businessId: string;
   questionId: string;
+  userId: string;
   type: 'increment' | 'decrement';
 }
 
@@ -23,7 +25,7 @@ export default function useHandleQuestionLikes() {
 
   const mutation = useMutation({
     mutationFn: (data: MutationProps) => handleQuestionLikes(data, api),
-    onMutate: async ({ questionId, type, businessId }) => {
+    onMutate: async ({ userId, questionId, type, businessId }) => {
       await queryClient.cancelQueries({
         queryKey: ['questions', { business: businessId }],
       });
@@ -38,37 +40,39 @@ export default function useHandleQuestionLikes() {
       /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
       const previousQuestions = matchedData[0][1] as any;
 
-      // console.log('Previous questions', previousQuestions);
-
-      /* if (mutationData.type === 'increment') {
-        updatedQuestion.likes += 1;
-      }
-      if (mutationData.type === 'decrement') {
-        updatedQuestion.likes -= 1;
-      } */
-
       // Optimistically update to the new value
       queryClient.setQueriesData<QuestionsResponseData>(
         ['questions'],
         (old) => {
           if (!old) return;
 
-          // create map to preserve original order of questions
+          // create map to preserve original order of values
           const map = new Map<string, IUserQuestion>();
           old.data.forEach((value) => map.set(value._id.toString(), value));
 
           // question to update
-          const newQuestion = map.get(questionId);
-          if (!newQuestion) return;
+          const questionToUpdate = map.get(questionId);
+          if (!questionToUpdate) return;
 
-          // increment or decrement likes
-          map.set(questionId, {
-            ...newQuestion,
-            likes:
-              type === 'increment'
-                ? newQuestion.likes + 1
-                : newQuestion.likes - 1,
-          });
+          // update question fields
+          const likedUsers = questionToUpdate.likes.users;
+
+          if (type === 'increment') {
+            likedUsers.push(userId);
+            questionToUpdate.likes.value++;
+          } else if (type === 'decrement') {
+            console.log('liked users', likedUsers);
+
+            console.log('user to remove', userId);
+
+            const index = likedUsers.indexOf(userId);
+            likedUsers.splice(index, 1); // remove user from the array
+            questionToUpdate.likes.value--;
+          }
+
+          /* map.set(questionId, {
+            ...questionToUpdate,
+          }); */
 
           const updatedData = { ...old, data: [...map.values()] };
           return updatedData;
@@ -77,6 +81,14 @@ export default function useHandleQuestionLikes() {
 
       // this is used for rolling back if error occurs
       return previousQuestions;
+    },
+    onError: (_err, newData, context) => {
+      // rollback with previous value
+      queryClient.setQueriesData(
+        ['questions', { business: newData.businessId }],
+        () => context
+      );
+      return;
     },
   });
 
