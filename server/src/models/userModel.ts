@@ -26,12 +26,16 @@ const userSchema = new mongoose.Schema({
   },
   numReviews: {
     type: Number,
-    default: 0
+    default: 0,
   },
   numQuestions: {
     type: Number,
-    default: 0
-  }
+    default: 0,
+  },
+  reports: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const User = mongoose.model('User', userSchema);
