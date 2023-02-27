@@ -131,7 +131,7 @@ export default function UserQuestion({ data }: UserQuestionProps) {
               </div>
             </div>
           </div>
-          <ReportUserDropdown />
+          <ReportUserDropdown userId={data._id.toString()} />
         </div>
         <div>
           <p className="mb-3">{data.question}</p>
@@ -229,8 +229,6 @@ interface UserReplyProps {
 }
 
 function UserReply({ reply, likes, author }: UserReplyProps) {
-  console.log(likes);
-
   return (
     <div className="flex border-l-[3px] border-b-0 border-gray-200 py-2">
       <div className="grow border-gray-200 pl-5">
@@ -257,7 +255,7 @@ function UserReply({ reply, likes, author }: UserReplyProps) {
               </div>
             </div>
           </div>
-          <ReportUserDropdown />
+          <ReportUserDropdown userId={author._id} />
         </div>
         <p className="mb-3">{reply}</p>
         <div className="mb-2 flex items-center gap-4">

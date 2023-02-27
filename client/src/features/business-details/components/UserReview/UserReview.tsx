@@ -46,7 +46,7 @@ export default function UserReview({ review }: UserReviewProps) {
           </div>
         </div>
         <div className="flex flex-col items-end">
-          <ReportUserDropdown />
+          <ReportUserDropdown userId={author._id} />
           <p className="hidden text-gray-600 xs:block">
             {getRelativeDate(review.createdAt)}
           </p>
