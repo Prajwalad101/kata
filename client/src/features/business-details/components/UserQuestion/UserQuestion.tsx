@@ -131,7 +131,7 @@ export default function UserQuestion({ data }: UserQuestionProps) {
               </div>
             </div>
           </div>
-          <ReportUserDropdown userId={data._id.toString()} />
+          <ReportUserDropdown userId={data.author._id} />
         </div>
         <div>
           <p className="mb-3">{data.question}</p>

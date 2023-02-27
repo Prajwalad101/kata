@@ -39,7 +39,7 @@ export const reportUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     // increase report count on user document
     const user = await User.findByIdAndUpdate(
-      req.body.id,
+      req.body.userId,
       {
         $inc: { reportCount: 1 },
       },
@@ -51,7 +51,7 @@ export const reportUser = catchAsync(
         'The user you are trying to report does not exist',
         404
       );
-      next(error);
+      return next(error);
     }
 
     // create a report document

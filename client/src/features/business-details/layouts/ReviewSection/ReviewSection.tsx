@@ -1,13 +1,11 @@
 import {
   Ratings,
-  ReviewSkeleton,
   SortReview,
   StartReviewForm,
   UserReview,
 } from '@features/business-details/components';
 import CommunitySearchSkeleton from '@features/business-details/components/ReviewSkeleton/ReviewSkeleton';
 import CommunitySectionNotFound from '@features/business-details/components/ReviewsNotFound.ts/ReviewsNotFound';
-import ReviewsNotFound from '@features/business-details/components/ReviewsNotFound.ts/ReviewsNotFound';
 import CommunitySectionSearch from '@features/business-details/components/SearchReviews/SearchReviews';
 import { reviewSortOptions } from '@features/business-details/data';
 import { useBusiness, useReviews } from '@features/business-details/queries';
@@ -30,7 +28,6 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
   const [searchText, setSearchText] = useState<string>();
   const [selectedSort, setSelectedSort] = useState(reviewSortOptions[0]);
   const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
-
 
   const businessResult = useBusiness();
 
@@ -77,8 +74,8 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
             onSelect={(sortItem) => setSelectedSort(sortItem)}
           />
           <CommunitySectionSearch
-            placeholder='Search for reviews' 
-            onChange={(text) => setSearchText(text)} 
+            placeholder="Search for reviews"
+            onChange={(text) => setSearchText(text)}
           />
         </div>
         <div className="mb-7 border-b border-gray-300" />
@@ -92,9 +89,11 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
         />
         <div className="mb-10 border-b border-gray-300" />
         {reviewsResult.isLoading && <CommunitySearchSkeleton items={5} />}
-        {reviewsResult.isError && <CommunitySectionNotFound message='Sorry, Could not find any reviews' />}
+        {reviewsResult.isError && (
+          <CommunitySectionNotFound message="Sorry, Could not find any reviews" />
+        )}
         {reviewsResult.isSuccess && reviews.length === 0 ? (
-          <CommunitySectionNotFound message='Sorry. Could not find any reviews' />
+          <CommunitySectionNotFound message="Sorry. Could not find any reviews" />
         ) : (
           reviews.map((review) => (
             <UserReview key={review._id.toString()} review={review} />
