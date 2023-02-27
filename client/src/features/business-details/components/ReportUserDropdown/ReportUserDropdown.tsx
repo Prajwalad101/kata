@@ -50,7 +50,7 @@ export default function ReportUserDropdown({
   };
 
   const handleReport = () => {
-    if (!user) {
+    if (!user || !user._id) {
       return toast.error('You have to be logged in to report this user');
     }
 
@@ -58,20 +58,26 @@ export default function ReportUserDropdown({
       return toast.error('You must select at least one category');
     }
 
-    reportUserMutation.mutate(userId, {
-      onSuccess: () => {
-        toast.success('User successfully reported');
-      },
-      onError: () => {
-        toast.error('Something went wrong. Please try again later');
-      },
-    });
+    reportUserMutation.mutate(
+      { violations: reports, reportedBy: user._id, userId: userId },
+      {
+        onSuccess: () => {
+          setReports([]);
+          toast.success('User successfully reported');
+          setOpenModal(false);
+        },
+        onError: () => {
+          setReports([]);
+          toast.error('Something went wrong. Please try again later');
+        },
+      }
+    );
   };
 
   return (
     <>
       <MyModal isOpen={openModal} closeModal={() => setOpenModal(false)}>
-        <div className="w-[500px] rounded-md bg-white py-7 px-5">
+        <div className="w-[500px] rounded-lg bg-white py-7 px-6">
           <h3 className="mb-7 text-center text-xl font-medium">Report User</h3>
           <div className="mb-10">
             {reportData.map((item) => (
@@ -96,7 +102,11 @@ export default function ReportUserDropdown({
             ))}
           </div>
           <div className="flex gap-5">
-            <PrimaryButton onClick={handleReport} className="grow py-3">
+            <PrimaryButton
+              isLoading={reportUserMutation.isLoading}
+              onClick={handleReport}
+              className="grow py-3"
+            >
               Report
             </PrimaryButton>
             <SecondaryButton
@@ -108,6 +118,7 @@ export default function ReportUserDropdown({
           </div>
         </div>
       </MyModal>
+      {/* Dropdown menu to report user */}
       <Menu as="div" className="relative h-[29px]">
         <Menu.Button className="rounded-full px-1 py-[3px] transition-colors hover:bg-gray-200 xs:px-3">
           <BsThreeDotsVertical
