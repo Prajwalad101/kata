@@ -1,9 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
+import Report from '../models/reportModel';
 import User from '../models/userModel';
 import catchAsync from '../utils/catchAsync';
 
 export const getAllUsers = catchAsync(
-  async (req: Request, res: Response, _next: NextFunction) => {
+  async (_req: Request, res: Response, _next: NextFunction) => {
     const userQuery = User.find();
 
     const allUsers = await userQuery;
@@ -32,3 +33,19 @@ export const createUser = async (profile: any) => {
   });
   return user;
 };
+
+export const reportUser = catchAsync(
+  async (req: Request, res: Response, _next: NextFunction) => {
+    console.log(req.body.userId);
+
+    // create a report document
+    await Report.create({ ...req.body, user: req.body.userId });
+
+    // increase reportCount on the user document
+    await User.findByIdAndUpdate(req.body.id, {
+      $inc: { reportCount: 1 },
+    });
+
+    res.status(204).json();
+  }
+);
