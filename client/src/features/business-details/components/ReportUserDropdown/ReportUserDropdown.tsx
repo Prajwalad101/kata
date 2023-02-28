@@ -1,5 +1,6 @@
 import useReportUser from '@features/business-details/queries/useReportUser';
 import { Menu, Transition } from '@headlessui/react';
+import { AxiosError } from 'axios';
 import { ChangeEvent, useState } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { toast } from 'react-toastify';
@@ -66,9 +67,13 @@ export default function ReportUserDropdown({
           toast.success('User successfully reported');
           setOpenModal(false);
         },
-        onError: () => {
+        onError: (err) => {
           setReports([]);
-          toast.error('Something went wrong. Please try again later');
+          if (err instanceof AxiosError) {
+            toast.error(err.response?.data.message);
+          } else {
+            toast.error('Something went wrong. Please try again later');
+          }
         },
       }
     );
