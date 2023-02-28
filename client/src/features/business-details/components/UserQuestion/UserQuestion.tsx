@@ -13,7 +13,7 @@ import { BsReplyFill } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { PrimaryButton, SecondaryButton } from 'src/components';
 import FormErrorMessage from 'src/components/FormErrorMessage/FormErrorMessage';
-import { useUser } from 'src/layouts/UserProvider';
+import { useAuth } from 'src/layouts/UserProvider';
 import { getRelativeDate } from 'src/utils/date';
 import { classNames } from 'src/utils/tailwind';
 import { getPublicFilePath } from 'src/utils/text';
@@ -28,7 +28,7 @@ interface UserQuestionProps {
 }
 
 export default function UserQuestion({ data }: UserQuestionProps) {
-  const user = useUser();
+  const user = useAuth()?.user;
   const businessId = useRouter().query.businessId;
   const [showReplyBox, setShowReplyBox] = useState(false);
 

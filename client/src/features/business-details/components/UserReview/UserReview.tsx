@@ -10,7 +10,7 @@ import { useRouter } from 'next/router';
 import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
 import { toast } from 'react-toastify';
 import RatingIcons from 'src/components/icons/ratings/RatingIcons';
-import { useUser } from 'src/layouts/UserProvider';
+import { useAuth } from 'src/layouts/UserProvider';
 import { getRelativeDate } from 'src/utils/date';
 import { classNames } from 'src/utils/tailwind';
 import { getPublicFilePath } from 'src/utils/text';
@@ -96,7 +96,7 @@ interface FeedbackProps {
 }
 
 function Feedback({ likes, reviewId }: FeedbackProps) {
-  const user = useUser();
+  const user = useAuth()?.user;
   const businessId = useRouter().query.businessId;
 
   const handleReviewLikesMutation = useHandleReviewLikes();

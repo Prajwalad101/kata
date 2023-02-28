@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { Fragment } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { useUser } from 'src/layouts/UserProvider';
+import { useAuth } from 'src/layouts/UserProvider';
 import { buildFormData } from 'src/utils/browser';
 import { classNames } from 'src/utils/tailwind';
 import Buttons from './Buttons';
@@ -22,7 +22,7 @@ interface StartReviewProps {
 export default function StartReview({ isOpen, closeModal }: StartReviewProps) {
   const { query } = useRouter();
   const businessId = query.businessId as string;
-  const user = useUser();
+  const user = useAuth()?.user;
 
   const mutation = useSubmitReview();
 

@@ -8,7 +8,7 @@ import { BsDot } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { PrimaryButton, SecondaryButton } from 'src/components';
 import FormErrorMessage from 'src/components/FormErrorMessage/FormErrorMessage';
-import { useUser } from 'src/layouts/UserProvider';
+import { useAuth } from 'src/layouts/UserProvider';
 
 interface FormInputs {
   question: string;
@@ -24,7 +24,7 @@ interface PostQuestionProps {
 
 export default function PostQuestion({ closeDialog }: PostQuestionProps) {
   const business = useRouter().query.businessId;
-  const user = useUser();
+  const user = useAuth()?.user;
 
   const { register, watch, handleSubmit, formState, reset } = useForm({
     defaultValues,

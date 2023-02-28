@@ -10,7 +10,7 @@ import useQuestions from '@features/business-details/queries/useQuestions';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { Portal, SecondaryButton } from 'src/components';
-import { useUser } from 'src/layouts/UserProvider';
+import { useAuth } from 'src/layouts/UserProvider';
 import { classNames } from 'src/utils/tailwind';
 
 const sortItems = [
@@ -24,7 +24,7 @@ interface QASectionProps {
 }
 
 export default function QASection({ className = '' }: QASectionProps) {
-  const user = useUser();
+  const user = useAuth()?.user;
 
   const [qaDialogOpen, setQADialogOpen] = useState(false);
 

@@ -12,7 +12,7 @@ import { useBusiness, useReviews } from '@features/business-details/queries';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { Portal, SecondaryButton } from 'src/components';
-import { useUser } from 'src/layouts/UserProvider';
+import { useAuth } from 'src/layouts/UserProvider';
 import { addOrRemove } from 'src/utils/array';
 import { classNames } from 'src/utils/tailwind';
 
@@ -21,7 +21,7 @@ interface ReviewSectionProps {
 }
 
 export default function ReviewSection({ className = '' }: ReviewSectionProps) {
-  const user = useUser();
+  const user = useAuth()?.user;
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
 
   // Filters for reviews
