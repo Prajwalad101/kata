@@ -5,7 +5,7 @@ import { ChangeEvent, useState } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import { MyModal, PrimaryButton, SecondaryButton } from 'src/components';
-import { useUser } from 'src/layouts/UserProvider';
+import { useAuth } from 'src/layouts/UserProvider';
 import { classNames } from 'src/utils/tailwind';
 
 interface ReportUserDropdownProps {
@@ -27,7 +27,7 @@ export default function ReportUserDropdown({
   const [openModal, setOpenModal] = useState(false);
   const [reports, setReports] = useState<string[]>([]);
 
-  const user = useUser();
+  const user = useAuth()?.user;
 
   const reportUserMutation = useReportUser();
 

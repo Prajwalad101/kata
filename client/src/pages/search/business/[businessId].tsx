@@ -21,6 +21,7 @@ import { NextPageWithLayout } from 'src/pages/_app';
 
 const Business: NextPageWithLayout = () => {
   const businessResult = useBusiness();
+
   const { data: businessData, isLoading, isError } = businessResult;
 
   if (!businessData) return <></>;
@@ -61,7 +62,7 @@ const Business: NextPageWithLayout = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+/* export const getServerSideProps: GetServerSideProps = async (context) => {
   const params = context.params;
   const businessId = params?.businessId as string;
 
@@ -78,7 +79,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       dehydratedState: dehydrate(queryClient),
     },
   };
-};
+}; */
 
 export default Business;
 
