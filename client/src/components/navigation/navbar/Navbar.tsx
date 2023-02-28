@@ -10,6 +10,7 @@ import Logo from 'src/components/logo/Logo';
 import UserProfile from 'src/components/userprofile/UserProfile';
 import { usePreventBodyOverflow } from 'src/hooks';
 import useCookie from 'src/hooks/browser/useCookie';
+import { useAuth } from 'src/layouts/UserProvider';
 import { classNames } from 'src/utils/tailwind';
 
 interface INavbar {
@@ -22,7 +23,7 @@ function Navbar({ theme }: INavbar) {
 
   usePreventBodyOverflow(open);
 
-  const accessToken = useCookie('access-token', null);
+  const auth = useAuth();
 
   return (
     <>
@@ -67,8 +68,8 @@ function Navbar({ theme }: INavbar) {
               </Link>
             </div>
             {/* Login Buttons */}
-            {accessToken ? (
-              <UserProfile accessToken={accessToken} />
+            {auth?.user ? (
+              <UserProfile user={auth.user} logout={auth.logout} />
             ) : (
               <PrimaryButton onClick={() => setIsModalOpen(true)}>
                 <p className="py-2 px-6">Sign In</p>

@@ -3,26 +3,36 @@ import { createContext, ReactNode, useContext } from 'react';
 import useCookie from 'src/hooks/browser/useCookie';
 import parseJwt from 'src/utils/text/parseJwt';
 
-type UserSession = Omit<IUser, 'trustPoints' | 'reviews'>;
+type UserSession = Partial<IUser> | undefined;
+interface UserContext {
+  user: UserSession;
+  accessToken: string | null;
+  logout: () => void;
+}
 
-const UserContext = createContext<Partial<IUser> | undefined>(undefined);
+const UserContext = createContext<UserContext | undefined>(undefined);
 
 interface UserProviderProps {
   children: ReactNode;
 }
 
 export default function UserProvider({ children }: UserProviderProps) {
-  const accessToken = useCookie('access-token', null);
+  const [accessToken, removeToken] = useCookie('access-token', null);
 
-  const user = accessToken ? parseJwt(accessToken) : undefined;
-  const value = user as UserSession | undefined;
+  const logout = removeToken;
+
+  const user = accessToken
+    ? (parseJwt(accessToken) as Partial<IUser>)
+    : undefined;
+
+  const value = { user, accessToken, logout };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }
 
-function useUser() {
+function useAuth() {
   const context = useContext(UserContext);
   return context;
 }
 
-export { UserProvider, useUser };
+export { UserProvider, useAuth };
