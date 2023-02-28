@@ -20,6 +20,24 @@ const useCookie = (key: string, defaultValue: string | null) => {
     }
   }, [key]);
 
-  return cookie;
+  function removeCookie() {
+    const path = '/';
+    const domain = process.env.NEXT_PUBLIC_HOSTNAME;
+
+    const cookie = `${key}=; path=${path}; domain=${domain}; expires=Thu, 01 Jan 1970 00:00:01 GMT`;
+    console.log(cookie);
+
+    document.cookie = cookie;
+    setCookie(null);
+    /* name +
+      '=' +
+      ';path=' +
+      '/' +
+      ';domain=' +
+      domain +
+      ';expires=Thu, 01 Jan 1970 00:00:01 GMT'; */
+  }
+
+  return [cookie, removeCookie] as const;
 };
 export default useCookie;
