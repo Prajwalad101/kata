@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import Question from '../models/questionModel';
 import { APIFeatures } from '../utils/apiFeatures';
 import AppError from '../utils/appError';
+import { increaseBusinessHits } from '../utils/business/increaseBusinessHits';
 import catchAsync from '../utils/catchAsync';
 
 export const getAllQuestions = catchAsync(
@@ -47,6 +48,8 @@ export const createQuestion = catchAsync(
     let newQuestion = await Question.create(req.body);
     newQuestion = await newQuestion.populate('author');
 
+    increaseBusinessHits(req.body.business, 'question');
+
     res.status(201).json({
       status: 'success',
       data: newQuestion,
@@ -55,7 +58,15 @@ export const createQuestion = catchAsync(
 );
 
 export const createReply = catchAsync(
-  async (req: Request, res: Response, _next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
+    const businessId = req.body.businessId;
+    if (!businessId) {
+      const error = new AppError('Business id is required', 400);
+      return next(error);
+    }
+
+    increaseBusinessHits(businessId, 'reply');
+
     const query = Question.findByIdAndUpdate(
       req.body.questionId,
       {
@@ -68,27 +79,44 @@ export const createReply = catchAsync(
 
     query.populate('author');
     query.populate('replies.author');
-    const updatedQuestion = await query.select(['replies']);
+    const updatedQuestion = await query.select(['replies', 'business']);
 
     res.status(201).json(updatedQuestion);
   }
 );
 
 export const handleQuestionLikes = catchAsync(
-  async (req: Request, res: Response, _next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const questionId = req.params.id;
+    const businessId = req.body.businessId;
 
-    await Question.findByIdAndUpdate(questionId, {
-      // $inc: { 'likes.value': req.body.type === 'increment' ? 1 : -1 },
-      ...(req.body.type === 'increment' && {
-        $inc: { 'likes.value': 1 },
-        $addToSet: { 'likes.users': req.body.userId },
-      }),
-      ...(req.body.type === 'decrement' && {
-        $inc: { 'likes.value': -1 },
-        $pull: { 'likes.users': req.body.userId },
-      }),
-    });
+    if (!businessId) {
+      const error = new AppError('Business id is required', 400);
+      return next(error);
+    }
+
+    if (!questionId) {
+      const error = new AppError('Question id is required', 400);
+      return next(error);
+    }
+
+    increaseBusinessHits(businessId, 'likes');
+
+    await Question.findByIdAndUpdate(
+      questionId,
+      {
+        // $inc: { 'likes.value': req.body.type === 'increment' ? 1 : -1 },
+        ...(req.body.type === 'increment' && {
+          $inc: { 'likes.value': 1 },
+          $addToSet: { 'likes.users': req.body.userId },
+        }),
+        ...(req.body.type === 'decrement' && {
+          $inc: { 'likes.value': -1 },
+          $pull: { 'likes.users': req.body.userId },
+        }),
+      },
+      { new: true }
+    );
 
     res.status(204).json({});
   }

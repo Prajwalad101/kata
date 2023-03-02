@@ -3,8 +3,20 @@ import { NextFunction, Request, Response } from 'express';
 import Business from '../models/businessModel';
 import { APIFeatures } from '../utils/apiFeatures';
 import AppError from '../utils/appError';
+import { increaseBusinessHits } from '../utils/business/increaseBusinessHits';
 import { filterFeatures } from '../utils/businessFunc';
 import catchAsync from '../utils/catchAsync';
+
+/* const getTrendingBusinesses = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    let businesses = await Business.aggregate([
+      // Stage 1: Filter businesses
+      {
+        $match: {},
+      },
+    ]);
+  }
+); */
 
 const getAllBusinesses = catchAsync(
   async (req: Request, res: Response, _next: NextFunction) => {
@@ -67,6 +79,7 @@ const createBusiness = catchAsync(
 const getBusiness = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const business = await Business.findById(req.params.id);
+    increaseBusinessHits(req.params.id, 'visit'); // create doc on every visit
 
     if (!business) {
       return next(new AppError('No document found with that ID', 404));

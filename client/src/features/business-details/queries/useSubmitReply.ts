@@ -1,13 +1,13 @@
 import { IUser } from '@destiny/common/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosInstance } from 'axios';
-import { useRouter } from 'next/router';
 import useCreateApi from 'src/api/useCreateApi';
 import { QuestionsResponseData } from './useQuestions';
 
 interface Response {
   _id: string;
   author: IUser;
+  business: string;
   replies: {
     _id: string;
     reply: string;
@@ -25,19 +25,18 @@ interface MutationProps {
   questionId: string;
   author: string;
   reply: string;
+  businessId: string;
 }
 
 export default function useSubmitReply() {
   const api = useCreateApi();
   const queryClient = useQueryClient();
 
-  const businessId = useRouter().query.businessId;
-
   const mutation = useMutation({
     mutationFn: (data: MutationProps) => submitReply(data, api),
     onSuccess: (newData, variables) => {
       queryClient.setQueriesData<QuestionsResponseData>(
-        ['questions', { business: businessId }],
+        ['questions', { business: newData.business }],
         (oldData) => {
           if (!oldData) return undefined;
 
@@ -59,8 +58,6 @@ export default function useSubmitReply() {
             ...oldData,
             data: [newQuestion, ...oldQuestions],
           };
-
-          console.log('updatedData', updatedData);
 
           return updatedData;
         }

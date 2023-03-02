@@ -79,12 +79,14 @@ export default function UserQuestion({ data }: UserQuestionProps) {
 
   const onSubmit = (formData: FormInputs) => {
     if (!user?._id) return;
+    if (!isString(businessId)) return toast.error('Invalid business id');
 
     submitReply.mutate(
       {
         questionId: data._id.toString(),
         author: user?._id,
         reply: formData.reply,
+        businessId,
       },
       {
         onSuccess: () => {

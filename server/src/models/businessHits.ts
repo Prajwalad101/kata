@@ -2,7 +2,8 @@ import mongoose from 'mongoose';
 
 const businessHitsSchema = new mongoose.Schema(
   {
-    type: { type: String },
+    // type: { type: String },
+    type: String,
     metadata: {
       businessId: {
         type: mongoose.Types.ObjectId,
