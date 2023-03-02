@@ -8,19 +8,48 @@ import { increaseBusinessHits } from '../utils/business/increaseBusinessHits';
 import { filterFeatures } from '../utils/businessFunc';
 import catchAsync from '../utils/catchAsync';
 
-const getTrendingBusinesses = catchAsync(
+export const getTrendingBusinesses = catchAsync(
   async (_req: Request, res: Response, _next: NextFunction) => {
-    let businesses = await BusinessHits.aggregate([
-      // Stage 1: Group Businesses
+    const businesses = await BusinessHits.aggregate([
+      // Stage 1: Get last week business hits
+      {
+        $match: {
+          timestamp: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) },
+        },
+      },
+      // Stage 2: Group Businesses and get total hit score
       {
         $group: {
           _id: '$metadata.businessId',
-          hitCount: {
-            $count: {},
+          totalHitScore: {
+            $sum: '$hitScore',
           },
         },
       },
+      // Stage 3: Sort based on total hit score
+      { $sort: { totalHitScore: -1, _id: 1 } },
+      // Stage 4: Populate businesses
+      {
+        $lookup: {
+          from: 'businesses',
+          localField: '_id',
+          foreignField: '_id',
+          as: 'business',
+        },
+      },
+      // Stage 5: set business object as the root field
+      {
+        $replaceRoot: {
+          newRoot: {
+            $mergeObjects: [{ $arrayElemAt: ['$business', 0] }, '$$ROOT'],
+          },
+        },
+      },
+      // Stage 6: exclude nested business field
+      { $project: { business: 0 } },
     ]);
+
+    res.json({ status: 'success', data: businesses });
   }
 );
 

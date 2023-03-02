@@ -16,7 +16,7 @@ const businessHitsSchema = new mongoose.Schema(
       metaField: 'metadata',
     },
     timestamps: { createdAt: 'timestamp', updatedAt: false },
-    expireAfterSeconds: 604800, // 1 week
+    expireAfterSeconds: 30 * 24 * 60 * 60, //  30 days
   }
 );
 
