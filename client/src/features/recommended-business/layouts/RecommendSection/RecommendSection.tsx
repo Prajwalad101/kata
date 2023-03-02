@@ -1,5 +1,5 @@
+import { IBusiness } from '@destiny/common/types';
 import { BusinessCard } from '@features/recommended-business/components';
-import { useFetchRecommendBusiness } from '@features/search-business/hooks';
 import Link from 'next/link';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import AppLayout from 'src/components/layout/app/AppLayout';
@@ -9,21 +9,10 @@ import { ButtonProps } from 'src/types/props';
 interface IRecommendedSection {
   title: string;
   description: string;
-  groupBy: string;
+  data: { status: string; documentCount: number; data: IBusiness[] };
 }
 
-function RecommendedSection({
-  title,
-  description,
-  groupBy: _groupBy,
-}: IRecommendedSection) {
-  const businessResult = useFetchRecommendBusiness();
-  const businesses = businessResult.data;
-
-  if (!businesses || businesses.documentCount <= 0) {
-    return <></>;
-  }
-
+function RecommendedSection({ title, description, data }: IRecommendedSection) {
   return (
     <AppLayout size="sm">
       <div className="font-rubik">
@@ -33,12 +22,12 @@ function RecommendedSection({
         <p className="mb-5 text-base text-gray-800 md:block">{description}</p>
 
         <Slider
-          numItems={businesses.documentCount}
+          numItems={data.documentCount}
           LeftButton={LeftButton}
           RightButton={RightButton}
           className="sm:-mx-2"
         >
-          {businesses.data.map((business, index) => (
+          {data.data.map((business, index) => (
             <div key={index} className="w-full sm:w-1/2 sm:px-2 lg:w-1/4">
               <Link href="/">
                 <a>
