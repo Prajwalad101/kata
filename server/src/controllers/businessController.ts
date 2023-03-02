@@ -49,7 +49,56 @@ export const getTrendingBusinesses = catchAsync(
       { $project: { business: 0 } },
     ]);
 
-    res.json({ status: 'success', data: businesses });
+    res.json({
+      status: 'success',
+      documentCount: businesses.length,
+      data: businesses,
+    });
+  }
+);
+
+export const getNearestBusinesses = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    console.log(req.query);
+    const coordinates = req.query.coordinates;
+
+    if (!Array.isArray(coordinates) || coordinates.length !== 2) {
+      const error = new AppError('Invalid coordinates', 400);
+      return next(error);
+    }
+
+    const businesses = await Business.aggregate([
+      // Stage 1: Get nearest businesses
+      {
+        $geoNear: {
+          near: {
+            type: 'Point',
+            coordinates: [Number(coordinates[0]), Number(coordinates[1])],
+          },
+          spherical: true,
+          // maxDistance: 5 * 1000, // 5 km
+          distanceField: 'calcDistance',
+        },
+      },
+      // Stage 2: Calculate average rating
+      /* {
+        $addFields: {
+          avgRating: { $avg: '$ratings' },
+        },
+      }, */
+      // Stage 3: Filter businesses with rating
+      /* {
+        $match: {
+          avgRating: { $gt: 5 },
+        },
+      }, */
+    ]);
+
+    res.json({
+      status: 'success',
+      documentCount: businesses.length,
+      data: businesses,
+    });
   }
 );
 
