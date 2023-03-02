@@ -45,9 +45,11 @@ export default function useHandleReviewLikes() {
       queryClient.setQueriesData<IReview[]>(['reviews'], (old) => {
         if (!old) return;
 
+        const oldData = JSON.parse(JSON.stringify(old)) as IReview[];
+
         // create map to preserve original order of values
         const map = new Map<string, IReview>();
-        old.forEach((value) => map.set(value._id.toString(), value));
+        oldData.forEach((value) => map.set(value._id.toString(), value));
 
         // review to update
         const reviewToUpdate = map.get(reviewId);
