@@ -7,6 +7,7 @@ const handleQuestionLikes = async (data: MutationProps, api: AxiosInstance) => {
   const response = await api.patch(`/questions/${data.questionId}`, {
     type: data.type,
     userId: data.userId,
+    businessId: data.businessId,
   });
 
   return response;
