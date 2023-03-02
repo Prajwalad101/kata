@@ -24,7 +24,14 @@ const questionSchema = new Schema<IQuestion>(
       },
     ],
     likes: {
-      value: { type: Number, default: 0 },
+      value: {
+        type: Number,
+        default: 0,
+        validate: {
+          validator: (value: number) => value >= 0,
+          message: 'Likes cannot be negative',
+        },
+      },
       users: [{ type: Schema.Types.ObjectId }],
     },
     business: {

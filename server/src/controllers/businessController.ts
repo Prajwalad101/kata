@@ -1,10 +1,106 @@
 import { isString } from '@destiny/common/utils';
 import { NextFunction, Request, Response } from 'express';
+import BusinessHits from '../models/businessHits';
 import Business from '../models/businessModel';
 import { APIFeatures } from '../utils/apiFeatures';
 import AppError from '../utils/appError';
+import { increaseBusinessHits } from '../utils/business/increaseBusinessHits';
 import { filterFeatures } from '../utils/businessFunc';
 import catchAsync from '../utils/catchAsync';
+
+export const getTrendingBusinesses = catchAsync(
+  async (_req: Request, res: Response, _next: NextFunction) => {
+    const businesses = await BusinessHits.aggregate([
+      // Stage 1: Get last week business hits
+      {
+        $match: {
+          timestamp: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) },
+        },
+      },
+      // Stage 2: Group Businesses and get total hit score
+      {
+        $group: {
+          _id: '$metadata.businessId',
+          totalHitScore: {
+            $sum: '$hitScore',
+          },
+        },
+      },
+      // Stage 3: Sort based on total hit score
+      { $sort: { totalHitScore: -1, _id: 1 } },
+      // Stage 4: Populate businesses
+      {
+        $lookup: {
+          from: 'businesses',
+          localField: '_id',
+          foreignField: '_id',
+          as: 'business',
+        },
+      },
+      // Stage 5: set business object as the root field
+      {
+        $replaceRoot: {
+          newRoot: {
+            $mergeObjects: [{ $arrayElemAt: ['$business', 0] }, '$$ROOT'],
+          },
+        },
+      },
+      // Stage 6: exclude nested business field
+      { $project: { business: 0 } },
+    ]);
+
+    res.json({
+      status: 'success',
+      documentCount: businesses.length,
+      data: businesses,
+    });
+  }
+);
+
+export const getNearestBusinesses = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    console.log(req.query);
+    const coordinates = req.query.coordinates;
+
+    if (!Array.isArray(coordinates) || coordinates.length !== 2) {
+      const error = new AppError('Invalid coordinates', 400);
+      return next(error);
+    }
+
+    const businesses = await Business.aggregate([
+      // Stage 1: Get nearest businesses
+      {
+        $geoNear: {
+          near: {
+            type: 'Point',
+            coordinates: [Number(coordinates[0]), Number(coordinates[1])],
+          },
+          spherical: true,
+          // maxDistance: 5 * 1000, // 5 km
+          distanceField: 'calcDistance',
+        },
+      },
+      // Stage 2: Calculate average rating
+      /* {
+        $addFields: {
+          avgRating: { $avg: '$ratings' },
+        },
+      }, */
+      // Stage 3: Filter businesses with rating
+      /* {
+        $match: {
+          avgRating: { $gt: 5 },
+        },
+      }, */
+    ]);
+
+    res.json({
+      status: 'success',
+      documentCount: businesses.length,
+      data: businesses,
+    });
+  }
+);
 
 const getAllBusinesses = catchAsync(
   async (req: Request, res: Response, _next: NextFunction) => {
@@ -67,6 +163,7 @@ const createBusiness = catchAsync(
 const getBusiness = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const business = await Business.findById(req.params.id);
+    increaseBusinessHits({ businessId: req.params.id, hitScore: 2 });
 
     if (!business) {
       return next(new AppError('No document found with that ID', 404));

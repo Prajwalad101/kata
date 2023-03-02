@@ -1,5 +1,8 @@
 import express from 'express';
-import businessController from '../controllers/businessController';
+import businessController, {
+  getNearestBusinesses,
+  getTrendingBusinesses,
+} from '../controllers/businessController';
 import uploadFiles from '../utils/multer/uploadFiles';
 
 const router = express.Router();
@@ -15,6 +18,8 @@ router
   .get(businessController.getAllBusinesses)
   .post(upload, businessController.createBusiness);
 
+router.route('/trending').get(getTrendingBusinesses);
+router.route('/nearest').get(getNearestBusinesses);
 router.route('/search').get(businessController.searchBusiness);
 
 router

@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import Review from '../models/reviewModel';
 import { APIFeatures } from '../utils/apiFeatures';
 import AppError from '../utils/appError';
+import { increaseBusinessHits } from '../utils/business/increaseBusinessHits';
 import catchAsync from '../utils/catchAsync';
 
 const getAllReviews = catchAsync(
@@ -53,6 +54,12 @@ const createReview = catchAsync(
     let newReview = await Review.create(req.body);
     newReview = await newReview.populate('author');
 
+    // hit score depends on the rating
+    increaseBusinessHits({
+      businessId: req.body.business,
+      hitScore: req.body.rating,
+    });
+
     res.status(201).json({
       status: 'success',
       data: newReview,
@@ -91,8 +98,21 @@ const deleteReview = catchAsync(
 );
 
 const handleReviewLikes = catchAsync(
-  async (req: Request, res: Response, _next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const reviewId = req.params.id;
+    const businessId = req.body.businessId;
+
+    if (!businessId) {
+      const error = new AppError('Business id is required', 400);
+      return next(error);
+    }
+
+    if (!reviewId) {
+      const error = new AppError('Review id is required', 400);
+      return next(error);
+    }
+
+    // increaseBusinessHits(businessId, 'reply');
 
     await Review.findByIdAndUpdate(reviewId, {
       ...(req.body.type === 'increment' && {

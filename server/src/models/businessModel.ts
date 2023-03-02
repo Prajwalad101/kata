@@ -78,9 +78,6 @@ const businessSchema = new mongoose.Schema<IBusiness>(
       },
     },
     verified: { type: Boolean, default: false },
-    // total_rating: { type: Number, default: 0 },
-    // rating_count: { type: Number, default: 0 },
-    // avgRating: { type: Number, default: 0 },
     ratings: {
       type: [Number],
       default: [0, 0, 0, 0, 0],
@@ -95,6 +92,9 @@ const businessSchema = new mongoose.Schema<IBusiness>(
 
 // index based on business name and address
 businessSchema.index({ name: 'text', 'location.address': 'text' });
+
+// create geospatial index
+businessSchema.index({ location: '2dsphere' });
 
 businessSchema.virtual('reviews', {
   ref: 'Review',

@@ -7,6 +7,7 @@ const handleQuestionLikes = async (data: MutationProps, api: AxiosInstance) => {
   const response = await api.patch(`/questions/${data.questionId}`, {
     type: data.type,
     userId: data.userId,
+    businessId: data.businessId,
   });
 
   return response;
@@ -36,19 +37,23 @@ export default function useHandleQuestionLikes() {
         { business: businessId },
       ]);
 
-      // matched data is an array containing tuples of [key, value]
+      // get the value of first query match
       /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-      const previousQuestions = matchedData[0][1] as any;
+      const queryData = matchedData[0][1] as any;
 
       // Optimistically update to the new value
       queryClient.setQueriesData<QuestionsResponseData>(
-        ['questions'],
+        ['questions', { business: businessId }],
         (old) => {
           if (!old) return;
+          // prevent accidental mutation
+          const oldData = JSON.parse(
+            JSON.stringify(old)
+          ) as QuestionsResponseData;
 
           // create map to preserve original order of values
           const map = new Map<string, IUserQuestion>();
-          old.data.forEach((value) => map.set(value._id.toString(), value));
+          oldData.data.forEach((value) => map.set(value._id.toString(), value));
 
           // question to update
           const questionToUpdate = map.get(questionId);
@@ -66,15 +71,17 @@ export default function useHandleQuestionLikes() {
             questionToUpdate.likes.value--;
           }
 
-          const updatedData = { ...old, data: [...map.values()] };
+          const updatedData = { ...oldData, data: [...map.values()] };
           return updatedData;
         }
       );
 
       // this is used for rolling back if error occurs
-      return previousQuestions;
+      return queryData;
     },
     onError: (_err, newData, context) => {
+      console.log('context', context);
+
       // rollback with previous value
       queryClient.setQueriesData(
         ['questions', { business: newData.businessId }],

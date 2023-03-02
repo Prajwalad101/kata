@@ -2,10 +2,10 @@ import { IReview } from '@destiny/common/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosInstance } from 'axios';
 import useCreateApi from 'src/api/useCreateApi';
-import { IUserQuestion, QuestionsResponseData } from './useQuestions';
 
 const handleReviewLikes = async (data: MutationProps, api: AxiosInstance) => {
   const response = await api.patch(`/reviews/${data.reviewId}/likes`, {
+    businessId: data.businessId,
     type: data.type,
     userId: data.userId,
   });
@@ -45,9 +45,11 @@ export default function useHandleReviewLikes() {
       queryClient.setQueriesData<IReview[]>(['reviews'], (old) => {
         if (!old) return;
 
+        const oldData = JSON.parse(JSON.stringify(old)) as IReview[];
+
         // create map to preserve original order of values
         const map = new Map<string, IReview>();
-        old.forEach((value) => map.set(value._id.toString(), value));
+        oldData.forEach((value) => map.set(value._id.toString(), value));
 
         // review to update
         const reviewToUpdate = map.get(reviewId);
