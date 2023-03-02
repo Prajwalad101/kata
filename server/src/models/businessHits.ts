@@ -2,8 +2,7 @@ import mongoose from 'mongoose';
 
 const businessHitsSchema = new mongoose.Schema(
   {
-    // type: { type: String },
-    type: String,
+    hitScore: { type: Number, required: [true, 'weight field is required'] },
     metadata: {
       businessId: {
         type: mongoose.Types.ObjectId,

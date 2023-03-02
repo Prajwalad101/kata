@@ -48,7 +48,7 @@ export const createQuestion = catchAsync(
     let newQuestion = await Question.create(req.body);
     newQuestion = await newQuestion.populate('author');
 
-    increaseBusinessHits(req.body.business, 'question');
+    increaseBusinessHits({ businessId: req.body.business, hitScore: 3 });
 
     res.status(201).json({
       status: 'success',
@@ -65,7 +65,7 @@ export const createReply = catchAsync(
       return next(error);
     }
 
-    increaseBusinessHits(businessId, 'reply');
+    increaseBusinessHits({ businessId, hitScore: 2 });
 
     const query = Question.findByIdAndUpdate(
       req.body.questionId,
@@ -100,7 +100,7 @@ export const handleQuestionLikes = catchAsync(
       return next(error);
     }
 
-    increaseBusinessHits(businessId, 'likes');
+    // increaseBusinessHits(businessId, 'likes');
 
     await Question.findByIdAndUpdate(
       questionId,
