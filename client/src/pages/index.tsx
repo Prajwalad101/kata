@@ -36,18 +36,18 @@ const Home: NextPageWithLayout = () => {
           <CategoriesDropdown />
         </section>
       </div>
-      {trendingBusinessQuery.data && (
-        <RecommendedSection
-          title="Trending right now"
-          description="Take a look at some of the hottest places to explore"
-          data={trendingBusinessQuery.data}
-        />
-      )}
-      {nearestBusinessQuery.data && (
+      <RecommendedSection
+        title="Trending right now"
+        description="Take a look at some of the hottest places to explore"
+        data={trendingBusinessQuery.data}
+        isLoading={trendingBusinessQuery.isLoading}
+      />
+      {userCoordinates && (
         <RecommendedSection
           title="Near to you"
           description="Explore local businesses near to your location"
           data={nearestBusinessQuery.data}
+          isLoading={nearestBusinessQuery.isLoading}
         />
       )}
     </div>

@@ -23,7 +23,6 @@ export default function useNearestBusiness(
   coordinates: [number, number] | undefined
 ) {
   const api = useCreateApi();
-  console.log(coordinates);
 
   const query = useQuery({
     queryKey: ['businesses', 'nearest'],
