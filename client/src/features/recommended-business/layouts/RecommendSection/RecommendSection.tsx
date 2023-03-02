@@ -23,33 +23,31 @@ function RecommendedSection({
   isLoading,
 }: IRecommendedSection) {
   return (
-    <AppLayout size="sm">
-      <div className="font-rubik">
-        <h3 className="mb-2 text-xl font-medium text-gray-800 sm:text-[22px] md:mt-10 md:text-2xl">
-          {title}
-        </h3>
-        <p className="mb-5 text-base text-gray-600 md:block">{description}</p>
-        {isLoading && <BusinessSkeleton />}
-        {data && (
-          <Slider
-            numItems={data.documentCount}
-            LeftButton={LeftButton}
-            RightButton={RightButton}
-            className="sm:-mx-2"
-          >
-            {data.data.map((business, index) => (
-              <div key={index} className="w-full sm:w-1/2 sm:px-2 lg:w-1/4">
-                <Link href="/">
-                  <a>
-                    <BusinessCard business={business} />
-                  </a>
-                </Link>
-              </div>
-            ))}
-          </Slider>
-        )}
-      </div>
-    </AppLayout>
+    <div className="font-rubik">
+      <h3 className="mb-2 text-xl font-medium text-gray-800 sm:text-[22px] md:mt-10 md:text-2xl">
+        {title}
+      </h3>
+      <p className="mb-5 text-base text-gray-600 md:block">{description}</p>
+      {isLoading && <BusinessSkeleton />}
+      {data && (
+        <Slider
+          numItems={data.documentCount}
+          LeftButton={LeftButton}
+          RightButton={RightButton}
+          className="sm:-mx-2"
+        >
+          {data.data.map((business, index) => (
+            <div key={index} className="w-full sm:w-1/2 sm:px-2 lg:w-1/4">
+              <Link href={`/search/business/${business._id}`}>
+                <a>
+                  <BusinessCard business={business} />
+                </a>
+              </Link>
+            </div>
+          ))}
+        </Slider>
+      )}
+    </div>
   );
 }
 
