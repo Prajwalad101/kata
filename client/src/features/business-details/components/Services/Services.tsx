@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import { Divider, PrimaryButton, SecondaryButton } from 'src/components';
+import { useAuth } from 'src/layouts/UserProvider';
 import { classNames } from 'src/utils/tailwind';
 import SendMessage from '../modals/SendMessage/SendMessage';
 
@@ -15,10 +17,19 @@ export default function Services({
   businessEmail,
   className = '',
 }: ServicesProps) {
+  const auth = useAuth();
+
   const [isMessageOpen, setIsMessageOpen] = useState(false);
 
   const closeMessageModal = () => {
     setIsMessageOpen(false);
+  };
+
+  const handleModalOpen = () => {
+    if (!auth?.user) {
+      return toast.error('You have to be logged in to send a message');
+    }
+    setIsMessageOpen(true);
   };
 
   return (
@@ -43,7 +54,7 @@ export default function Services({
           </p>
           <SecondaryButton
             className="w-full max-w-[200px] py-2.5"
-            onClick={() => setIsMessageOpen(true)}
+            onClick={handleModalOpen}
           >
             Send a message
           </SecondaryButton>
