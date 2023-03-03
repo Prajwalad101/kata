@@ -42,7 +42,10 @@ const Business: NextPageWithLayout = () => {
         className="mt-4 mb-7 md:mb-16"
       />
       <div className="flex flex-col items-start gap-x-16 gap-y-7 md:flex-row-reverse">
-        <Services businessId={businessData._id} />
+        <Services
+          businessId={businessData._id}
+          businessEmail={businessData.email}
+        />
         <div className="w-full overflow-y-auto">
           <BusinessAttributes
             categoryName={businessData.category}
