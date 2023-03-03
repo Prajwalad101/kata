@@ -6,11 +6,13 @@ import SendMessage from '../modals/SendMessage/SendMessage';
 
 interface ServicesProps {
   businessId: string;
+  businessEmail: string;
   className?: string;
 }
 
 export default function Services({
   businessId,
+  businessEmail,
   className = '',
 }: ServicesProps) {
   const [isMessageOpen, setIsMessageOpen] = useState(false);
@@ -21,7 +23,11 @@ export default function Services({
 
   return (
     <>
-      <SendMessage isOpen={isMessageOpen} closeModal={closeMessageModal} />
+      <SendMessage
+        businessEmail={businessEmail}
+        isOpen={isMessageOpen}
+        closeModal={closeMessageModal}
+      />
       <div
         className={classNames(
           className,
