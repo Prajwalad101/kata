@@ -139,6 +139,7 @@ export default function SendMessage({
                     </div>
 
                     <div className="mb-5">
+                      <label className="mb-2 block font-medium">Subject</label>
                       <MyInput
                         className="mb-3"
                         error={errors.subject}
@@ -148,6 +149,7 @@ export default function SendMessage({
                       <FormErrorMessage error={errors.subject} />
                     </div>
 
+                    <label className="mb-2 block font-medium">Message</label>
                     <textarea
                       {...register('message')}
                       rows={6}
