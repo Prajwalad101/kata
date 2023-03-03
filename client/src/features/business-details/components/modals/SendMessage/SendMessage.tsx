@@ -16,11 +16,13 @@ import * as yup from 'yup';
 interface FormInputs {
   subject: string;
   message: string;
+  receiverEmail: string;
 }
 
 const defaultValues: FormInputs = {
   subject: '',
   message: '',
+  receiverEmail: '',
 };
 
 const schema = yup.object({
@@ -74,7 +76,7 @@ export default function SendMessage({
   const message = watch('message');
   const onSubmit = (data: FormInputs) => {
     sendMailMutation.mutate(
-      { ...data, receiverEmail: businessEmail },
+      { ...data },
       {
         onSuccess: (data) => {
           toast.success(data.message);
@@ -139,6 +141,20 @@ export default function SendMessage({
                     </div>
 
                     <div className="mb-5">
+                      <label className="mb-2 block font-medium">
+                        Receiver Email
+                      </label>
+                      <MyInput
+                        className="mb-3"
+                        error={errors.receiverEmail}
+                        {...register('receiverEmail')}
+                        placeholder="Provide the receiver email address"
+                      />
+                      <FormErrorMessage error={errors.subject} />
+                    </div>
+
+                    <div className="mb-5">
+                      <label className="mb-2 block font-medium">Subject</label>
                       <MyInput
                         className="mb-3"
                         error={errors.subject}
@@ -148,6 +164,7 @@ export default function SendMessage({
                       <FormErrorMessage error={errors.subject} />
                     </div>
 
+                    <label className="mb-2 block font-medium">Message</label>
                     <textarea
                       {...register('message')}
                       rows={6}
