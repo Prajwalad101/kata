@@ -39,6 +39,7 @@ export default function BusinessDirections({
   const [origin, setOrigin] = useState<LatLng>(
     new google.maps.LatLng(27.701251, 85.316449)
   );
+  const [directionsError, setDirectionsError] = useState<string>();
 
   const center = useMemo(
     () => ({ lng: businessCoordinates[0], lat: businessCoordinates[1] }),
@@ -74,7 +75,12 @@ export default function BusinessDirections({
       },
       (result, status) => {
         if (status === 'OK' && result) {
+          setDirectionsError(undefined);
           setDirections(result);
+        } else if (status === 'ZERO_RESULTS') {
+          setDirectionsError(
+            'No directions found. Please select other options'
+          );
         }
       }
     );
@@ -93,7 +99,7 @@ export default function BusinessDirections({
         <h3 className="mb-4 text-center text-xl font-medium text-gray-600">
           Directions
         </h3>
-        <div className="mb-5 flex justify-between">
+        <div className="flex items-center justify-between">
           <Select
             defaultValue={options.find((option) => option.value === travelMode)}
             className="w-60"
@@ -107,10 +113,11 @@ export default function BusinessDirections({
           />
           {directions && <Distance leg={directions.routes[0].legs[0]} />}
         </div>
+        <p className="text-red-600">{directionsError}</p>
         <GoogleMap
           zoom={10}
           center={center}
-          mapContainerClassName="mb-4 w-full h-[500px]"
+          mapContainerClassName="my-4 w-full h-[500px]"
           onClick={handleMapClick}
         >
           {directions && <DirectionsRenderer directions={directions} />}
@@ -134,8 +141,8 @@ function Distance({ leg }: DistanceProps) {
 
   return (
     <div>
-      <p className="font-medium text-gray-800">Distance: {leg.distance.text}</p>
-      <p className="font-medium text-gray-800">Duration: {leg.duration.text}</p>
+      <p className="font-medium text-gray-700">Distance: {leg.distance.text}</p>
+      <p className="font-medium text-gray-700">Duration: {leg.duration.text}</p>
     </div>
   );
 }
