@@ -4,6 +4,7 @@ import { BiPhone } from 'react-icons/bi';
 import { BsLaptop } from 'react-icons/bs';
 import { HiOutlineLocationMarker } from 'react-icons/hi';
 import { classNames } from 'src/utils/tailwind';
+import DynamicMap from '../DynamicMap/DynamicMap';
 
 interface LocationAndContactProps {
   location: IBusiness['location'];
@@ -30,7 +31,7 @@ export default function LocationAndContact({
       <h4 className="mb-6 text-xl font-medium">
         Location and Contact Information
       </h4>
-      <div className="mb-5 h-[200px] w-full bg-gray-200" />
+      <DynamicMap coordinates={location.coordinates} className="mb-5" />
       <div className="flex flex-wrap items-start justify-between gap-x-5">
         <div
           className="mb-5 flex 
