@@ -6,22 +6,17 @@ import {
   Searchbar,
 } from '@features/home-page/components';
 import { RecommendedSection } from '@features/recommended-business/layouts';
-import { getUserCoordinates } from '@features/register-business/utils/api';
-import { useEffect, useState } from 'react';
 import { NavigationProvider } from 'src/components/context-provider/NavigationProvider/NavigationProvider';
 import { AppLayout } from 'src/components/layout';
 import { Navbar } from 'src/components/navigation';
+import { useLocation } from 'src/layouts/LocationProvider';
 import { NextPageWithLayout } from 'src/pages/_app';
 
 const Home: NextPageWithLayout = () => {
-  const [userCoordinates, setUserCoordinates] = useState<[number, number]>();
+  const coordinates = useLocation();
 
   const trendingBusinessQuery = useTrendingBusiness();
-  const nearestBusinessQuery = useNearestBusiness(userCoordinates);
-
-  useEffect(() => {
-    getUserCoordinates().then((value) => setUserCoordinates(value));
-  }, []);
+  const nearestBusinessQuery = useNearestBusiness(coordinates);
 
   return (
     <div>
@@ -42,7 +37,7 @@ const Home: NextPageWithLayout = () => {
         data={trendingBusinessQuery.data}
         isLoading={trendingBusinessQuery.isLoading}
       />
-      {userCoordinates && (
+      {coordinates && (
         <RecommendedSection
           title="Near to you"
           description="Explore local businesses near to your location"
