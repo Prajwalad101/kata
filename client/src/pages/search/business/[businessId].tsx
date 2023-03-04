@@ -45,6 +45,7 @@ const Business: NextPageWithLayout = () => {
         <Services
           businessId={businessData._id}
           businessEmail={businessData.email}
+          businessCoordinates={businessData.location.coordinates}
         />
         <div className="w-full overflow-y-auto">
           <BusinessAttributes

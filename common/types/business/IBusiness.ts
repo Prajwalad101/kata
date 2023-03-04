@@ -1,4 +1,4 @@
-import { IReview } from '@destiny/common/types';
+import { IReview } from "@destiny/common/types";
 
 export interface IBusiness {
   _id: string;
@@ -12,7 +12,7 @@ export interface IBusiness {
   category: string;
   subcategory: string;
   createdAt?: Date;
-  location: { type: 'Point'; coordinates: number[]; address?: string };
+  location: { type: "Point"; coordinates: [number, number]; address?: string };
   features: string[];
   socials: string[];
   images: string[];

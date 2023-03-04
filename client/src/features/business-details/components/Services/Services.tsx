@@ -4,22 +4,26 @@ import { toast } from 'react-toastify';
 import { Divider, PrimaryButton, SecondaryButton } from 'src/components';
 import { useAuth } from 'src/layouts/UserProvider';
 import { classNames } from 'src/utils/tailwind';
+import BusinessDirections from '../BusinessDirections/BusinessDirections';
 import SendMessage from '../modals/SendMessage/SendMessage';
 
 interface ServicesProps {
   businessId: string;
   businessEmail: string;
+  businessCoordinates: [number, number];
   className?: string;
 }
 
 export default function Services({
   businessId,
   businessEmail,
+  businessCoordinates,
   className = '',
 }: ServicesProps) {
   const auth = useAuth();
 
   const [isMessageOpen, setIsMessageOpen] = useState(false);
+  const [isDirectionsOpen, setIsDirectionsOpen] = useState(false);
 
   const closeMessageModal = () => {
     setIsMessageOpen(false);
@@ -38,6 +42,11 @@ export default function Services({
         businessEmail={businessEmail}
         isOpen={isMessageOpen}
         closeModal={closeMessageModal}
+      />
+      <BusinessDirections
+        isOpen={isDirectionsOpen}
+        closeModal={() => setIsDirectionsOpen(false)}
+        businessCoordinates={businessCoordinates}
       />
       <div
         className={classNames(
@@ -64,7 +73,10 @@ export default function Services({
           <p className="mb-3 text-gray-700">
             - Get directions to the business from your current location
           </p>
-          <SecondaryButton className="w-full max-w-[200px] py-2.5">
+          <SecondaryButton
+            onClick={() => setIsDirectionsOpen(true)}
+            className="w-full max-w-[200px] py-2.5"
+          >
             Get directions
           </SecondaryButton>
         </div>

@@ -10,7 +10,7 @@ interface Response {
 }
 
 const getNearestBusiness = async (
-  coordinates: [number, number] | undefined,
+  coordinates: [number, number] | null,
   api: AxiosInstance
 ) => {
   const response = await api.get<Response>('/business/nearest', {
@@ -20,7 +20,7 @@ const getNearestBusiness = async (
 };
 
 export default function useNearestBusiness(
-  coordinates: [number, number] | undefined
+  coordinates: [number, number] | null
 ) {
   const api = useCreateApi();
 
