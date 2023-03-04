@@ -64,18 +64,18 @@ export default function BusinessDirections({
       const travelMode = google.maps.TravelMode.DRIVING;
       setTravelMode(travelMode);
     }
-  }, [coordinates]);
+  }, [coordinates, window.google]);
 
   useEffect(() => {
     if (!travelMode || !origin) return;
 
     const directionsService = new google.maps.DirectionsService();
 
-    /* const destination = new google.maps.LatLng(
+    const destination = new google.maps.LatLng(
       businessCoordinates[1],
       businessCoordinates[0]
-    ); */
-    const destination = new google.maps.LatLng(27.687571, 85.295493);
+    );
+    // const destination = new google.maps.LatLng(27.687571, 85.295493);
 
     directionsService.route(
       {
@@ -101,8 +101,6 @@ export default function BusinessDirections({
     return <></>;
   }
 
-  if (!isLoaded) return <div>Loading ...</div>;
-
   return (
     <MyModal closeModal={closeModal} isOpen={isOpen}>
       <div className="w-[900px] rounded-md bg-white p-4">
@@ -123,16 +121,20 @@ export default function BusinessDirections({
           />
           {directions && <Distance leg={directions.routes[0].legs[0]} />}
         </div>
-        <p className="text-red-600">{directionsError}</p>
-        <GoogleMap
-          zoom={10}
-          center={center}
-          mapContainerClassName="my-4 w-full h-[500px]"
-          onClick={handleMapClick}
-        >
-          {directions && <DirectionsRenderer directions={directions} />}
-          <MarkerF position={center} />
-        </GoogleMap>
+        <p className="mt-2 text-red-600">{directionsError}</p>
+        {!isLoaded ? (
+          <div className="my-4 h-[500px] w-full animate-pulse bg-gray-300"></div>
+        ) : (
+          <GoogleMap
+            zoom={10}
+            center={center}
+            mapContainerClassName="my-4 w-full h-[500px]"
+            onClick={handleMapClick}
+          >
+            {directions && <DirectionsRenderer directions={directions} />}
+            <MarkerF position={center} />
+          </GoogleMap>
+        )}
         <p className="mb-1 font-medium text-gray-600">Note: </p>
         <p className="text-gray-500">
           Click anywhere on the map to select your starting position
