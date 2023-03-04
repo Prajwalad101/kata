@@ -10,6 +10,8 @@ import { MyModal } from 'src/components';
 
 type DirectionsResult = google.maps.DirectionsResult;
 type TravelMode = google.maps.TravelMode;
+type MapMouseEvent = google.maps.MapMouseEvent;
+type LatLng = google.maps.LatLng;
 
 const options = [
   { label: 'Driving', value: 'DRIVING' },
@@ -28,11 +30,15 @@ export default function BusinessDirections({
   closeModal,
   businessCoordinates,
 }: BusinessDirectionsProps) {
+  const googleApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+
   const [directions, setDirections] = useState<DirectionsResult>();
   const [travelMode, setTravelMode] = useState<TravelMode>(
     google.maps.TravelMode.DRIVING
   );
-  const googleApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+  const [origin, setOrigin] = useState<LatLng>(
+    new google.maps.LatLng(27.701251, 85.316449)
+  );
 
   const center = useMemo(
     () => ({ lng: businessCoordinates[0], lat: businessCoordinates[1] }),
@@ -43,12 +49,16 @@ export default function BusinessDirections({
     googleMapsApiKey: googleApiKey as string,
   });
 
+  const handleMapClick = (e: MapMouseEvent) => {
+    if (e.latLng) {
+      setOrigin(e.latLng);
+    }
+  };
+
   useEffect(() => {
     if (!travelMode) return;
 
     const directionsService = new google.maps.DirectionsService();
-
-    const origin = new google.maps.LatLng(27.701251, 85.316449);
 
     /* const destination = new google.maps.LatLng(
       businessCoordinates[1],
@@ -63,14 +73,12 @@ export default function BusinessDirections({
         travelMode,
       },
       (result, status) => {
-        console.log(status);
-
         if (status === 'OK' && result) {
           setDirections(result);
         }
       }
     );
-  }, [businessCoordinates, travelMode]);
+  }, [businessCoordinates, travelMode, origin]);
 
   if (!googleApiKey) {
     console.error('Google Maps Api key not found');
@@ -82,7 +90,9 @@ export default function BusinessDirections({
   return (
     <MyModal closeModal={closeModal} isOpen={isOpen}>
       <div className="w-[900px] rounded-md bg-white p-4">
-        <h3 className="mb-4 text-center text-xl font-medium">Directions</h3>
+        <h3 className="mb-4 text-center text-xl font-medium text-gray-600">
+          Directions
+        </h3>
         <div className="mb-5 flex justify-between">
           <Select
             defaultValue={options.find((option) => option.value === travelMode)}
@@ -97,16 +107,19 @@ export default function BusinessDirections({
           />
           {directions && <Distance leg={directions.routes[0].legs[0]} />}
         </div>
-        <div>
-          <GoogleMap
-            zoom={10}
-            center={center}
-            mapContainerClassName="w-full h-[500px] mb-5"
-          >
-            {directions && <DirectionsRenderer directions={directions} />}
-            <MarkerF position={center} />
-          </GoogleMap>
-        </div>
+        <GoogleMap
+          zoom={10}
+          center={center}
+          mapContainerClassName="mb-4 w-full h-[500px]"
+          onClick={handleMapClick}
+        >
+          {directions && <DirectionsRenderer directions={directions} />}
+          <MarkerF position={center} />
+        </GoogleMap>
+        <p className="mb-1 text-gray-500">
+          <span className="font-medium text-gray-600">Note: </span>Click
+          anywhere on the map to select your starting position
+        </p>
       </div>
     </MyModal>
   );
