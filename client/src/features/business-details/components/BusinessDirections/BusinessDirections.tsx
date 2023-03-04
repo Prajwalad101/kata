@@ -7,6 +7,7 @@ import {
 import { useEffect, useMemo, useState } from 'react';
 import Select from 'react-select';
 import { MyModal } from 'src/components';
+import { useLocation } from 'src/layouts/LocationProvider';
 
 type DirectionsResult = google.maps.DirectionsResult;
 type TravelMode = google.maps.TravelMode;
@@ -32,13 +33,11 @@ export default function BusinessDirections({
 }: BusinessDirectionsProps) {
   const googleApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
+  const coordinates = useLocation();
+
   const [directions, setDirections] = useState<DirectionsResult>();
-  const [travelMode, setTravelMode] = useState<TravelMode>(
-    google.maps.TravelMode.DRIVING
-  );
-  const [origin, setOrigin] = useState<LatLng>(
-    new google.maps.LatLng(27.701251, 85.316449)
-  );
+  const [travelMode, setTravelMode] = useState<TravelMode>();
+  const [origin, setOrigin] = useState<LatLng>();
   const [directionsError, setDirectionsError] = useState<string>();
 
   const center = useMemo(
@@ -57,7 +56,18 @@ export default function BusinessDirections({
   };
 
   useEffect(() => {
-    if (!travelMode) return;
+    if (window.google) {
+      if (coordinates) {
+        const latLng = new google.maps.LatLng(coordinates[1], coordinates[0]);
+        setOrigin(latLng);
+      }
+      const travelMode = google.maps.TravelMode.DRIVING;
+      setTravelMode(travelMode);
+    }
+  }, [coordinates]);
+
+  useEffect(() => {
+    if (!travelMode || !origin) return;
 
     const directionsService = new google.maps.DirectionsService();
 
@@ -123,9 +133,12 @@ export default function BusinessDirections({
           {directions && <DirectionsRenderer directions={directions} />}
           <MarkerF position={center} />
         </GoogleMap>
-        <p className="mb-1 text-gray-500">
-          <span className="font-medium text-gray-600">Note: </span>Click
-          anywhere on the map to select your starting position
+        <p className="mb-1 font-medium text-gray-600">Note: </p>
+        <p className="text-gray-500">
+          Click anywhere on the map to select your starting position
+        </p>
+        <p className="text-gray-500">
+          Your starting position might not be accurate
         </p>
       </div>
     </MyModal>
