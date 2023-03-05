@@ -86,16 +86,6 @@ export default function GeoLocationInput({
               <MarkerF position={{ lat: origin[1], lng: origin[0] }} />
             )}
           </GoogleMap>
-          /* <div>
-            <SecondaryButton
-              type="button"
-              onClick={() => handleClick(field.onChange)}
-              className="py-3 px-6"
-            >
-              Set Location
-            </SecondaryButton>
-            <FormErrorMessage className="mt-2" error={fieldState.error} />
-          </div> */
         )}
       />
     </FieldLayout>

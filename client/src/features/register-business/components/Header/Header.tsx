@@ -25,7 +25,13 @@ export default function Header({ step, className = '' }: HeaderProps) {
       <div className="relative ml-[50%] h-1 w-[100vw] -translate-x-[50%]">
         <Divider
           width={3}
-          className="absolute left-0 z-20 w-1/4 border-primaryred"
+          className={classNames(
+            step === 1 ? 'w-1/4' : '',
+            step === 2 ? 'w-1/2' : '',
+            step === 3 ? 'w-9/12' : '',
+            step === 4 ? 'w-full' : '',
+            'absolute left-0 z-20 border-primaryred duration-1000'
+          )}
         />
         <Divider width={3} className="absolute left-0 right-0" />
       </div>
