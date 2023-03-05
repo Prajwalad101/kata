@@ -30,7 +30,7 @@ interface FormContainerProps {
 }
 
 function FormContainer({ mutation }: FormContainerProps) {
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(2);
 
   const resolver = yupResolver(validationSchemas[step - 1]);
   const { register, control, handleSubmit, setValue } = useForm({
@@ -100,6 +100,7 @@ function FormContainer({ mutation }: FormContainerProps) {
         )}
         {step === 2 && (
           <FormStep2
+            setValue={setValue}
             control={control}
             register={register}
             className="mb-20 xs:pt-10"
