@@ -17,7 +17,7 @@ interface UserProviderProps {
 }
 
 export default function UserProvider({ children }: UserProviderProps) {
-  const [accessToken, removeToken] = useCookie('access-token', null);
+  const [accessToken, _, removeToken] = useCookie('access-token', null);
 
   const logout = removeToken;
 

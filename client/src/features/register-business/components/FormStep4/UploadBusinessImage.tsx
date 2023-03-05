@@ -15,6 +15,7 @@ import {
 import FormErrorMessage from 'src/components/FormErrorMessage/FormErrorMessage';
 import { readFilesAsDataURL } from 'src/utils/browser';
 import { classNames } from 'src/utils/tailwind';
+import MyLabel from '../MyLabel/MyLabel';
 
 interface UploadBusinessImageProps {
   register: UseFormRegister<FormInputs>;
@@ -60,8 +61,11 @@ export default function UploadBusinessImage({
 
   return (
     <FieldLayout>
-      <p className="mb-3 text-lg font-medium">Upload Photos</p>
-      <div>
+      <MyLabel
+        name="Upload Photos"
+        sublabel="Please upload some pictures of your business"
+      />
+      <div className="overflow-x-scroll">
         <div
           {...getRootProps()}
           className={classNames(
@@ -104,7 +108,7 @@ export default function UploadBusinessImage({
         </div>
         {error && <p className="mb-3 text-sm text-red-600">*{error}</p>}
         {/* Preview images */}
-        <div className="flex gap-3 overflow-x-auto">
+        <div className="flex gap-3 overflow-x-scroll">
           {images?.map((image, index) => (
             <div key={index} className="relative h-[150px] w-[180px] shrink-0">
               <Image
