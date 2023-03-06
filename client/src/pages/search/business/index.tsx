@@ -5,6 +5,7 @@ import {
   SortItems,
 } from '@features/search-business/components';
 import BusinessNotFound from '@features/search-business/components/BusinessNotFound/BusinessNotFound';
+import MapSearch from '@features/search-business/components/MapSearch/MapSearch';
 import { sortOptions } from '@features/search-business/components/SortItems/SortItems';
 import { useFetchBusinesses } from '@features/search-business/hooks';
 import { fetchBusinesses } from '@features/search-business/hooks/useFetchBusinesses';
@@ -27,6 +28,8 @@ const SearchBusiness: NextPageWithLayout = () => {
     sortOptions[0].value
   );
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
+  const [coordinates, setCoordinates] = useState<[number, number]>();
+
   const { ref, inView } = useInView();
 
   const { data, isLoading, isSuccess, fetchNextPage, isFetchingNextPage } =
@@ -55,11 +58,14 @@ const SearchBusiness: NextPageWithLayout = () => {
     />
   );
 
+  const Map = <MapSearch />;
+
   return (
     <>
       <SearchBusinessSection
         filterComponent={filterComponent}
         sortComponent={SortComponent}
+        mapComponent={Map}
       >
         <>
           {isLoading && <BusinessListSkeleton />}
