@@ -58,7 +58,7 @@ const SearchBusiness: NextPageWithLayout = () => {
     />
   );
 
-  const Map = <MapSearch />;
+  const Map = <MapSearch coordinates={coordinates} onChange={setCoordinates} />;
 
   return (
     <>

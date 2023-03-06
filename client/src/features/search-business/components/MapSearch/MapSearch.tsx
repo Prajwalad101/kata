@@ -1,26 +1,29 @@
 import { GoogleMap, MarkerF, useLoadScript } from '@react-google-maps/api';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useLocation } from 'src/layouts/LocationProvider';
 import { classNames } from 'src/utils/tailwind';
 
 interface MapSearchProps {
-  // coordinates:
+  coordinates: [number, number] | undefined;
+  onChange: (_v: [number, number]) => void;
   className?: string;
 }
 
 type MapMouseEvent = google.maps.MapMouseEvent;
 
-export default function MapSearch({ className = '' }: MapSearchProps) {
+export default function MapSearch({
+  coordinates: origin,
+  onChange,
+  className = '',
+}: MapSearchProps) {
   const googleApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
   const userCoordinates = useLocation();
-  const [origin, setOrigin] = useState<[number, number]>();
 
-  // store original reference to user coordinates
   const center = useRef<{ lat: number; lng: number }>();
 
   const handleMapClick = (e: MapMouseEvent) => {
     if (e.latLng) {
-      setOrigin([e.latLng.lng(), e.latLng.lat()]);
+      onChange([e.latLng.lng(), e.latLng.lat()]);
     }
   };
 
