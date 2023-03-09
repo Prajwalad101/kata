@@ -12,7 +12,14 @@ class APIFeatures {
   filter() {
     // copy queryString
     const queryObj = { ...this.queryString };
-    const excludedFields = ['page', 'sort', 'limit', 'fields', 'features'];
+    const excludedFields = [
+      'page',
+      'sort',
+      'limit',
+      'fields',
+      'features',
+      'coordinates',
+    ];
     excludedFields.forEach((el) => delete queryObj[el]);
 
     let queryStr = JSON.stringify(queryObj);

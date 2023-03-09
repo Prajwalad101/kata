@@ -12,6 +12,7 @@ export default function LocationProvider({ children }: LocationProviderProps) {
   // const [userCoordinates, setUserCoordinates] = useState<[number, number]>();
   const [coordinates, updateCoordinates] = useCookie('coordinates', null, {
     'max-age': 60 * 60 * 3, // 3 hours,
+    path: '/',
   });
 
   useEffect(() => {

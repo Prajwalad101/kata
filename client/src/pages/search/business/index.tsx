@@ -36,6 +36,9 @@ const SearchBusiness: NextPageWithLayout = () => {
     useFetchBusinesses({
       sort: selectedSort,
       features: selectedFeatures,
+      coordinates,
+      // {coordinates && ...(coordinates)}
+      // ...(coordinates && { coordinates }),
     });
 
   useEffect(() => {
