@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 interface SearchBusinessSectionProps {
   filterComponent: JSX.Element;
   sortComponent: JSX.Element;
+  mapComponent: JSX.Element;
   children: JSX.Element;
   // businessResult: UseQueryResult<SearchBusinessResponse, unknown>;
 }
@@ -10,6 +11,7 @@ interface SearchBusinessSectionProps {
 function SearchBusinessSection({
   filterComponent,
   sortComponent,
+  mapComponent,
   children,
 }: // businessResult,
 SearchBusinessSectionProps) {
@@ -21,7 +23,10 @@ SearchBusinessSectionProps) {
   return (
     <div className="mt-5 flex gap-10 md:mt-10">
       {/* SearchFilter */}
-      {filterComponent}
+      <div className="w-[380px]">
+        <div className="mb-10">{filterComponent}</div>
+        <div className="mb-10">{mapComponent}</div>
+      </div>
       <div className="min-w-0 grow">
         <div className="mb-7 sm:mr-5 md:mb-10">
           <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">

@@ -6,7 +6,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
  */
 
 interface CookieAttributes {
-  'max-age': number;
+  'max-age'?: number;
+  path?: string;
 }
 const useCookie = (
   key: string,

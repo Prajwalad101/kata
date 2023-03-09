@@ -24,8 +24,9 @@ export const fetchBusinesses = async (
 };
 
 type UseFetchBusinessesProps = {
-  sort: string; // sort items based on this field(eg:-createdAt)
-  features: string[]; // filter items based on this property
+  sort?: string; // sort items based on this field(eg:-createdAt)
+  features?: string[]; // filter items based on this property
+  coordinates?: [number, number];
 };
 
 function useFetchBusinesses(props?: UseFetchBusinessesProps) {
@@ -42,6 +43,7 @@ function useFetchBusinesses(props?: UseFetchBusinessesProps) {
         props.features.length !== 0 && {
           features: props.features.join(','),
         }),
+      ...(props.coordinates && { coordinates: props.coordinates }),
     };
   }
 

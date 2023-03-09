@@ -68,7 +68,6 @@ export const getNearestBusinesses = catchAsync(
     }
 
     const businesses = await Business.aggregate([
-      // Stage 1: Get nearest businesses
       {
         $geoNear: {
           near: {
@@ -80,18 +79,6 @@ export const getNearestBusinesses = catchAsync(
           distanceField: 'calcDistance',
         },
       },
-      // Stage 2: Calculate average rating
-      /* {
-        $addFields: {
-          avgRating: { $avg: '$ratings' },
-        },
-      }, */
-      // Stage 3: Filter businesses with rating
-      /* {
-        $match: {
-          avgRating: { $gt: 5 },
-        },
-      }, */
     ]);
 
     res.json({
@@ -105,6 +92,7 @@ export const getNearestBusinesses = catchAsync(
 const getAllBusinesses = catchAsync(
   async (req: Request, res: Response, _next: NextFunction) => {
     const businessQuery = Business.find();
+
     const defaultFields = [
       'name',
       'location',
@@ -117,6 +105,21 @@ const getAllBusinesses = catchAsync(
     // filter documents by "features" field
     if (isString(req.query.features)) {
       filterFeatures(businessQuery, req.query.features);
+    }
+
+    const coordinates = req.query.coordinates;
+    if (coordinates) {
+      console.log(coordinates);
+      businessQuery.find({
+        location: {
+          $near: {
+            $geometry: {
+              type: 'Point',
+              coordinates,
+            },
+          },
+        },
+      });
     }
 
     businessQuery.populate({
