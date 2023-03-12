@@ -1,5 +1,5 @@
 import { GoogleMap, MarkerF, useLoadScript } from '@react-google-maps/api';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'src/layouts/LocationProvider';
 import { classNames } from 'src/utils/tailwind';
 
@@ -19,7 +19,8 @@ export default function MapSearch({
   const googleApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
   const userCoordinates = useLocation();
 
-  const center = useRef<{ lat: number; lng: number }>();
+  // const center = useRef<{ lat: number; lng: number }>();
+  const [center, setCenter] = useState<{ lat: number; lng: number }>();
 
   const handleMapClick = (e: MapMouseEvent) => {
     if (e.latLng) {
@@ -29,8 +30,7 @@ export default function MapSearch({
 
   useEffect(() => {
     if (userCoordinates) {
-      center.current = { lng: userCoordinates[0], lat: userCoordinates[1] };
-      // setOrigin(userCoordinates);
+      setCenter({ lng: userCoordinates[0], lat: userCoordinates[1] });
     }
   }, [userCoordinates]);
 
@@ -50,11 +50,14 @@ export default function MapSearch({
       <GoogleMap
         onClick={handleMapClick}
         zoom={12}
-        center={center.current}
-        mapContainerClassName="w-full h-[450px] rounded-lg"
+        center={center}
+        mapContainerClassName="mb-3 w-full h-[450px] rounded-lg"
       >
         {origin && <MarkerF position={{ lng: origin[0], lat: origin[1] }} />}
       </GoogleMap>
+      <p className="text-gray-500">
+        Note: Select a location on the map to search nearest businesses
+      </p>
     </div>
   );
 }

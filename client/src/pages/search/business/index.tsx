@@ -37,8 +37,6 @@ const SearchBusiness: NextPageWithLayout = () => {
       sort: selectedSort,
       features: selectedFeatures,
       coordinates,
-      // {coordinates && ...(coordinates)}
-      // ...(coordinates && { coordinates }),
     });
 
   useEffect(() => {
