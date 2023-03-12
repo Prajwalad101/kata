@@ -30,9 +30,13 @@ export default function useSubmitQuestion() {
       queryClient.setQueriesData<QuestionsResponseData>(
         ['questions', { business: newQuestion.business }],
         (oldData) => {
-          if (!oldData) return undefined;
+          if (!oldData) {
+            return { status: 'success', documentCount: 1, data: [newQuestion] };
+          }
+
           const updatedData = {
             ...oldData,
+            documentCount: oldData.documentCount + 1,
             data: [newQuestion, ...oldData.data],
           };
           return updatedData;

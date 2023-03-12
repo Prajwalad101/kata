@@ -75,7 +75,6 @@ export default function BusinessDirections({
       businessCoordinates[1],
       businessCoordinates[0]
     );
-    // const destination = new google.maps.LatLng(27.687571, 85.295493);
 
     directionsService.route(
       {

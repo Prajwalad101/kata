@@ -44,6 +44,8 @@ export default function QASection({ className = '' }: QASectionProps) {
     setQADialogOpen(true);
   };
 
+  console.log(questionsQuery.data);
+
   return (
     <div className={classNames(className)}>
       <Portal selector="#ask-question-button">
