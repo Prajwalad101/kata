@@ -75,7 +75,7 @@ export const getNearestBusinesses = catchAsync(
             coordinates: [Number(coordinates[0]), Number(coordinates[1])],
           },
           spherical: true,
-          // maxDistance: 5 * 1000, // 5 km
+          maxDistance: 5 * 1000, // 5 km
           distanceField: 'calcDistance',
         },
       },
