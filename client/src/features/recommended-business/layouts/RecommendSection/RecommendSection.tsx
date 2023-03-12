@@ -6,6 +6,7 @@ import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import AppLayout from 'src/components/layout/app/AppLayout';
 import Slider from 'src/components/slider/Slider';
 import { ButtonProps } from 'src/types/props';
+import { classNames } from 'src/utils/tailwind';
 
 interface IRecommendedSection {
   title: string;
@@ -72,7 +73,12 @@ const RightButton = ({ onClick, ...props }: ButtonProps) => {
       {...props}
       onClick={onClick}
       type="button"
-      className="absolute right-[10px] top-[38%] z-10 translate-y-[-50%] rounded-full bg-gray-50 p-1 shadow-md transition-colors hover:bg-primaryred hover:text-xl hover:text-white md:right-[15px]"
+      className={classNames(
+        props.disabled
+          ? 'opacity-50'
+          : 'opacity-80 hover:bg-primaryred hover:text-white hover:opacity-100',
+        'absolute right-[10px] top-[38%] z-10 translate-y-[-50%] rounded-full bg-gray-50 p-1 shadow-md transition-colors md:right-[15px]'
+      )}
     >
       <MdKeyboardArrowRight size={25} />
     </button>
@@ -85,7 +91,12 @@ const LeftButton = ({ onClick, ...props }: ButtonProps) => {
       {...props}
       onClick={onClick}
       type="button"
-      className="absolute left-[10px] top-[38%] z-10 translate-y-[-50%] rounded-full bg-gray-50 p-1 shadow-md transition-colors hover:bg-primaryred hover:text-xl hover:text-white md:left-[15px]"
+      className={classNames(
+        props.disabled
+          ? 'opacity-50'
+          : 'opacity-80 hover:bg-primaryred hover:text-white hover:opacity-100',
+        'absolute left-[10px] top-[38%] z-10 translate-y-[-50%] rounded-full bg-gray-50 p-1 shadow-md transition-colors hover:text-xl  md:left-[15px]'
+      )}
     >
       <MdKeyboardArrowLeft size={25} />
     </button>
