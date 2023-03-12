@@ -66,7 +66,7 @@ const Business: NextPageWithLayout = () => {
   );
 };
 
-/* export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const params = context.params;
   const businessId = params?.businessId as string;
 
@@ -83,7 +83,7 @@ const Business: NextPageWithLayout = () => {
       dehydratedState: dehydrate(queryClient),
     },
   };
-}; */
+};
 
 export default Business;
 
