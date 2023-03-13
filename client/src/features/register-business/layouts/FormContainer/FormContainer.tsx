@@ -30,7 +30,7 @@ interface FormContainerProps {
 }
 
 function FormContainer({ mutation }: FormContainerProps) {
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(1);
 
   const resolver = yupResolver(validationSchemas[step - 1]);
   const { register, control, handleSubmit, setValue } = useForm({

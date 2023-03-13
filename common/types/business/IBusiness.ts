@@ -15,6 +15,7 @@ export interface IBusiness {
   location: { type: "Point"; coordinates: [number, number]; address?: string };
   features: string[];
   socials: string[];
+  website: string;
   images: string[];
   reviews?: IReview[];
   verified: boolean;

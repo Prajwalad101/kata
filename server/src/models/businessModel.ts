@@ -55,6 +55,7 @@ const businessSchema = new mongoose.Schema<IBusiness>(
         required: [true, 'Please provide location address'],
       },
     },
+    website: String,
     features: {
       type: [String],
       validate: {

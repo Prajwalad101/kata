@@ -63,10 +63,7 @@ export const registerBusinessFormStep3 = yup.object({
 });
 
 export const registerBusinessFormStep4 = yup.object({
-  email: yup
-    .string()
-    .required('Please provide your business email')
-    .matches(emailReg, 'Please provide a valid email'),
+  website: yup.string(),
   socials: yup
     .array()
     .of(
