@@ -6,6 +6,7 @@ import {
   Searchbar,
 } from '@features/home-page/components';
 import { RecommendedSection } from '@features/recommended-business/layouts';
+import Head from 'next/head';
 import { NavigationProvider } from 'src/components/context-provider/NavigationProvider/NavigationProvider';
 import { AppLayout } from 'src/components/layout';
 import { Navbar } from 'src/components/navigation';
@@ -20,6 +21,14 @@ const Home: NextPageWithLayout = () => {
 
   return (
     <div>
+      <Head>
+        <title>Kata | Find and support local businesses</title>
+        <meta
+          property="og:title"
+          content="Kata, Find and suppert local businesses"
+          key="Homepage"
+        />
+      </Head>
       <div className="mb-10 md:mb-0 md:h-[550px]">
         <div className="absolute inset-0 -z-10 hidden h-[700px] bg-main-img bg-cover bg-no-repeat md:block" />
 
