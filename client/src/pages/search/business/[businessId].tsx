@@ -53,6 +53,7 @@ const Business: NextPageWithLayout = () => {
             features={businessData.features}
           />
           <LocationAndContact
+            website={businessData.website}
             location={businessData.location}
             directions={businessData.directions}
             email={businessData.email}

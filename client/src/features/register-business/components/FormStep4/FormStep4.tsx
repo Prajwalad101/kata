@@ -36,14 +36,17 @@ export default function FormStep4({
   return (
     <div className={classNames(className)}>
       <FieldLayout>
-        <MyLabel name="email" sublabel="Please provide your business email" />
+        <MyLabel
+          name="website"
+          sublabel="Please provide your business website (Optional)"
+        />
         <div>
           <MyInput
-            placeholder="business@email.com"
-            {...register('email')}
-            error={errors.email}
+            placeholder="www.businessWebsite.com"
+            {...register('website')}
+            error={errors.website}
           />
-          <FormErrorMessage className="mt-2" error={errors.email} />
+          {/* <FormErrorMessage className="mt-2" error={errors.email} /> */}
         </div>
       </FieldLayout>
       <FieldLayout>

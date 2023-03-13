@@ -8,6 +8,7 @@ import DynamicMap from '../DynamicMap/DynamicMap';
 
 interface LocationAndContactProps {
   location: IBusiness['location'];
+  website: IBusiness['website'];
   directions: IBusiness['directions'];
   email: IBusiness['email'];
   contactNumber: IBusiness['contactNumber'];
@@ -18,6 +19,7 @@ export default function LocationAndContact({
   location,
   directions,
   email,
+  website,
   contactNumber,
   className = '',
 }: LocationAndContactProps) {
@@ -61,7 +63,14 @@ export default function LocationAndContact({
       </div>
       <div className="flex cursor-pointer gap-4 hover:text-gray-600">
         <BsLaptop size={23} className="shrink-0" />
-        <span className="underline">Website</span>
+        <a
+          onClick={() => {
+            window.open(`https://${website}`, '_blank');
+          }}
+          className="underline"
+        >
+          Website
+        </a>
       </div>
     </div>
   );
