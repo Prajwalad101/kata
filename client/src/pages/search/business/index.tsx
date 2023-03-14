@@ -15,6 +15,8 @@ import {
 } from '@features/search-business/layouts';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { GetServerSideProps } from 'next';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { memo, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { PropagateLoader } from 'react-spinners';
@@ -24,6 +26,8 @@ import { Navbar, Sidebar } from 'src/components/navigation';
 import { NextPageWithLayout } from 'src/pages/_app';
 
 const SearchBusiness: NextPageWithLayout = () => {
+  const { name, city } = useRouter().query;
+
   const [selectedSort, setSelectedSort] = useState<string>(
     sortOptions[0].value
   );
@@ -63,6 +67,16 @@ const SearchBusiness: NextPageWithLayout = () => {
 
   return (
     <>
+      <Head>
+        <title>
+          Kata | Search {name} in {city}
+        </title>
+        <meta
+          property="og:title"
+          content={`Kata | Search for ${name} in ${city}`}
+          key="Search Page"
+        />
+      </Head>
       <SearchBusinessSection
         filterComponent={filterComponent}
         sortComponent={SortComponent}

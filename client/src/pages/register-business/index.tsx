@@ -2,6 +2,7 @@ import { Navbar } from '@features/register-business/components';
 import { infoCardData } from '@features/register-business/data';
 import { HeroSection } from '@features/register-business/layouts';
 import { EllipsisSeperator, InfoCard } from '@features/register-business/ui';
+import Head from 'next/head';
 import React from 'react';
 import { NavigationProvider } from 'src/components/context-provider';
 import AppLayout from 'src/components/layout/app/AppLayout';
@@ -10,6 +11,15 @@ import { NextPageWithLayout } from '../_app';
 const CreateBusiness: NextPageWithLayout = () => {
   return (
     <div>
+      <Head>
+        <title>Register Business | Kata </title>
+        <meta
+          property="og:title"
+          content="Register Business"
+          key="Register Business"
+        />
+      </Head>
+
       <HeroSection />
       <div className="md:my-20">
         {infoCardData.map((data, index) => (
