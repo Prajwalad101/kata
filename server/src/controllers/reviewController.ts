@@ -13,6 +13,17 @@ const getAllReviews = catchAsync(
       path: 'author',
     });
 
+    if (req.query._end && req.query._start) {
+      req.query.limit = String(
+        Number(req.query._end) - Number(req.query._start)
+      );
+      req.query.skip = req.query._start;
+
+      // delete original query params
+      delete req.query._end;
+      delete req.query._start;
+    }
+
     const features = new APIFeatures(reviewQuery, req.query)
       .filter()
       .sort()

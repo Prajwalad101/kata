@@ -12,6 +12,7 @@ import mailRouter from './routes/mailRoutes';
 import AppError from './utils/appError';
 import adminAuthRouter from './routes/admin/adminAuthRouter';
 import adminLogsRouter from './routes/admin/adminLogsRouter';
+import adminReviewsRouter from './routes/admin/adminReviewsRouter';
 import cors from 'cors';
 import Logger from './models/loggerModel';
 
@@ -47,6 +48,7 @@ app.use('/api/mail', mailRouter);
 // Admin routes
 app.use('/api/admin/auth', adminAuthRouter);
 app.use('/api/admin/business', adminBusinessRouter);
+app.use('/api/admin/reviews', adminReviewsRouter);
 app.use('/api/admin/logs', adminLogsRouter);
 
 app.all('*', (req: Request, _res: Response, next: NextFunction) => {

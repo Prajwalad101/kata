@@ -1,6 +1,7 @@
 import { NextFunction, Response, Request } from 'express';
 import Logger from '../../models/loggerModel';
 import { APIFeatures } from '../../utils/apiFeatures';
+import AppError from '../../utils/appError';
 import catchAsync from '../../utils/catchAsync';
 
 const getLogs = catchAsync(
@@ -35,4 +36,16 @@ const getLogs = catchAsync(
   }
 );
 
-export { getLogs };
+const getLog = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const log = await Logger.findById(req.params.id);
+
+    if (!log) {
+      return next(new AppError('No log found with that ID', 404));
+    }
+
+    res.json(log);
+  }
+);
+
+export { getLogs, getLog };
