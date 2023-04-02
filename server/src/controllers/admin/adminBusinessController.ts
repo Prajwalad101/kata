@@ -1,6 +1,8 @@
-import { NextFunction, Response } from 'express';
-import Request from 'mailgun.js/request';
+import { NextFunction, Response, Request } from 'express';
 import Business from '../../models/businessModel';
+import { APIFeatures } from '../../utils/apiFeatures';
+import AppError from '../../utils/appError';
+import { increaseBusinessHits } from '../../utils/business/increaseBusinessHits';
 import catchAsync from '../../utils/catchAsync';
 
 const getAllBusinesses = catchAsync(
@@ -52,4 +54,17 @@ const getAllBusinesses = catchAsync(
   }
 );
 
-export { getAllBusinesses };
+const getBusiness = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const business = await Business.findById(req.params.id);
+    increaseBusinessHits({ businessId: req.params.id, hitScore: 2 });
+
+    if (!business) {
+      return next(new AppError('No document found with that ID', 404));
+    }
+
+    res.status(200).json(business);
+  }
+);
+
+export { getAllBusinesses, getBusiness };
