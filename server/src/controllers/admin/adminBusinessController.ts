@@ -32,9 +32,6 @@ const getAllBusinesses = catchAsync(
       delete req.query._start;
     }
 
-    delete req.query._end;
-    delete req.query._start;
-
     const apiFeatures = new APIFeatures(businessQuery, req.query)
       .filter()
       .sort()
@@ -43,7 +40,7 @@ const getAllBusinesses = catchAsync(
 
     let allBusiness = await apiFeatures.query;
 
-    allBusiness = allBusiness.map((business: any) => {
+    allBusiness = allBusiness.map((business: unknown) => {
       const newBusiness = JSON.parse(JSON.stringify(business));
       delete newBusiness._id;
       newBusiness.verified = String(newBusiness.verified);
