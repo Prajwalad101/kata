@@ -16,6 +16,7 @@ class APIFeatures {
       'page',
       'sort',
       'limit',
+      'skip',
       'fields',
       'features',
       'coordinates',
@@ -62,10 +63,16 @@ class APIFeatures {
   }
 
   paginate() {
+    console.log(this.queryString);
     const page = Number(this.queryString.page) || 1;
     const limit = this.queryString.limit * 1 || 10;
+    let skip;
 
-    const skip = (page - 1) * limit;
+    if (this.queryString.skip) {
+      skip = Number(this.queryString.skip);
+    } else {
+      skip = (page - 1) * limit;
+    }
 
     this.query = this.query.skip(skip).limit(limit);
     return this;

@@ -49,10 +49,17 @@ export const getTrendingBusinesses = catchAsync(
       { $project: { business: 0 } },
     ]);
 
+    // only send business that are populated
+    const filteredBusinesses = businesses.filter((business) => {
+      const keys = Object.keys(business);
+      if (keys.length > 2) return true;
+      return false;
+    });
+
     res.json({
       status: 'success',
       documentCount: businesses.length,
-      data: businesses,
+      data: filteredBusinesses,
     });
   }
 );

@@ -9,7 +9,7 @@ export interface BusinessCardProps {
 }
 
 function BusinessCard({ business }: BusinessCardProps) {
-  const images = business.images.map((image) => getPublicFilePath(image));
+  const images = business.images?.map((image) => getPublicFilePath(image));
   const { avgRating, numRatings } = getRatingStats(business.ratings);
 
   return (
