@@ -6,7 +6,16 @@ import { useRouter } from 'next/router';
 
 export type BusinessPage = Pick<
   IBusiness,
-  '_id' | 'images' | 'location' | 'name' | 'reviews' | 'ratings' | 'workingDays'
+  | '_id'
+  | 'images'
+  | 'location'
+  | 'name'
+  | 'reviews'
+  | 'ratings'
+  | 'workingDays'
+  | 'avgRating'
+  | 'ratingCount'
+  | 'totalRating'
 >[];
 
 interface SearchBusinessResponse {

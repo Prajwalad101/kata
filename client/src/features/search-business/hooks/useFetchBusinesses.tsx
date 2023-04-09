@@ -17,7 +17,10 @@ export const fetchBusinesses = async (
   const baseURL = process.env.NEXT_PUBLIC_HOST;
 
   const response = await axios.get(`${baseURL}/api/business`, {
-    params,
+    params: {
+      ...params,
+      verified: true,
+    },
   });
 
   return response.data;

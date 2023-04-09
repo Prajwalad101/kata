@@ -37,14 +37,7 @@ export const createUser = async (profile: any) => {
 
 export const reportUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    // increase report count on user document
-    const user = await User.findByIdAndUpdate(
-      req.body.userId,
-      {
-        $inc: { reportCount: 1 },
-      },
-      { new: true }
-    );
+    const user = await User.findById(req.body.userId);
 
     if (!user) {
       const error = new AppError(
@@ -54,9 +47,17 @@ export const reportUser = catchAsync(
       return next(error);
     }
 
-    // create a report document
-    await Report.create({ ...req.body, user: req.body.userId });
+    if (user?.reportCount >= 2) {
+      await User.findByIdAndUpdate(req.body.userId, { blocked: true });
+    } else {
+      // increase report count on user document
+      await User.findByIdAndUpdate(req.body.userId, {
+        $inc: { reportCount: 1 },
+      });
 
+      // create a report document
+      await Report.create({ ...req.body, user: req.body.userId });
+    }
     res.status(204).json();
   }
 );

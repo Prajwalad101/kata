@@ -8,7 +8,7 @@ export interface SortItemsProps {
 }
 
 export const sortOptions = [
-  { label: 'Most Popular', value: '-rating_count' },
+  { label: 'Most Popular', value: '-ratingCount' },
   { label: 'Best Rating', value: '-avgRating' },
   { label: 'Newest', value: '-createdAt' },
 ];

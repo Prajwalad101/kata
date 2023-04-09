@@ -23,6 +23,8 @@ const getAllReviews = catchAsync(
       delete req.query._start;
     }
 
+    req.query.fields = 'review,rating,likes,dislikes,author';
+
     const features = new APIFeatures(reviewQuery, req.query)
       .filter()
       .sort()
@@ -33,7 +35,13 @@ const getAllReviews = catchAsync(
 
     const newReviews = reviews.map((value: unknown) => {
       const review = JSON.parse(JSON.stringify(value));
-      return { ...review, id: review._id };
+      return {
+        data: review.review,
+        likes: review.likes.value,
+        dislikes: review.dislikes,
+        rating: review.rating,
+        id: review._id,
+      };
     });
 
     res.status(200).json(newReviews);
@@ -48,8 +56,30 @@ const getReview = catchAsync(
       return next(new AppError('No document found with that ID', 404));
     }
 
-    res.status(200).json(review);
+    let newReview = JSON.parse(JSON.stringify(review));
+    newReview = {
+      data: JSON.parse(JSON.stringify(newReview.review)),
+      ...newReview,
+    };
+
+    delete newReview.review;
+
+    res.status(200).json(newReview);
   }
 );
 
-export { getAllReviews, getReview };
+const deleteReview = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const review = await Review.findByIdAndDelete(req.params.id);
+
+    if (!review) {
+      return next(new AppError('No document found with that ID', 404));
+    }
+
+    res.status(204).json({
+      status: 'success',
+    });
+  }
+);
+
+export { getAllReviews, getReview, deleteReview };
