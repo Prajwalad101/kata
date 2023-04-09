@@ -20,19 +20,15 @@ export default function Ratings({
   className = '',
   onClick,
 }: RatingsProps) {
-  // const { avgRating, numRatings } = getRatingStats(ratings);
   const { ref, inView } = useInView();
 
   const [ratingPercentage, setRatingPercentage] = useState<number[]>([
     0, 0, 0, 0, 0,
   ]);
 
-  console.log('RATINGCOUNT', ratingCount);
-
   // update percentage if in view
   useEffect(() => {
     if (inView) {
-      console.log('RATINGS', ratings);
       const ratingPercentage = ratings.map((rating) => {
         if (ratingCount <= 0) return 0;
         return (rating / ratingCount) * 100;

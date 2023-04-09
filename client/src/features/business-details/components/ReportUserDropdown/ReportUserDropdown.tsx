@@ -22,11 +22,12 @@ const reportData = [
 ];
 
 export default function ReportUserDropdown({
-  userId,
+  userId, // user to report to
 }: ReportUserDropdownProps) {
   const [openModal, setOpenModal] = useState(false);
   const [reports, setReports] = useState<string[]>([]);
 
+  // currently logged in user
   const user = useAuth()?.user;
 
   const reportUserMutation = useReportUser();
@@ -79,14 +80,17 @@ export default function ReportUserDropdown({
     );
   };
 
+  // user cannot report themselves
+  if (user?._id === userId) return <></>;
+
   return (
     <>
       <MyModal isOpen={openModal} closeModal={() => setOpenModal(false)}>
         <div className="w-[500px] rounded-lg bg-white py-7 px-6">
           <h3 className="mb-7 text-center text-xl font-medium">Report User</h3>
           <div className="mb-10">
-            {reportData.map((item) => (
-              <div className="mb-5">
+            {reportData.map((item, index) => (
+              <div key={index} className="mb-5">
                 <input
                   type="checkbox"
                   className="inp-cbx"
