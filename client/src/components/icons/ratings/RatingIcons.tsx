@@ -8,7 +8,6 @@ interface IRatingIcons {
 }
 
 function RatingIcons({ className = '', avgRating, size = 17 }: IRatingIcons) {
-  console.log('AVGRATING', avgRating);
   // if totalRatings or ratingCount is 0, render empty stars
   const emptyArr = Array.from(Array(5).keys());
 
