@@ -20,4 +20,7 @@ export interface IBusiness {
   reviews?: IReview[];
   verified: boolean;
   ratings: [number, number, number, number, number];
+  totalRating: number;
+  avgRating: number;
+  ratingCount: number;
 }
