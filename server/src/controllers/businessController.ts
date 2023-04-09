@@ -14,6 +14,7 @@ export const getTrendingBusinesses = catchAsync(
       // Stage 1: Get last week business hits
       {
         $match: {
+          verified: true,
           timestamp: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) },
         },
       },
@@ -66,7 +67,6 @@ export const getTrendingBusinesses = catchAsync(
 
 export const getNearestBusinesses = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.query);
     const coordinates = req.query.coordinates;
 
     if (!Array.isArray(coordinates) || coordinates.length !== 2) {
@@ -86,6 +86,7 @@ export const getNearestBusinesses = catchAsync(
           distanceField: 'calcDistance',
         },
       },
+      { $match: { verified: true } },
     ]);
 
     res.json({
@@ -106,6 +107,9 @@ const getAllBusinesses = catchAsync(
       'images',
       'ratings',
       'workingDays',
+      'avgRating',
+      'totalRoting',
+      'ratingCount',
     ];
     req.query.fields = defaultFields.join(',');
 
@@ -116,7 +120,6 @@ const getAllBusinesses = catchAsync(
 
     const coordinates = req.query.coordinates;
     if (coordinates) {
-      console.log(coordinates);
       businessQuery.find({
         location: {
           $near: {
@@ -228,7 +231,7 @@ const searchBusiness = catchAsync(
     }
 
     const businessesQuery = Business.find(
-      { $text: { $search: searchString } },
+      { $text: { $search: searchString }, verified: true },
       { score: { $meta: 'textScore' } }
     );
 
