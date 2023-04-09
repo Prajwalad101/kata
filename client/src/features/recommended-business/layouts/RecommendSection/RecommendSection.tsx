@@ -1,9 +1,7 @@
 import { IBusiness } from '@destiny/common/types';
 import { BusinessCard } from '@features/recommended-business/components';
-import { isError } from '@tanstack/react-query';
 import Link from 'next/link';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
-import AppLayout from 'src/components/layout/app/AppLayout';
 import Slider from 'src/components/slider/Slider';
 import { ButtonProps } from 'src/types/props';
 import { classNames } from 'src/utils/tailwind';
@@ -24,29 +22,31 @@ function RecommendedSection({
   isLoading,
 }: IRecommendedSection) {
   return (
-    <div className="font-rubik">
-      <h3 className="mb-2 text-xl font-medium text-gray-800 sm:text-[22px] md:mt-10 md:text-2xl">
-        {title}
-      </h3>
-      <p className="mb-5 text-base text-gray-600 md:block">{description}</p>
+    <div className="mb-2 md:mt-10">
       {isLoading && <BusinessSkeleton />}
-      {data && (
-        <Slider
-          numItems={data.documentCount}
-          LeftButton={LeftButton}
-          RightButton={RightButton}
-          className="sm:-mx-2"
-        >
-          {data.data.map((business, index) => (
-            <div key={index} className="w-full sm:w-1/2 sm:px-2 lg:w-1/4">
-              <Link href={`/search/business/${business._id}`}>
-                <a>
-                  <BusinessCard business={business} />
-                </a>
-              </Link>
-            </div>
-          ))}
-        </Slider>
+      {data && data.data.length > 0 && (
+        <>
+          <h3 className="text-xl font-medium text-gray-800 sm:text-[22px] md:text-2xl">
+            {title}
+          </h3>
+          <p className="mb-5 text-base text-gray-600 md:block">{description}</p>
+          <Slider
+            numItems={data.documentCount}
+            LeftButton={LeftButton}
+            RightButton={RightButton}
+            className="sm:-mx-2"
+          >
+            {data.data.map((business, index) => (
+              <div key={index} className="w-full sm:w-1/2 sm:px-2 lg:w-1/4">
+                <Link href={`/search/business/${business._id}`}>
+                  <a>
+                    <BusinessCard business={business} />
+                  </a>
+                </Link>
+              </div>
+            ))}
+          </Slider>
+        </>
       )}
     </div>
   );
@@ -56,13 +56,17 @@ function BusinessSkeleton() {
   const arr = [1, 2, 3, 4, 5];
 
   return (
-    <div className="flex gap-3 overflow-scroll">
-      {arr.map((_, index) => (
-        <div
-          key={index}
-          className="animate h-[200px] min-w-[250px] rounded-sm bg-gray-200 sm:h-[250px] sm:w-1/2 lg:w-1/4"
-        />
-      ))}
+    <div>
+      <div className="animate mb-4 h-6 max-w-xl rounded-full bg-gray-200"></div>
+      <div className="animate mb-6 h-5 max-w-sm rounded-full bg-gray-200"></div>
+      <div className="flex gap-3 overflow-scroll">
+        {arr.map((_, index) => (
+          <div
+            key={index}
+            className="animate h-[200px] min-w-[250px] rounded-sm bg-gray-200 sm:h-[250px] sm:w-1/2 lg:w-1/4"
+          />
+        ))}
+      </div>
     </div>
   );
 }

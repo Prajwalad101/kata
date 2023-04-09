@@ -14,7 +14,6 @@ export const getTrendingBusinesses = catchAsync(
       // Stage 1: Get last week business hits
       {
         $match: {
-          verified: true,
           timestamp: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) },
         },
       },
@@ -44,6 +43,11 @@ export const getTrendingBusinesses = catchAsync(
           newRoot: {
             $mergeObjects: [{ $arrayElemAt: ['$business', 0] }, '$$ROOT'],
           },
+        },
+      },
+      {
+        $match: {
+          verified: true,
         },
       },
       // Stage 6: exclude nested business field
