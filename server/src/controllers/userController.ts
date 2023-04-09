@@ -37,6 +37,17 @@ export const createUser = async (profile: any) => {
 
 export const reportUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.body.userId || !req.body.reportedBy) {
+      const error = new AppError('userId and reportedBy are required', 400);
+      return next(error);
+    }
+
+    const reporter = await User.findById(req.body.reportedBy);
+    if (reporter?.onCooldown) {
+      const error = new AppError("You can't report another user yet", 400);
+      return next(error);
+    }
+
     const user = await User.findById(req.body.userId);
 
     if (!user) {
@@ -47,7 +58,20 @@ export const reportUser = catchAsync(
       return next(error);
     }
 
-    if (user?.reportCount >= 2) {
+    // put the user who reported on cooldown to prevent spams
+    await User.findByIdAndUpdate(req.body.reportedBy, {
+      onCooldown: true,
+    });
+
+    // remove cooldown after 24 hours
+    setTimeout(async () => {
+      await User.findByIdAndUpdate(req.body.reportedBy, {
+        onCooldown: false,
+      });
+    }, 86400000);
+
+    // block user if they have 4 or more reports
+    if (user?.reportCount >= 4) {
       await User.findByIdAndUpdate(req.body.userId, { blocked: true });
     } else {
       // increase report count on user document
