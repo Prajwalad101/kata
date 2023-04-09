@@ -35,8 +35,10 @@ const getAllReviews = catchAsync(
 
     const newReviews = reviews.map((value: unknown) => {
       const review = JSON.parse(JSON.stringify(value));
+      console.log('REVIEW', review);
       return {
         data: review.review,
+        user: review.author.userName,
         likes: review.likes.value,
         dislikes: review.dislikes,
         rating: review.rating,
