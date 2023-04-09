@@ -57,7 +57,7 @@ export default function UserReview({ review }: UserReviewProps) {
       </p>
 
       <RatingIcons
-        rating={review.rating}
+        avgRating={review.rating}
         size={20}
         className="mb-4 gap-[5px]"
       />

@@ -83,6 +83,9 @@ const businessSchema = new mongoose.Schema<IBusiness>(
       type: [Number],
       default: [0, 0, 0, 0, 0],
     },
+    totalRating: { type: Number, default: 0 },
+    avgRating: { type: Number, default: 0 },
+    ratingCount: { type: Number, default: 0 },
   },
   {
     toJSON: { virtuals: true },
@@ -105,12 +108,19 @@ businessSchema.virtual('reviews', {
 
 // calculate the avgRating field from total_rating & rating_count
 // only runs when creating business and updating business through save (done in reviewMiddleware)
-// businessSchema.pre('save', function (next) {
-//   if (this.totalRating === 0 || this.numReviews === 0) return next();
+/* businessSchema.pre('save', function (next) {
+  const numRatings = this.ratings.reduce((acc, cur) => acc + cur, 0);
+  if (numRatings === 0) return next();
 
-//   this.avgRating = this.totalRating / this.numReviews;
-//   next();
-// });
+  const totalRating = this.ratings.reduce(
+    (acc, cur, i) => acc + cur * (i + 1),
+    0
+  );
+
+  const avgRating = totalRating / numRatings;
+  this.averageRating = avgRating;
+  this.totalRating = totalRating;
+}); */
 
 const Business = mongoose.model<IBusiness>('Business', businessSchema);
 

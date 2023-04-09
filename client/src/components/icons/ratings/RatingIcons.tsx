@@ -2,16 +2,17 @@ import { BsStar, BsStarFill, BsStarHalf } from 'react-icons/bs';
 import { classNames } from 'src/utils/tailwind';
 
 interface IRatingIcons {
-  rating: number;
+  avgRating: number;
   size?: number;
   className?: string;
 }
 
-function RatingIcons({ className = '', rating, size = 17 }: IRatingIcons) {
+function RatingIcons({ className = '', avgRating, size = 17 }: IRatingIcons) {
+  console.log('AVGRATING', avgRating);
   // if totalRatings or ratingCount is 0, render empty stars
   const emptyArr = Array.from(Array(5).keys());
 
-  if (rating === 0) {
+  if (avgRating === 0) {
     return (
       <div className={classNames('flex text-primaryred', className)}>
         {emptyArr.map((item) => (
@@ -21,10 +22,10 @@ function RatingIcons({ className = '', rating, size = 17 }: IRatingIcons) {
     );
   }
   // to check for a half star
-  const isDecimal = !Number.isInteger(rating);
+  const isDecimal = !Number.isInteger(avgRating);
 
   // to calculate the number of full stars
-  const fullRating = Math.floor(rating);
+  const fullRating = Math.floor(avgRating);
   const ratingsArr = Array.from(Array(fullRating).keys());
 
   // to calculate remaining stars
