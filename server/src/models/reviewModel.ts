@@ -1,4 +1,4 @@
-import { IReview } from '@destiny/common/types';
+import { IBusiness, IReview } from '@destiny/common/types';
 import { model, Schema } from 'mongoose';
 import Business from './businessModel';
 import User from './userModel';
@@ -14,7 +14,6 @@ const reviewSchema = new Schema<IReview>(
       max: 5,
       required: [true, 'Rating cannot be empty'],
     },
-    // likes: { type: Number, default: 0 },
     likes: {
       value: {
         type: Number,
@@ -52,11 +51,30 @@ reviewSchema.post('save', async function (doc) {
 
 // update business ratings
 reviewSchema.post('save', async function (doc) {
-  const ratingIndex = doc.rating - 1;
+  const rating = doc.rating;
 
-  await Business.findByIdAndUpdate(doc.business, {
-    $inc: { [`ratings.${ratingIndex}`]: 1 },
-  });
+  await Business.findByIdAndUpdate(
+    doc.business,
+    [
+      {
+        $set: {
+          /* [`ratings.${rating - 1}`]: 
+            $add: [{ $arrayElemAt: ['$ratings', rating - 1] }, 1],
+          , */
+          totalRating: { $add: ['$totalRating', rating] },
+          ratingCount: { $add: ['$ratingCount', 1] },
+          avgRating: {
+            $cond: [
+              { $eq: ['$ratingCount', 0] },
+              rating,
+              { $divide: ['$totalRating', '$ratingCount'] },
+            ],
+          },
+        },
+      },
+    ],
+    { new: true }
+  );
 });
 
 const Review = model<IReview>('Review', reviewSchema);
