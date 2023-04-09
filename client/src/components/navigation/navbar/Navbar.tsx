@@ -9,7 +9,6 @@ import { useSidebar } from 'src/components/context-provider';
 import Logo from 'src/components/logo/Logo';
 import UserProfile from 'src/components/userprofile/UserProfile';
 import { usePreventBodyOverflow } from 'src/hooks';
-import useCookie from 'src/hooks/browser/useCookie';
 import { useAuth } from 'src/layouts/UserProvider';
 import { classNames } from 'src/utils/tailwind';
 
