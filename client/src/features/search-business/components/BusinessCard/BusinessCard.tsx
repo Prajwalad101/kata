@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { FaQuoteLeft } from 'react-icons/fa';
 import RatingIcons from 'src/components/icons/ratings/RatingIcons';
 import Slider from 'src/components/slider/Slider';
-import getRatingStats from 'src/utils/getRatingStats';
 import { getPublicFilePath } from 'src/utils/text';
 
 export interface BusinessCardProps {
@@ -16,7 +15,6 @@ export interface BusinessCardProps {
 function BusinessCard({ business }: BusinessCardProps) {
   // get image path relative to the public folder
   const images = business.images.map((image) => getPublicFilePath(image));
-  const { avgRating, numRatings } = getRatingStats(business.ratings);
 
   return (
     <div className="h-48 font-rubik transition-colors hover:bg-gray-50 sm:flex">
@@ -41,8 +39,10 @@ function BusinessCard({ business }: BusinessCardProps) {
               <h3 className="mb-2 text-lg font-medium">{business.name}</h3>
               <div className="mb-2 flex items-center gap-4">
                 <div className="flex items-center gap-3">
-                  <RatingIcons rating={avgRating} />
-                  <p className="text-sm text-secondarytext">({numRatings})</p>
+                  <RatingIcons avgRating={business.avgRating} />
+                  <p className="text-sm text-secondarytext">
+                    ({business.ratingCount})
+                  </p>
                 </div>
                 <OpenOrClosed
                   className="text-sm font-medium text-gray-600"

@@ -25,7 +25,7 @@ const Home: NextPageWithLayout = () => {
         <title>Kata | Find and support local businesses</title>
         <meta
           property="og:title"
-          content="Kata, Find and suppert local businesses"
+          content="Kata, Find and support local businesses"
           key="Homepage"
         />
       </Head>

@@ -4,7 +4,7 @@ import Review from '../../models/reviewModel';
 import AppError from '../../utils/appError';
 import catchAsync from '../../utils/catchAsync';
 
-// updates the field (total_rating) when a review is updated
+// updates business when a review is updated
 export const updateBusinessRating = catchAsync(
   async (req: Request, _res: Response, next: NextFunction) => {
     if (!req.body.rating) return next();
@@ -13,17 +13,28 @@ export const updateBusinessRating = catchAsync(
     if (!req.query.business)
       return next(new AppError('No business id found.', 400));
 
-    // get the old rating and update new rating based on that
     const review = await Review.findById(req.params.id);
     if (!review) return next();
-
-    // increment new rating by the difference between new and previous rating
-    const incrementBy = req.body.rating - review.rating;
 
     const business = await Business.findById(req.query.business);
     if (!business) return next();
 
-    business.total_rating += incrementBy; // increment or decrement total_rating (depends on incrementBy)
+    // get the index of previous rating
+    const prevRatingIndex = business.ratings.indexOf(review.rating);
+    const newRatingIndex = req.body.rating - 1;
+
+    // decrease previous rating and increase new rating
+    const newBusinessRating = business.ratings.map((rating, index) => {
+      if (index === prevRatingIndex) {
+        return rating - 1;
+      }
+      if (index === newRatingIndex) {
+        return rating + 1;
+      }
+      return rating;
+    }) as [number, number, number, number, number];
+
+    business.ratings = newBusinessRating;
     await business.save();
 
     next();

@@ -1,10 +1,6 @@
 import express from 'express';
 import reviewController from '../controllers/reviewController';
 import { jwtAuth } from '../middlewares/jwtAuthMiddleware';
-import {
-  deleteBusinessRating,
-  updateBusinessRating,
-} from '../middlewares/review/reviewMiddleware';
 import uploadFiles from '../utils/multer/uploadFiles';
 
 const router = express.Router();
@@ -26,8 +22,8 @@ router.route('/').get(reviewController.getAllReviews).post(
 router
   .route('/:id')
   .get(reviewController.getReview)
-  .patch(updateBusinessRating, reviewController.updateReview)
-  .delete(deleteBusinessRating, reviewController.deleteReview);
+  .patch(reviewController.updateReview)
+  .delete(reviewController.deleteReview);
 
 router.route('/:id/likes').patch(jwtAuth(), reviewController.handleReviewLikes);
 
