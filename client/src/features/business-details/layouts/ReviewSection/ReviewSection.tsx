@@ -79,7 +79,7 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
           />
         </div>
         <div className="mb-7 border-b border-gray-300" />
-        {/* <Ratings
+        <Ratings
           ratings={business.ratings}
           avgRating={business.avgRating}
           ratingCount={business.ratingCount}
@@ -88,7 +88,7 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
             const ratings = addOrRemove(selectedRatings, rating);
             setSelectedRatings(ratings);
           }}
-        /> */}
+        />
         <div className="mb-10 border-b border-gray-300" />
         {reviewsResult.isLoading && <CommunitySearchSkeleton items={5} />}
         {reviewsResult.isError && (

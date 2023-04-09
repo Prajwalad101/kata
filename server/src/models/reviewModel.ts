@@ -50,31 +50,22 @@ reviewSchema.post('save', async function (doc) {
 });
 
 // update business ratings
-reviewSchema.post('save', async function (doc) {
+reviewSchema.post('save', async function (doc, next) {
   const rating = doc.rating;
+  const ratingIndex = rating - 1;
 
-  await Business.findByIdAndUpdate(
-    doc.business,
-    [
-      {
-        $set: {
-          /* [`ratings.${rating - 1}`]: 
-            $add: [{ $arrayElemAt: ['$ratings', rating - 1] }, 1],
-          , */
-          totalRating: { $add: ['$totalRating', rating] },
-          ratingCount: { $add: ['$ratingCount', 1] },
-          avgRating: {
-            $cond: [
-              { $eq: ['$ratingCount', 0] },
-              rating,
-              { $divide: ['$totalRating', '$ratingCount'] },
-            ],
-          },
-        },
-      },
-    ],
-    { new: true }
-  );
+  const business = await Business.findById(doc.business);
+
+  if (!business) return next();
+
+  // increment ratings field in business
+  business.ratings[ratingIndex] += 1;
+
+  business.ratingCount += 1;
+  business.totalRating += rating;
+  business.avgRating = business.totalRating / business.ratingCount;
+
+  await business.save();
 });
 
 const Review = model<IReview>('Review', reviewSchema);

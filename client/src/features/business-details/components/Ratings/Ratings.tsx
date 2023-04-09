@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import RatingIcons from 'src/components/icons/ratings/RatingIcons';
-import getRatingStats from 'src/utils/getRatingStats';
 import { classNames } from 'src/utils/tailwind';
 
 const ratingLabels = ['very poor', 'poor', 'average', 'very good', 'excellent'];
@@ -28,16 +27,19 @@ export default function Ratings({
     0, 0, 0, 0, 0,
   ]);
 
+  console.log('RATINGCOUNT', ratingCount);
+
   // update percentage if in view
-  /* useEffect(() => {
+  useEffect(() => {
     if (inView) {
+      console.log('RATINGS', ratings);
       const ratingPercentage = ratings.map((rating) => {
-        if (numRatings <= 0) return 0;
-        return (rating / numRatings) * 100;
+        if (ratingCount <= 0) return 0;
+        return (rating / ratingCount) * 100;
       });
       setRatingPercentage(ratingPercentage);
     }
-  }, [inView, numRatings, ratings]); */
+  }, [inView, ratingCount, ratings]);
 
   return (
     <div
