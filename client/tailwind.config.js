@@ -23,7 +23,7 @@ module.exports = {
         secondarytext: '#4E4E4E',
       },
       backgroundImage: {
-        'main-img': "url('/images/img.jpg')",
+        'main-img': "url('/images/landingpage/bike-shop.jpg')",
         'for-business-main': "url('/images/for-business/main-img.jpg')",
       },
     },
