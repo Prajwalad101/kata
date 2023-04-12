@@ -14,6 +14,7 @@ export default function CategoryDropdown({
   subcategories,
   headingColor = 'white',
 }: CategoryDropdownProps) {
+  console.log('HEADINGCOLOR', headingColor);
   // to display items in two columns
   const evenItems = subcategories.filter(
     (_subCategory, i) => i % 2 === 0 || i === 0
@@ -43,7 +44,7 @@ export default function CategoryDropdown({
       {/* Dropdown heading */}
       <div
         className={classNames(
-          'peer flex cursor-pointer items-center gap-1 text-white hover:opacity-70',
+          'peer flex cursor-pointer items-center gap-1 hover:opacity-70',
           headingColor === 'white' ? 'text-white' : 'text-black'
         )}
       >
