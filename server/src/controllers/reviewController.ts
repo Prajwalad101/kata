@@ -59,8 +59,19 @@ const getReview = catchAsync(
 
 const createReview = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    const businessId = req.body.business;
+    // prevent business owners from reviewing their own business
+
+    // TODO: get the business owner from busines id
+    const business = await Business.findById(businessId);
+
+    // TODO: check if the business owner and review author are the same
+    if (!business) {
+      const error = new AppError('Business not found', 400);
+      return next(error);
+    }
+
     const files = req.files as Express.Multer.File[] | undefined;
-    console.log('REQBODY', req.body);
 
     const author = await User.findById(req.body.author);
     if (!author) {
@@ -81,7 +92,7 @@ const createReview = catchAsync(
 
     // hit score depends on the rating
     increaseBusinessHits({
-      businessId: req.body.business,
+      businessId,
       hitScore: req.body.rating,
     });
 
