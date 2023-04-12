@@ -1,5 +1,6 @@
 import express from 'express';
 import businessController, {
+  getHighestRatedBusinesses,
   getNearestBusinesses,
   getTrendingBusinesses,
 } from '../controllers/businessController';
@@ -21,6 +22,7 @@ router
 
 router.route('/trending').get(getTrendingBusinesses);
 router.route('/nearest').get(getNearestBusinesses);
+router.route('/highest-rated').get(getHighestRatedBusinesses);
 router.route('/search').get(businessController.searchBusiness);
 
 router
