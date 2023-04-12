@@ -102,6 +102,50 @@ export const getNearestBusinesses = catchAsync(
   }
 );
 
+export const getHighestRatedBusinesses = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const coordinates = req.query.coordinates;
+
+    if (!Array.isArray(coordinates) || coordinates.length !== 2) {
+      const error = new AppError('Invalid coordinates', 400);
+      return next(error);
+    }
+
+    const businesses = await Business.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: 'Point',
+            coordinates: [Number(coordinates[0]), Number(coordinates[1])],
+          },
+          spherical: true,
+          maxDistance: 20 * 1000, // 5 km
+          distanceField: 'calcDistance',
+        },
+      },
+      {
+        $match: {
+          verified: true,
+          ratingCount: { $gt: 10 },
+          avgRating: { $gt: 4.5 },
+        },
+      },
+      {
+        $sort: {
+          avgRating: -1,
+          ratingCount: -1,
+        },
+      },
+    ]);
+
+    res.json({
+      status: 'success',
+      documentCount: businesses.length,
+      data: businesses,
+    });
+  }
+);
+
 const getAllBusinesses = catchAsync(
   async (req: Request, res: Response, _next: NextFunction) => {
     const businessQuery = Business.find();

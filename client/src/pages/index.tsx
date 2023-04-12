@@ -1,3 +1,4 @@
+import useHighestRatedBusiness from '@features/home-page/api/useHighestRatedBusiness';
 import useNearestBusiness from '@features/home-page/api/useNearestBusinesses';
 import useTrendingBusiness from '@features/home-page/api/useTrendingBusiness';
 import {
@@ -20,6 +21,7 @@ const Home: NextPageWithLayout = () => {
 
   const trendingBusinessQuery = useTrendingBusiness();
   const nearestBusinessQuery = useNearestBusiness(coordinates);
+  const highestRatedBusinessQuery = useHighestRatedBusiness(coordinates);
 
   return (
     <div>
@@ -55,6 +57,15 @@ const Home: NextPageWithLayout = () => {
           description="Explore local businesses near to your location"
           data={nearestBusinessQuery.data}
           isLoading={nearestBusinessQuery.isLoading}
+        />
+      )}
+      <Divider className="mt-4" />
+      {coordinates && (
+        <RecommendedSection
+          title="Highest rated"
+          description="Find the best rated businesses near to you"
+          data={highestRatedBusinessQuery.data}
+          isLoading={highestRatedBusinessQuery.isLoading}
         />
       )}
       <Divider className="mt-4 mb-8" />
