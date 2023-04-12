@@ -26,7 +26,7 @@ import { Navbar, Sidebar } from 'src/components/navigation';
 import { NextPageWithLayout } from 'src/pages/_app';
 
 const SearchBusiness: NextPageWithLayout = () => {
-  const { name, city } = useRouter().query;
+  const { name, city, category } = useRouter().query;
 
   const [selectedSort, setSelectedSort] = useState<string>(
     sortOptions[0].value
@@ -68,12 +68,10 @@ const SearchBusiness: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>
-          Kata | Search {name} in {city}
-        </title>
+        <title>{`Search ${name || category} in ${city}`}</title>
         <meta
           property="og:title"
-          content={`Kata | Search for ${name} in ${city}`}
+          content={`Search ${name || category} in ${city}`}
           key="Search Page"
         />
       </Head>
@@ -111,22 +109,27 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
 
   const sort = sortOptions[0].value;
+
   const subcategory = context.query.name;
+  const category = context.query.category;
 
   const params = {
     sort,
     ...(isString(subcategory) && { subcategory }),
+    ...(isString(category) && { category }),
   };
 
-  await queryClient.prefetchQuery(
-    ['business', sort, subcategory],
-    () => fetchBusinesses(params),
-    { staleTime: 1000 * 10 } // 10 mins
-  );
+  const queryKey = ['business', params];
+
+  await queryClient.prefetchInfiniteQuery({
+    queryKey,
+    queryFn: () => fetchBusinesses(params),
+    staleTime: 1000 * 60, // 1 minute
+  });
 
   return {
     props: {
-      dehydratedState: dehydrate(queryClient),
+      dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
     },
   };
 };

@@ -10,7 +10,8 @@ export default function ChooseCategory() {
   const router = useRouter();
 
   const handleNavigation = (categoryName: string) => {
-    router.push(`/search/business?category=${categoryName}`);
+    // TODO: city is static, change later
+    router.push(`/search/business?category=${categoryName}&city=Kathmandu`);
   };
 
   return (

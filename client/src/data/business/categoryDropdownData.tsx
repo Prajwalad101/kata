@@ -9,7 +9,6 @@ import { FaPizzaSlice, FaSwimmingPool } from 'react-icons/fa';
 import { FiShoppingBag } from 'react-icons/fi';
 import {
   GiAutoRepair,
-  GiKnifeFork,
   GiTeePipe,
   GiVacuumCleaner,
   GiWeightLiftingUp,
