@@ -1,5 +1,6 @@
 import { isString } from '@destiny/common/utils';
 import useSubmitQuestion from '@features/business-details/queries/useSubmitQuestion';
+import { AxiosError } from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -34,11 +35,20 @@ export default function PostQuestion({ closeDialog }: PostQuestionProps) {
   const onSubmit = (data: FormInputs) => {
     // check if author and business exists
     if (user?._id && isString(business)) {
-      submitQuestionMutation.mutate({
-        question: data.question,
-        business,
-        author: user?._id,
-      });
+      submitQuestionMutation.mutate(
+        {
+          question: data.question,
+          business,
+          author: user?._id,
+        },
+        {
+          onError: (error) => {
+            if (error instanceof AxiosError) {
+              toast.error(error.response?.data.message);
+            }
+          },
+        }
+      );
     } else {
       toast.error('Something went wrong.');
     }

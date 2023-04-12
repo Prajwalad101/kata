@@ -17,6 +17,7 @@ export const sendMail = catchAsync(
 
     const user = await User.findById(data._id);
 
+    // FIXME: Seems to be a variable syntax error
     if (!userData) {
       const error = new AppError('User not found', 400);
       return next(error);

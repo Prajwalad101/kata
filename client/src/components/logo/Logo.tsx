@@ -8,8 +8,8 @@ function Logo() {
       <a className="flex gap-3">
         <Image
           src={logoImg}
-          width={30}
-          height={30}
+          width={27}
+          height={27}
           alt="logo"
           objectFit="contain"
         />

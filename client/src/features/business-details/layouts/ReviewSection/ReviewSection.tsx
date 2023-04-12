@@ -45,6 +45,10 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
     if (!user) {
       return toast.error(ErrorMessage.loggedOut);
     }
+
+    if (user._id === business?.owner) {
+      return toast.error('You cannot review your own business');
+    }
     if (user.blocked) {
       return toast.error(ErrorMessage.suspended);
     }

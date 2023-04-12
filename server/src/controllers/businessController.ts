@@ -1,3 +1,4 @@
+import { IUser } from '@destiny/common/types/IUser';
 import { isString } from '@destiny/common/utils';
 import { NextFunction, Request, Response } from 'express';
 import BusinessHits from '../models/businessHits';
@@ -162,6 +163,8 @@ const getAllBusinesses = catchAsync(
 
 const createBusiness = catchAsync(
   async (req: Request, res: Response, _next: NextFunction) => {
+    const user = req.user as IUser;
+
     const files = req.files as Express.Multer.File[] | undefined;
 
     const filePaths = files?.map((file) => file.path);
@@ -169,7 +172,7 @@ const createBusiness = catchAsync(
     // add images paths to the request body
     req.body.images = filePaths;
 
-    const business = await Business.create(req.body);
+    const business = await Business.create({ ...req.body, owner: user._id });
     res.status(201).json({
       status: 'success',
       data: business,

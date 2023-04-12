@@ -10,6 +10,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { Divider, PrimaryButton, SecondaryButton } from 'src/components';
 import { Breadcrumbs, FormStep1, FormStep2, Header } from '../../components';
+import ErrorMessage from '@destiny/common/data/errorsMessages';
 import {
   registerBusinessFormStep1,
   registerBusinessFormStep2,
@@ -65,7 +66,11 @@ function FormContainer({ mutation }: FormContainerProps) {
       mutation.mutate(formData, {
         onError: (error) => {
           if (error instanceof AxiosError) {
-            toast.error('Error while registering business');
+            if (error.response?.status === 401) {
+              toast.error(ErrorMessage.loggedOut);
+            } else {
+              toast.error(ErrorMessage.generic);
+            }
           }
         },
       });

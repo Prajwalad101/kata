@@ -1,5 +1,6 @@
 import ErrorMessage from '@destiny/common/data/errorsMessages';
 import { NextFunction, Request, Response } from 'express';
+import Business from '../models/businessModel';
 import Question from '../models/questionModel';
 import User from '../models/userModel';
 import { APIFeatures } from '../utils/apiFeatures';
@@ -46,7 +47,24 @@ export const getQuestion = catchAsync(
 );
 
 export const createQuestion = catchAsync(
-  async (req: Request, res: Response, _next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
+    const businessId = req.body.business;
+
+    const business = await Business.findById(businessId);
+
+    if (!business) {
+      const error = new AppError('Business not found', 404);
+      return next(error);
+    }
+
+    // prevent business owners from posting question on their own business
+    if (business.owner.toString() === req.body.author) {
+      const error = new AppError(
+        'Business owners cannot post questions on their own business',
+        400
+      );
+      return next(error);
+    }
     let newQuestion = await Question.create(req.body);
     newQuestion = await newQuestion.populate('author');
 

@@ -1,7 +1,10 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { AiOutlineSearch } from 'react-icons/ai';
+import { toast } from 'react-toastify';
 import PrimaryButton from 'src/components/button/primary/PrimaryButton';
 import Logo from 'src/components/logo/Logo';
+import { useAuth } from 'src/layouts/UserProvider';
 import { classNames } from 'src/utils/tailwind';
 
 interface NavbarProps {
@@ -9,6 +12,16 @@ interface NavbarProps {
 }
 
 function Navbar({ theme = 'light' }: NavbarProps) {
+  const router = useRouter();
+  const user = useAuth()?.user;
+
+  const handleRedirect = () => {
+    if (!user) {
+      return toast.error('You have to be logged in to register your business');
+    }
+    router.push('/register-business/form');
+  };
+
   return (
     <div className="py-4 font-rubik shadow-md md:pt-7 md:shadow-none">
       {/* FOR SMALLER(<md) SCREENS */}
@@ -36,14 +49,9 @@ function Navbar({ theme = 'light' }: NavbarProps) {
               </a>
             </Link>
           </div>
-
-          <Link href="/register-business/form">
-            <a>
-              <PrimaryButton className="px-6 py-2">
-                Create Listing
-              </PrimaryButton>
-            </a>
-          </Link>
+          <PrimaryButton onClick={handleRedirect} className="px-6 py-2">
+            Create Listing
+          </PrimaryButton>
         </div>
       </div>
     </div>

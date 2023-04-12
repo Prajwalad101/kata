@@ -1,9 +1,11 @@
 import { IReview } from "@destiny/common/types";
+import mongoose from "mongoose";
 
 export interface IBusiness {
   _id: string;
   name: string;
   description: string;
+  owner: mongoose.Types.ObjectId;
   city: string;
   workingDays: { day: string; startTime: string; endTime: string }[];
   contactNumber: string;

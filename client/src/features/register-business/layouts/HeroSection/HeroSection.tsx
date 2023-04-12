@@ -1,7 +1,11 @@
+import ErrorMessage from '@destiny/common/data/errorsMessages';
 import { MainHeading } from '@features/home-page/components';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { BsClipboardData, BsLightbulb, BsPeople } from 'react-icons/bs';
+import { toast } from 'react-toastify';
 import PrimaryButton from 'src/components/button/primary/PrimaryButton';
+import { useAuth } from 'src/layouts/UserProvider';
 
 function HeroSection() {
   return (
@@ -33,6 +37,16 @@ function SubHeading() {
 }
 
 function CallToAction() {
+  const router = useRouter();
+  const user = useAuth()?.user;
+
+  const handleRedirect = () => {
+    if (!user) {
+      return toast.error('You have to be logged in to register your business');
+    }
+    router.push('/register-business/form');
+  };
+
   return (
     <div className="max-w-sm rounded-md bg-gray-200 px-5 py-6 md:bg-white">
       <div className="mb-7 text-secondarytext child-notlast:mb-3">
@@ -52,13 +66,9 @@ function CallToAction() {
       <p className="mb-4 font-semibold text-black">
         Set up your listing in minutes
       </p>
-      <Link href="/register-business/form">
-        <a>
-          <PrimaryButton>
-            <p className="px-6 py-2">Register now</p>
-          </PrimaryButton>
-        </a>
-      </Link>
+      <PrimaryButton onClick={handleRedirect}>
+        <p className="px-6 py-2">Register now</p>
+      </PrimaryButton>
     </div>
   );
 }
