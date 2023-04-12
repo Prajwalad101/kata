@@ -1,6 +1,7 @@
+import { IUser } from '@destiny/common/types/IUser';
 import mongoose from 'mongoose';
 
-const userSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema<IUser>(
   {
     userName: {
       type: String,

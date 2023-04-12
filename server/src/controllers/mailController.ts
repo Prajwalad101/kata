@@ -3,6 +3,7 @@ import catchAsync from '../utils/catchAsync';
 import Mailgun from 'mailgun.js';
 import formData from 'form-data';
 import AppError from '../utils/appError';
+import User from '../models/userModel';
 
 const mailgun = new Mailgun(formData);
 const mg = mailgun.client({
@@ -12,7 +13,14 @@ const mg = mailgun.client({
 
 export const sendMail = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const user = req.user as any;
+    const data = req.user as any;
+
+    const user = await User.findById(data._id);
+
+    if (!userData) {
+      const error = new AppError('User not found', 400);
+      return next(error);
+    }
 
     if (
       !user.email ||

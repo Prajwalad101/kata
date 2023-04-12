@@ -18,6 +18,7 @@ export default function LocationProvider({ children }: LocationProviderProps) {
   useEffect(() => {
     // coordinates is always initially null
     const id = setTimeout(() => {
+      console.log('COORDINATES', coordinates);
       if (!coordinates) {
         getUserCoordinates().then((value) =>
           updateCoordinates(JSON.stringify(value))

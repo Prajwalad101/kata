@@ -9,6 +9,7 @@ import CommunitySectionNotFound from '@features/business-details/components/Revi
 import CommunitySectionSearch from '@features/business-details/components/SearchReviews/SearchReviews';
 import { reviewSortOptions } from '@features/business-details/data';
 import { useBusiness, useReviews } from '@features/business-details/queries';
+import ErrorMessage from '@destiny/common/data/errorsMessages';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { Portal, SecondaryButton } from 'src/components';
@@ -40,6 +41,16 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
     sort: selectedSort.field,
   });
 
+  const openReviewModal = () => {
+    if (!user) {
+      return toast.error(ErrorMessage.loggedOut);
+    }
+    if (user.blocked) {
+      return toast.error(ErrorMessage.suspended);
+    }
+    setReviewModalOpen(true);
+  };
+
   const reviews = reviewsResult.data || [];
   const business = businessResult.data;
 
@@ -55,13 +66,7 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
         <Portal selector="#start-review-button">
           <SecondaryButton
             className="px-6 py-2 sm:py-[10px]"
-            onClick={() => {
-              if (!user)
-                return toast.error(
-                  'You have to be logged in to submit a review.'
-                );
-              setReviewModalOpen(true);
-            }}
+            onClick={openReviewModal}
           >
             Start Review
           </SecondaryButton>

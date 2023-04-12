@@ -1,8 +1,10 @@
+import ErrorMessage from '@destiny/common/data/errorsMessages';
 import { IUser } from '@destiny/common/types';
 import { isString } from '@destiny/common/utils';
 import useHandleQuestionLikes from '@features/business-details/queries/useHandleQuestionLikes';
 import { IUserQuestion } from '@features/business-details/queries/useQuestions';
 import useSubmitReply from '@features/business-details/queries/useSubmitReply';
+import { AxiosError } from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -54,15 +56,28 @@ export default function UserQuestion({ data }: UserQuestionProps) {
   const handleQuestionLike = () => {
     const userId = user?._id;
 
-    if (!userId) return toast.error('You must be logged in to like this post');
+    if (!userId) return toast.error(ErrorMessage.loggedOut);
+
+    if (user.blocked) {
+      return toast.error(ErrorMessage.suspended);
+    }
 
     if (isString(businessId)) {
-      handleQuestionLikeMutation.mutate({
-        userId,
-        questionId: data._id.toString(),
-        businessId,
-        type: alreadyLiked ? 'decrement' : 'increment',
-      });
+      handleQuestionLikeMutation.mutate(
+        {
+          userId,
+          questionId: data._id.toString(),
+          businessId,
+          type: alreadyLiked ? 'decrement' : 'increment',
+        },
+        {
+          onError: (err) => {
+            if (err instanceof AxiosError) {
+              toast.error(err.response?.data.message);
+            }
+          },
+        }
+      );
     }
   };
 
@@ -80,6 +95,8 @@ export default function UserQuestion({ data }: UserQuestionProps) {
   const onSubmit = (formData: FormInputs) => {
     if (!user?._id) return;
     if (!isString(businessId)) return toast.error('Invalid business id');
+
+    if (user.blocked) return toast.error(ErrorMessage.suspended);
 
     submitReply.mutate(
       {
@@ -186,12 +203,15 @@ export default function UserQuestion({ data }: UserQuestionProps) {
                   })}
                   className={classNames(
                     data.replies.length <= 0 ? 'mt-4' : '',
-                    'mb-4 w-full rounded-md border-2 border-gray-300 p-4 outline-none ring-blue-600 focus:ring'
+                    'mb-3 w-full rounded-md border-2 border-gray-300 p-4 outline-none ring-blue-600 focus:ring'
                   )}
                   rows={4}
                   placeholder="Add your reply here ..."
                 />
-                <FormErrorMessage error={formState.errors.reply} />
+                <FormErrorMessage
+                  className="mb-2"
+                  error={formState.errors.reply}
+                />
                 <div className="mb-4 flex gap-5">
                   <PrimaryButton
                     isLoading={submitReply.isLoading}

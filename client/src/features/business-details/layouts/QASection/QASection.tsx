@@ -41,6 +41,12 @@ export default function QASection({ className = '' }: QASectionProps) {
     if (!user) {
       return toast.error('You have to be logged in to ask a question');
     }
+
+    if (user.blocked) {
+      return toast.error(
+        'You have been suspended due to violation of terms and services'
+      );
+    }
     setQADialogOpen(true);
   };
 
