@@ -1,3 +1,4 @@
+import Footer from 'src/components/Footer/Footer';
 import { classNames } from 'src/utils/tailwind';
 
 interface IAppLayout {
@@ -14,6 +15,7 @@ function AppLayout({ children, size }: IAppLayout) {
       )}
     >
       {children}
+      <Footer />
     </div>
   );
 }
