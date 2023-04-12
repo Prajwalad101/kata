@@ -5,8 +5,10 @@ import {
   MainHeading,
   Searchbar,
 } from '@features/home-page/components';
+import ChooseCategory from '@features/home-page/components/ChooseCategory/ChooseCategory';
 import { RecommendedSection } from '@features/recommended-business/layouts';
 import Head from 'next/head';
+import { Divider } from 'src/components';
 import { NavigationProvider } from 'src/components/context-provider/NavigationProvider/NavigationProvider';
 import { AppLayout } from 'src/components/layout';
 import { Navbar } from 'src/components/navigation';
@@ -46,6 +48,7 @@ const Home: NextPageWithLayout = () => {
         data={trendingBusinessQuery.data}
         isLoading={trendingBusinessQuery.isLoading}
       />
+      <Divider className="mt-4" />
       {coordinates && (
         <RecommendedSection
           title="Near to you"
@@ -54,6 +57,8 @@ const Home: NextPageWithLayout = () => {
           isLoading={nearestBusinessQuery.isLoading}
         />
       )}
+      <Divider className="mt-4 mb-8" />
+      <ChooseCategory />
     </div>
   );
 };
