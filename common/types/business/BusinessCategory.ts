@@ -16,7 +16,7 @@ export const businessCategories = [
       { value: "takeout", tag: "popular" },
       { value: "good parking", tag: "popular" },
       { value: "authentic", tag: "trending" },
-      { value: "lgbtq friendly", tag: "trending" },
+      { value: "LGBTQ friendly", tag: "trending" },
       { value: "24 hr service", tag: "trending" },
     ],
   },

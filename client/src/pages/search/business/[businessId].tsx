@@ -71,7 +71,7 @@ const Business: NextPageWithLayout = () => {
               contactNumber={businessData.contactNumber}
               className="mb-10 md:mb-16"
             />
-            <CommunitySection className="mb-10" />
+            <CommunitySection />
           </div>
         </div>
       </ConditionalRender>

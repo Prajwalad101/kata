@@ -5,7 +5,7 @@ import Logo from '../logo/Logo';
 
 export default function Footer() {
   return (
-    <div className="ml-[calc(50%-50vw)] flex w-[100vw] flex-col items-center gap-5 bg-gray-100 px-3 py-8 text-black md:px-10">
+    <div className="mt-16 ml-[calc(50%-50vw)] flex w-[100vw] flex-col items-center gap-5 bg-gray-100 px-3 py-8 text-black md:px-10">
       <div className="mb-2 flex gap-5">
         <button className="group rounded-md border-2 border-gray-500 p-2 transition-colors hover:border-red-500 hover:bg-red-500 hover:text-white">
           <FiTwitter

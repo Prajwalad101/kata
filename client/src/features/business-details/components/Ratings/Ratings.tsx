@@ -7,6 +7,7 @@ const ratingLabels = ['very poor', 'poor', 'average', 'very good', 'excellent'];
 
 interface RatingsProps {
   avgRating: number;
+  totalRating: number;
   ratingCount: number;
   ratings: number[];
   className?: string;
@@ -15,6 +16,7 @@ interface RatingsProps {
 
 export default function Ratings({
   ratingCount,
+  totalRating,
   avgRating,
   ratings,
   className = '',
@@ -42,11 +44,11 @@ export default function Ratings({
       ref={ref}
       className={classNames(className, 'rounded-md border-gray-300')}
     >
-      <div className="mb-3 flex items-center gap-8">
+      <div className="mb-2 flex items-center gap-8">
         <h4 className="text-3xl font-medium">{avgRating.toFixed(1)}</h4>
         <RatingIcons avgRating={avgRating} size={19} className="gap-[6px]" />
       </div>
-      {/* <p className="mb-10 text-gray-500 underline">from {numRatings} reviews</p> */}
+      <p className="mb-5 text-gray-500 underline">from {totalRating} reviews</p>
       <div className="flex flex-col gap-3">
         {ratings.map((_, index) => {
           return (

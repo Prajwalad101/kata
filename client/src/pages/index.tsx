@@ -50,25 +50,28 @@ const Home: NextPageWithLayout = () => {
         data={trendingBusinessQuery.data}
         isLoading={trendingBusinessQuery.isLoading}
       />
-      <Divider className="mt-4" />
       {coordinates && (
-        <RecommendedSection
-          title="Near to you"
-          description="Explore local businesses near to your location"
-          data={nearestBusinessQuery.data}
-          isLoading={nearestBusinessQuery.isLoading}
-        />
+        <>
+          <Divider className="mt-4" />
+          <RecommendedSection
+            title="Near to you"
+            description="Explore local businesses near to your location"
+            data={nearestBusinessQuery.data}
+            isLoading={nearestBusinessQuery.isLoading}
+          />
+        </>
       )}
-      <Divider className="mt-4" />
       {coordinates && (
-        <RecommendedSection
-          title="Highest rated"
-          description="Find the best rated businesses near to you"
-          data={highestRatedBusinessQuery.data}
-          isLoading={highestRatedBusinessQuery.isLoading}
-        />
+        <>
+          <Divider className="mt-4" />
+          <RecommendedSection
+            title="Highest rated"
+            description="Find the best rated businesses near to you"
+            data={highestRatedBusinessQuery.data}
+            isLoading={highestRatedBusinessQuery.isLoading}
+          />
+        </>
       )}
-      <Divider className="mt-4 mb-8" />
       <ChooseCategory />
     </div>
   );

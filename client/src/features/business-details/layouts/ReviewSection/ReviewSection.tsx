@@ -89,6 +89,7 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
         </div>
         <div className="mb-7 border-b border-gray-300" />
         <Ratings
+          totalRating={business.totalRating}
           ratings={business.ratings}
           avgRating={business.avgRating}
           ratingCount={business.ratingCount}
