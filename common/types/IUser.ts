@@ -8,4 +8,7 @@ export interface IUser {
   trustPoints: number;
   numReviews: number;
   numQuestions: number;
+  onCooldown: boolean;
+  blocked: boolean;
+  reportCount: number;
 }

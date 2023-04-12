@@ -1,5 +1,7 @@
+import ErrorMessage from '@destiny/common/data/errorsMessages';
 import { NextFunction, Request, Response } from 'express';
 import Question from '../models/questionModel';
+import User from '../models/userModel';
 import { APIFeatures } from '../utils/apiFeatures';
 import AppError from '../utils/appError';
 import { increaseBusinessHits } from '../utils/business/increaseBusinessHits';
@@ -90,13 +92,20 @@ export const handleQuestionLikes = catchAsync(
     const questionId = req.params.id;
     const businessId = req.body.businessId;
 
-    if (!businessId) {
-      const error = new AppError('Business id is required', 400);
+    if (!businessId || !questionId) {
+      const error = new AppError(
+        'Business id and question id are required',
+        400
+      );
       return next(error);
     }
 
-    if (!questionId) {
-      const error = new AppError('Question id is required', 400);
+    // user who updates the post
+    const user = await User.findById(req.body.userId);
+
+    // check if the user is blocked
+    if (user?.blocked) {
+      const error = new AppError(ErrorMessage.suspended, 400);
       return next(error);
     }
 
@@ -105,7 +114,6 @@ export const handleQuestionLikes = catchAsync(
     await Question.findByIdAndUpdate(
       questionId,
       {
-        // $inc: { 'likes.value': req.body.type === 'increment' ? 1 : -1 },
         ...(req.body.type === 'increment' && {
           $inc: { 'likes.value': 1 },
           $addToSet: { 'likes.users': req.body.userId },

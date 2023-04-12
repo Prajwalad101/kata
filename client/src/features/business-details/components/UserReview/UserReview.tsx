@@ -1,3 +1,4 @@
+import ErrorMessage from '@destiny/common/data/errorsMessages';
 import { IReview } from '@destiny/common/types';
 import { isString } from '@destiny/common/utils';
 import {
@@ -5,6 +6,7 @@ import {
   ReviewText,
 } from '@features/business-details/components';
 import useHandleReviewLikes from '@features/business-details/queries/useHandleReviewLikes';
+import { AxiosError } from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
@@ -107,14 +109,26 @@ function Feedback({ likes, reviewId }: FeedbackProps) {
     if (!user?._id) {
       return toast.error('You have to be logged in to like this post');
     }
+    if (user.blocked) {
+      return toast.error(ErrorMessage.suspended);
+    }
 
     if (isString(businessId) && isString(user._id))
-      handleReviewLikesMutation.mutate({
-        businessId,
-        userId: user._id,
-        reviewId,
-        type: alreadyLiked ? 'decrement' : 'increment',
-      });
+      handleReviewLikesMutation.mutate(
+        {
+          businessId,
+          userId: user._id,
+          reviewId,
+          type: alreadyLiked ? 'decrement' : 'increment',
+        },
+        {
+          onError: (err) => {
+            if (err instanceof AxiosError) {
+              toast.error(err.response?.data.message);
+            }
+          },
+        }
+      );
   };
 
   return (

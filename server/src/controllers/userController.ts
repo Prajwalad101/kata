@@ -44,7 +44,10 @@ export const reportUser = catchAsync(
 
     const reporter = await User.findById(req.body.reportedBy);
     if (reporter?.onCooldown) {
-      const error = new AppError("You can't report another user yet", 400);
+      const error = new AppError(
+        'You must wait 24 hours before reporting another user',
+        400
+      );
       return next(error);
     }
 

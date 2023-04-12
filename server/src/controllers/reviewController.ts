@@ -1,8 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 import Review from '../models/reviewModel';
+import User from '../models/userModel';
 import { APIFeatures } from '../utils/apiFeatures';
 import AppError from '../utils/appError';
 import { increaseBusinessHits } from '../utils/business/increaseBusinessHits';
+import ErrorMessage from '@destiny/common/data/errorsMessages';
 import catchAsync from '../utils/catchAsync';
 
 const getAllReviews = catchAsync(
@@ -56,8 +58,20 @@ const getReview = catchAsync(
 );
 
 const createReview = catchAsync(
-  async (req: Request, res: Response, _next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const files = req.files as Express.Multer.File[] | undefined;
+    console.log('REQBODY', req.body);
+
+    const author = await User.findById(req.body.author);
+    if (!author) {
+      const error = new AppError('Could not find author', 400);
+      return next(error);
+    }
+
+    if (author?.blocked) {
+      const error = new AppError(ErrorMessage.suspended, 400);
+      return next(error);
+    }
 
     const filePaths = files?.map((file) => file.path);
 
@@ -80,6 +94,11 @@ const createReview = catchAsync(
 
 const updateReview = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.body.userId) {
+      const error = new AppError('User id is required', 400);
+      return next(error);
+    }
+
     const newReview = await Review.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
@@ -113,13 +132,17 @@ const handleReviewLikes = catchAsync(
     const reviewId = req.params.id;
     const businessId = req.body.businessId;
 
-    if (!businessId) {
-      const error = new AppError('Business id is required', 400);
+    if (!businessId || !reviewId) {
+      const error = new AppError('Business id and review id are required', 400);
       return next(error);
     }
 
-    if (!reviewId) {
-      const error = new AppError('Review id is required', 400);
+    // user who updates the post
+    const user = await User.findById(req.body.userId);
+
+    // check if the user is blocked
+    if (user?.blocked) {
+      const error = new AppError(ErrorMessage.suspended, 400);
       return next(error);
     }
 

@@ -58,11 +58,9 @@ export default function StartReview({ isOpen, closeModal }: StartReviewProps) {
       onError: (error) => {
         resetForm();
         if (error instanceof AxiosError) {
-          if (error.response?.status === 401) {
-            return toast.error('You must be authenticated to submit a review');
-          }
+          const errorMsg = error.response?.data.message;
+          return toast.error(errorMsg || 'Could not submit review');
         }
-        toast.error('Could not submit review.');
       },
     });
   };
