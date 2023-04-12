@@ -17,22 +17,36 @@ export default function FilterFeatures({
   setSelectedFeatures,
 }: FilterFeaturesProps) {
   const { query } = useRouter();
+  const [subCategoryName, setSubCategoryName] = useState<string>();
   const [categoryName, setCategoryName] = useState<string>();
 
   useEffect(() => {
     if (isString(query.name)) {
-      setCategoryName(query.name);
+      setSubCategoryName(query.name);
     }
-  }, [query.name]);
+    if (isString(query.category)) {
+      setCategoryName(query.category);
+    }
+  }, [query.name, query.category]);
 
-  // if no categoryName present, don't render filter
-  if (!categoryName) {
+  // if no category and subcategory name present, don't render filter
+  if (!subCategoryName && !categoryName) {
     return <></>;
   }
 
-  const businessCategory = businessCategories.find((category) =>
-    category.subcategories.includes(categoryName)
-  );
+  let businessCategory: BusinessCategories[number] | undefined;
+
+  if (categoryName) {
+    businessCategory = businessCategories.find(
+      (category) => category.name === categoryName
+    );
+  }
+
+  if (subCategoryName) {
+    businessCategory = businessCategories.find((category) =>
+      category.subcategories.includes(subCategoryName)
+    );
+  }
 
   // if no businessCategory found, don't render filter
   if (!businessCategory) {

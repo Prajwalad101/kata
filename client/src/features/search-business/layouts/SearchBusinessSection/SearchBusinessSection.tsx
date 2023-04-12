@@ -16,9 +16,7 @@ function SearchBusinessSection({
 }: // businessResult,
 SearchBusinessSectionProps) {
   const router = useRouter();
-  const { name, city } = router.query;
-
-  // const { isLoading, isSuccess } = businessResult;
+  const { name, city, category } = router.query;
 
   return (
     <div className="mt-5 flex gap-10 md:mt-10">
@@ -32,7 +30,7 @@ SearchBusinessSectionProps) {
           <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
             {/* Heading */}
             <h2 className="font-merriweather text-2xl font-bold">
-              Top <span className="capitalize">{name}</span> in{' '}
+              <span className="capitalize">{name || category}</span> in{' '}
               <span className="capitalize">{city}</span>
             </h2>
             {/* Sort Items */}

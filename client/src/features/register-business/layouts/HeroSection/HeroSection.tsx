@@ -1,6 +1,4 @@
-import ErrorMessage from '@destiny/common/data/errorsMessages';
 import { MainHeading } from '@features/home-page/components';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { BsClipboardData, BsLightbulb, BsPeople } from 'react-icons/bs';
 import { toast } from 'react-toastify';

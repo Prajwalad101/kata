@@ -34,7 +34,7 @@ type UseFetchBusinessesProps = {
 
 function useFetchBusinesses(props?: UseFetchBusinessesProps) {
   const {
-    query: { name },
+    query: { name, category },
   } = useRouter();
 
   let params = {};
@@ -42,6 +42,7 @@ function useFetchBusinesses(props?: UseFetchBusinessesProps) {
     params = {
       ...(props.sort && { sort: props.sort }),
       ...(isString(name) && { subcategory: name }),
+      ...(isString(category) && { category: category }),
       ...(props.features &&
         props.features.length !== 0 && {
           features: props.features.join(','),
