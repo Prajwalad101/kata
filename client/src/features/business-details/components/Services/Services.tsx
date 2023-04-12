@@ -10,6 +10,7 @@ import SendMessage from '../modals/SendMessage/SendMessage';
 interface ServicesProps {
   businessId: string;
   businessEmail: string;
+  businessOwner: string;
   businessCoordinates: [number, number];
   className?: string;
 }
@@ -17,6 +18,7 @@ interface ServicesProps {
 export default function Services({
   businessId,
   businessEmail,
+  businessOwner,
   businessCoordinates,
   className = '',
 }: ServicesProps) {
@@ -32,6 +34,9 @@ export default function Services({
   const handleModalOpen = () => {
     if (!auth?.user) {
       return toast.error('You have to be logged in to send a message');
+    }
+    if (businessOwner === auth?.user._id) {
+      return toast.error("You can't send a message to your own business");
     }
     setIsMessageOpen(true);
   };

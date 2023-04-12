@@ -6,6 +6,7 @@ import AppError from '../utils/appError';
 import { increaseBusinessHits } from '../utils/business/increaseBusinessHits';
 import ErrorMessage from '@destiny/common/data/errorsMessages';
 import catchAsync from '../utils/catchAsync';
+import Business from '../models/businessModel';
 
 const getAllReviews = catchAsync(
   async (req: Request, res: Response, _next: NextFunction) => {
@@ -60,14 +61,20 @@ const getReview = catchAsync(
 const createReview = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const businessId = req.body.business;
-    // prevent business owners from reviewing their own business
 
-    // TODO: get the business owner from busines id
     const business = await Business.findById(businessId);
 
-    // TODO: check if the business owner and review author are the same
     if (!business) {
-      const error = new AppError('Business not found', 400);
+      const error = new AppError('Business not found', 404);
+      return next(error);
+    }
+
+    // prevent business owners from reviewing their own business
+    if (business.owner.toString() === req.body.author) {
+      const error = new AppError(
+        'Business owners cannot review their own businesses',
+        400
+      );
       return next(error);
     }
 
@@ -79,6 +86,7 @@ const createReview = catchAsync(
       return next(error);
     }
 
+    // prevent suspended users from reviewing businesses
     if (author?.blocked) {
       const error = new AppError(ErrorMessage.suspended, 400);
       return next(error);

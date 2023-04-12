@@ -53,6 +53,7 @@ const Business: NextPageWithLayout = () => {
         />
         <div className="flex flex-col items-start gap-x-16 gap-y-7 md:flex-row-reverse">
           <Services
+            businessOwner={businessData.owner}
             businessId={businessData._id}
             businessEmail={businessData.email}
             businessCoordinates={businessData.location.coordinates}

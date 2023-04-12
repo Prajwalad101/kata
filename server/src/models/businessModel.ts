@@ -1,5 +1,5 @@
 import { IBusiness } from '@destiny/common/types';
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 const businessSchema = new mongoose.Schema<IBusiness>(
   {
@@ -11,6 +11,11 @@ const businessSchema = new mongoose.Schema<IBusiness>(
     description: {
       type: String,
       required: [true, 'A business must contain a description'],
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: [true, 'A business most contain a business owner'],
     },
     city: { type: String, required: [true, 'City is required'] },
     workingDays: [

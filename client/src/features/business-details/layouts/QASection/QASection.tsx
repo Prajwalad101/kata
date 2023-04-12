@@ -6,6 +6,7 @@ import {
 import CommunitySearchSkeleton from '@features/business-details/components/ReviewSkeleton/ReviewSkeleton';
 import CommunitySectionNotFound from '@features/business-details/components/ReviewsNotFound.ts/ReviewsNotFound';
 import CommunitySectionSearch from '@features/business-details/components/SearchReviews/SearchReviews';
+import { useBusiness } from '@features/business-details/queries';
 import useQuestions from '@features/business-details/queries/useQuestions';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
@@ -32,6 +33,8 @@ export default function QASection({ className = '' }: QASectionProps) {
   const [selectedSort, setSelectedSort] = useState(sortItems[0].value);
   const [searchText, setSearchText] = useState<string>('');
 
+  const { data: business } = useBusiness();
+
   const questionsQuery = useQuestions({
     ...(searchText && { 'text[search]': searchText }),
     sort: selectedSort,
@@ -40,6 +43,12 @@ export default function QASection({ className = '' }: QASectionProps) {
   const handleAskQuestion = () => {
     if (!user) {
       return toast.error('You have to be logged in to ask a question');
+    }
+
+    if (user._id === business?.owner) {
+      return toast.error(
+        'You cannot post a question in your own business page'
+      );
     }
 
     if (user.blocked) {

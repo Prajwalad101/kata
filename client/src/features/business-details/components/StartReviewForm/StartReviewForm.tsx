@@ -37,8 +37,10 @@ export default function StartReview({ isOpen, closeModal }: StartReviewProps) {
 
   const onSubmit: SubmitHandler<IReviewFormValues> = (data) => {
     const userId = user?._id;
-    if (!userId)
+
+    if (!userId) {
       return toast.error('You have to be logged in to submit a review.');
+    }
 
     const formData = new FormData();
     buildFormData({ formData, data });
