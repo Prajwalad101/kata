@@ -8,6 +8,30 @@ import ErrorMessage from '@destiny/common/data/errorsMessages';
 import catchAsync from '../utils/catchAsync';
 import Business from '../models/businessModel';
 
+export const getMostLikedReviews = catchAsync(
+  async (_req: Request, res: Response, _next: NextFunction) => {
+    // fetch 50 reviews with the highest likes
+    const reviewQuery = Review.find().sort({ 'likes.value': 'desc' }).limit(50);
+
+    reviewQuery
+      .populate({
+        path: 'author',
+      })
+      .populate({
+        path: 'business',
+        select: 'name',
+      });
+
+    const reviews = await reviewQuery;
+
+    res.status(200).json({
+      status: 'success',
+      count: reviews.length,
+      data: reviews,
+    });
+  }
+);
+
 const getAllReviews = catchAsync(
   async (req: Request, res: Response, _next: NextFunction) => {
     const reviewQuery = Review.find();
