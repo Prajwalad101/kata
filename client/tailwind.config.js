@@ -25,6 +25,7 @@ module.exports = {
       backgroundImage: {
         'main-img': "url('/images/landingpage/bike-shop.jpg')",
         'for-business-main': "url('/images/for-business/main-img.jpg')",
+        'review-landing-img': "url('/images/landingpage/home-service.jpg')",
       },
     },
   },

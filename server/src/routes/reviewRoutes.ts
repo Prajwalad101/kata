@@ -1,5 +1,7 @@
 import express from 'express';
-import reviewController from '../controllers/reviewController';
+import reviewController, {
+  getMostLikedReviews,
+} from '../controllers/reviewController';
 import { jwtAuth } from '../middlewares/jwtAuthMiddleware';
 import uploadFiles from '../utils/multer/uploadFiles';
 
@@ -11,6 +13,8 @@ const upload = uploadFiles({
   maxCount: 10,
   fieldName: 'image',
 });
+
+router.route('/most-liked').get(getMostLikedReviews);
 
 router.route('/').get(reviewController.getAllReviews).post(
   jwtAuth(), // authenticate users before creating reviews
