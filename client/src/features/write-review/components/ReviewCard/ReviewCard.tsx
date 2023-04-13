@@ -17,11 +17,11 @@ export default function ReviewCard({ review }: ReviewCardProps) {
     <div
       className={classNames(
         'overflow-hidden text-ellipsis rounded-md bg-gray-100 shadow-md transition-all hover:scale-[101%] hover:shadow-lg sm:w-[350px]',
-        noImage ? 'h-min' : ''
+        noImage ? 'h-min' : 'row-span-2'
       )}
     >
       {review.images && review.images.length !== 0 && (
-        <Slider numItems={review.images.length} className="h-[280px] w-full">
+        <Slider numItems={review.images.length} className="h-[250px] w-full">
           {review.images.map((image, index) => (
             <div key={index} className="relative h-full w-full">
               <Image
