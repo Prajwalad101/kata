@@ -17,7 +17,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
     <div
       className={classNames(
         'overflow-hidden text-ellipsis rounded-md bg-gray-100 shadow-md transition-all hover:scale-[101%] hover:shadow-lg sm:w-[350px]',
-        noImage ? 'h-min' : 'row-span-2'
+        noImage ? '' : 'row-span-2'
       )}
     >
       {review.images && review.images.length !== 0 && (
@@ -41,7 +41,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
             The Burger House
           </h3>
           <div>
-            <RatingIcons rating={review.rating} />
+            <RatingIcons avgRating={review.rating} />
           </div>
         </div>
         <div className="mb-3 flex items-center justify-between">
