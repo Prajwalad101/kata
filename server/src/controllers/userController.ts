@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import Cooldown from '../models/cooldownModel';
 import Report from '../models/reportModel';
 import User from '../models/userModel';
 import AppError from '../utils/appError';
@@ -66,12 +67,8 @@ export const reportUser = catchAsync(
       onCooldown: true,
     });
 
-    // remove cooldown after 24 hours
-    setTimeout(async () => {
-      await User.findByIdAndUpdate(req.body.reportedBy, {
-        onCooldown: false,
-      });
-    }, 86400000);
+    // keep track of cooldown period to update later
+    await Cooldown.create({ user: req.body.reportedBy, cooldownPeriod: 24 }); // 24 hours
 
     // block user if they have 4 or more reports
     if (user?.reportCount >= 4) {

@@ -19,6 +19,7 @@ const nextConfig = withTM({
       'via.placeholder.com',
       'dummyimage.com',
       'images.unsplash.com',
+      'platform-lookaside.fbsbx.com',
     ],
   },
 });
