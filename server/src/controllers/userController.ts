@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import Cooldown from '../models/cooldownModel';
 import Report from '../models/reportModel';
 import User from '../models/userModel';
 import AppError from '../utils/appError';
@@ -65,6 +66,9 @@ export const reportUser = catchAsync(
     await User.findByIdAndUpdate(req.body.reportedBy, {
       onCooldown: true,
     });
+
+    // put the user on cooldown
+    await Cooldown.create({ user: req.body.reportedBy, cooldownPeriod: '1d' });
 
     // remove cooldown after 24 hours
     setTimeout(async () => {
