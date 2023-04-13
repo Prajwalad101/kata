@@ -19,9 +19,9 @@ mongoose.connect(DB).then(() => {
   console.log('DB connection successful');
 });
 
-// schedule a cron job every day at 12:00 pm
+// create a cron schedule to update user cooldowns every 3 hours
 cron.schedule(
-  '31 18 * * *',
+  '0 */3 * * *',
   async () => {
     // find the documents that have exceeded their cooldown period
     const cooldowns = await Cooldown.aggregate([
@@ -36,7 +36,7 @@ cron.schedule(
       {
         $addFields: {
           timeDifferenceInHours: {
-            $divide: ['$timeDifference', 1000 * 60 * 60],
+            $divide: ['$timeDifference', 1000 * 60 * 60], // convert milliseconds to hours
           },
         },
       },
