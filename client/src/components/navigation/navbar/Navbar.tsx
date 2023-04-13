@@ -60,7 +60,7 @@ function Navbar({ theme }: INavbar) {
               </Link>
             </div>
             <div className="underline-offset-4 hover:underline">
-              <Link href="/">
+              <Link href="/write-review">
                 <SecondaryButton theme={theme}>
                   <p className="py-2 px-6">Write a review</p>
                 </SecondaryButton>
