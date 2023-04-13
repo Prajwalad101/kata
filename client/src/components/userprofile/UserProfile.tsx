@@ -1,29 +1,27 @@
+import { IUser } from '@destiny/common/types';
 import { Menu, Transition } from '@headlessui/react';
 import Image from 'next/image';
 import { Fragment } from 'react';
-import parseJwt from 'src/utils/text/parseJwt';
 
 interface UserProfileProps {
-  accessToken: string;
+  user: Partial<IUser>;
+  logout: () => void;
 }
 
-export default function UserProfile({ accessToken }: UserProfileProps) {
-  const userData = parseJwt(accessToken);
-  if (!userData || !('picture' in userData) || !('email' in userData)) {
-    return <></>;
-  }
-
+export default function UserProfile({ user, logout }: UserProfileProps) {
   return (
     <div className="h-[40px]">
       <Menu as="div" className="relative inline-block h-[40px] text-left">
         <Menu.Button className="h-[40px]">
-          <Image
-            width={40}
-            height={40}
-            className="cursor-pointer rounded-full"
-            alt="user-profile"
-            src={userData.picture as string}
-          />
+          {user?.picture && (
+            <Image
+              width={40}
+              height={40}
+              className="cursor-pointer rounded-full"
+              alt="user-profile"
+              src={user.picture}
+            />
+          )}
         </Menu.Button>
         <Transition
           as={Fragment}
@@ -43,7 +41,7 @@ export default function UserProfile({ accessToken }: UserProfileProps) {
               </Menu.Item>
               <Menu.Item>
                 <button className="group flex w-full cursor-default bg-gray-100 px-2 py-2 text-sm text-gray-900">
-                  {userData.email as string}
+                  {user.email}
                 </button>
               </Menu.Item>
             </div>
@@ -51,6 +49,7 @@ export default function UserProfile({ accessToken }: UserProfileProps) {
               <Menu.Item>
                 {({ active }) => (
                   <button
+                    onClick={logout}
                     className={`${
                       active ? 'bg-red-500 text-white' : 'text-gray-900'
                     } group flex w-full items-center rounded-md px-2 py-2 text-sm`}

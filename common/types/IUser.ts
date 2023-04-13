@@ -6,5 +6,9 @@ export interface IUser {
   picture: string;
   providerId: string;
   trustPoints: number;
-  reviews: string[];
+  numReviews: number;
+  numQuestions: number;
+  onCooldown: boolean;
+  blocked: boolean;
+  reportCount: number;
 }

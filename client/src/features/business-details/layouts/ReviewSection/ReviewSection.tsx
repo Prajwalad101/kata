@@ -1,18 +1,19 @@
 import {
   Ratings,
-  ReviewSkeleton,
   SortReview,
   StartReviewForm,
   UserReview,
 } from '@features/business-details/components';
-import ReviewsNotFound from '@features/business-details/components/ReviewsNotFound.ts/ReviewsNotFound';
-import SearchReviews from '@features/business-details/components/SearchReviews/SearchReviews';
+import CommunitySearchSkeleton from '@features/business-details/components/ReviewSkeleton/ReviewSkeleton';
+import CommunitySectionNotFound from '@features/business-details/components/ReviewsNotFound.ts/ReviewsNotFound';
+import CommunitySectionSearch from '@features/business-details/components/SearchReviews/SearchReviews';
 import { reviewSortOptions } from '@features/business-details/data';
 import { useBusiness, useReviews } from '@features/business-details/queries';
+import ErrorMessage from '@destiny/common/data/errorsMessages';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { Portal, SecondaryButton } from 'src/components';
-import { useUser } from 'src/layouts/UserProvider';
+import { useAuth } from 'src/layouts/UserProvider';
 import { addOrRemove } from 'src/utils/array';
 import { classNames } from 'src/utils/tailwind';
 
@@ -21,13 +22,15 @@ interface ReviewSectionProps {
 }
 
 export default function ReviewSection({ className = '' }: ReviewSectionProps) {
-  const user = useUser();
+  const user = useAuth()?.user;
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
 
   // Filters for reviews
   const [searchText, setSearchText] = useState<string>();
   const [selectedSort, setSelectedSort] = useState(reviewSortOptions[0]);
   const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
+
+  const businessResult = useBusiness();
 
   const reviewsResult = useReviews({
     // sort array so that the order in querykey remains same
@@ -38,7 +41,19 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
     sort: selectedSort.field,
   });
 
-  const businessResult = useBusiness();
+  const openReviewModal = () => {
+    if (!user) {
+      return toast.error(ErrorMessage.loggedOut);
+    }
+
+    if (user._id === business?.owner) {
+      return toast.error('You cannot review your own business');
+    }
+    if (user.blocked) {
+      return toast.error(ErrorMessage.suspended);
+    }
+    setReviewModalOpen(true);
+  };
 
   const reviews = reviewsResult.data || [];
   const business = businessResult.data;
@@ -55,13 +70,7 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
         <Portal selector="#start-review-button">
           <SecondaryButton
             className="px-6 py-2 sm:py-[10px]"
-            onClick={() => {
-              if (!user)
-                return toast.error(
-                  'You have to be logged in to submit a review.'
-                );
-              setReviewModalOpen(true);
-            }}
+            onClick={openReviewModal}
           >
             Start Review
           </SecondaryButton>
@@ -73,11 +82,17 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
             selectedSort={selectedSort}
             onSelect={(sortItem) => setSelectedSort(sortItem)}
           />
-          <SearchReviews onChange={(text) => setSearchText(text)} />
+          <CommunitySectionSearch
+            placeholder="Search for reviews"
+            onChange={(text) => setSearchText(text)}
+          />
         </div>
         <div className="mb-7 border-b border-gray-300" />
         <Ratings
+          totalRating={business.totalRating}
           ratings={business.ratings}
+          avgRating={business.avgRating}
+          ratingCount={business.ratingCount}
           className="mb-7"
           onClick={(rating: number) => {
             const ratings = addOrRemove(selectedRatings, rating);
@@ -85,10 +100,12 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
           }}
         />
         <div className="mb-10 border-b border-gray-300" />
-        {reviewsResult.isLoading && <ReviewSkeleton items={5} />}
-        {reviewsResult.isError && <ReviewsNotFound />}
+        {reviewsResult.isLoading && <CommunitySearchSkeleton items={5} />}
+        {reviewsResult.isError && (
+          <CommunitySectionNotFound message="Sorry, Could not find any reviews" />
+        )}
         {reviewsResult.isSuccess && reviews.length === 0 ? (
-          <ReviewsNotFound />
+          <CommunitySectionNotFound message="Sorry. Could not find any reviews" />
         ) : (
           reviews.map((review) => (
             <UserReview key={review._id.toString()} review={review} />

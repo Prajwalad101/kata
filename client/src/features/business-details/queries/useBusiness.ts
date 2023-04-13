@@ -12,13 +12,15 @@ export interface Response {
 
 export const fetchBusiness = async (
   businessId: string,
-  api?: AxiosInstance // in case of server side fetching
+  api?: AxiosInstance // optional in case of server side fetching
 ) => {
   let result;
 
   if (api) {
     result = await api.get<Response>(`/business/${businessId}`);
   } else {
+    console.log(process.env.NEXT_PUBLIC_HOST);
+
     result = await axios.get<Response>(
       `${process.env.NEXT_PUBLIC_HOST}/api/business/${businessId}`
     );

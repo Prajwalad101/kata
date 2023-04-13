@@ -13,6 +13,7 @@ import { fetchBusiness } from '@features/business-details/queries/useBusiness';
 import { CategoriesDropdown } from '@features/home-page/components';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { GetServerSideProps } from 'next';
+import Head from 'next/head';
 import ConditionalRender from 'src/components/conditional-render/ConditionalRender';
 import { NavigationProvider } from 'src/components/context-provider';
 import { AppLayout } from 'src/components/layout';
@@ -21,43 +22,60 @@ import { NextPageWithLayout } from 'src/pages/_app';
 
 const Business: NextPageWithLayout = () => {
   const businessResult = useBusiness();
+
   const { data: businessData, isLoading, isError } = businessResult;
 
   if (!businessData) return <></>;
 
   return (
-    <ConditionalRender isLoading={isLoading} isError={isError}>
-      <div className="mb-7">
-        <div className="absolute left-0 right-0 border-t-[1px] border-gray-300" />
-        <CategoriesDropdown
-          className="!gap-12 pt-4 pb-2"
-          headingColor="black"
+    <>
+      <Head>
+        <title>Kata | {businessData.name}</title>
+        <meta
+          property="og:title"
+          content={`Kata, ${businessData.name}`}
+          key="Business page"
         />
-        <div className="absolute left-0 right-0 border-t-[1px] border-gray-300" />
-      </div>
-      <BreadCrumbs />
-      <BusinessInfoSection
-        business={businessData}
-        className="mt-4 mb-7 md:mb-16"
-      />
-      <div className="flex flex-col items-start gap-x-16 gap-y-7 md:flex-row-reverse">
-        <Services businessId={businessData._id} />
-        <div className="w-full overflow-y-auto">
-          <BusinessAttributes
-            categoryName={businessData.category}
-            features={businessData.features}
+      </Head>
+      <ConditionalRender isLoading={isLoading} isError={isError}>
+        <div className="mb-7">
+          <div className="absolute left-0 right-0 border-t-[1px] border-gray-300" />
+          <CategoriesDropdown
+            className="!gap-12 pt-4 pb-2"
+            headingColor="black"
           />
-          <LocationAndContact
-            location={businessData.location}
-            directions={businessData.directions}
-            email={businessData.email}
-            contactNumber={businessData.contactNumber}
-            className="mb-10 md:mb-16"
-          />
-          <CommunitySection className="mb-10" />
+          <div className="absolute left-0 right-0 border-t-[1px] border-gray-300" />
         </div>
-      </div>
-    </ConditionalRender>
+        <BreadCrumbs />
+        <BusinessInfoSection
+          business={businessData}
+          className="mt-4 mb-7 md:mb-16"
+        />
+        <div className="flex flex-col items-start gap-x-16 gap-y-7 md:flex-row-reverse">
+          <Services
+            businessOwner={businessData.owner.toString()}
+            businessId={businessData._id}
+            businessEmail={businessData.email}
+            businessCoordinates={businessData.location.coordinates}
+          />
+          <div className="w-full overflow-y-auto">
+            <BusinessAttributes
+              categoryName={businessData.category}
+              features={businessData.features}
+            />
+            <LocationAndContact
+              website={businessData.website}
+              location={businessData.location}
+              directions={businessData.directions}
+              email={businessData.email}
+              contactNumber={businessData.contactNumber}
+              className="mb-10 md:mb-16"
+            />
+            <CommunitySection />
+          </div>
+        </div>
+      </ConditionalRender>
+    </>
   );
 };
 

@@ -9,7 +9,7 @@ import { useSidebar } from 'src/components/context-provider';
 import Logo from 'src/components/logo/Logo';
 import UserProfile from 'src/components/userprofile/UserProfile';
 import { usePreventBodyOverflow } from 'src/hooks';
-import useCookie from 'src/hooks/browser/useCookie';
+import { useAuth } from 'src/layouts/UserProvider';
 import { classNames } from 'src/utils/tailwind';
 
 interface INavbar {
@@ -22,7 +22,7 @@ function Navbar({ theme }: INavbar) {
 
   usePreventBodyOverflow(open);
 
-  const accessToken = useCookie('access-token', null);
+  const auth = useAuth();
 
   return (
     <>
@@ -39,7 +39,7 @@ function Navbar({ theme }: INavbar) {
             onClick={() => setOpen(!open)}
             className="cursor-pointer hover:text-gray-700"
           />
-          <Logo>Logo</Logo>
+          <Logo />
           <AiOutlineSearch
             size={30}
             className="cursor-pointer hover:text-gray-700"
@@ -52,7 +52,7 @@ function Navbar({ theme }: INavbar) {
             'hidden items-center justify-between md:flex'
           )}
         >
-          <Logo>Logo</Logo>
+          <Logo />
           <div className="flex items-center gap-7 lg:gap-10">
             <div className="underline-offset-4 hover:underline">
               <Link href="/register-business">
@@ -67,8 +67,8 @@ function Navbar({ theme }: INavbar) {
               </Link>
             </div>
             {/* Login Buttons */}
-            {accessToken ? (
-              <UserProfile accessToken={accessToken} />
+            {auth?.user ? (
+              <UserProfile user={auth.user} logout={auth.logout} />
             ) : (
               <PrimaryButton onClick={() => setIsModalOpen(true)}>
                 <p className="py-2 px-6">Sign In</p>

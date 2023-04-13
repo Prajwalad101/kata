@@ -1,14 +1,19 @@
+import Image from 'next/image';
 import Link from 'next/link';
+import logoImg from 'public/favicon.ico';
 
-interface ILogo {
-  children: React.ReactNode;
-}
-
-function Logo({ children }: ILogo) {
+function Logo() {
   return (
     <Link href="/">
-      <a>
-        <div className="font-merriweather text-xl">{children}</div>
+      <a className="flex gap-3">
+        <Image
+          src={logoImg}
+          width={27}
+          height={27}
+          alt="logo"
+          objectFit="contain"
+        />
+        <div className="font-merriweather text-xl">Kata</div>
       </a>
     </Link>
   );

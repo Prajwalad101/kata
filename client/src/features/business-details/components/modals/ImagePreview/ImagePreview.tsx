@@ -141,7 +141,7 @@ function SlideShow({
         />
       </div>
       {/* Scrollable Images */}
-      <div className="flex basis-[25%] grid-cols-1 gap-3 overflow-auto md:grid lg:grid-cols-2">
+      <div className="flex basis-[25%] auto-rows-[fit-content(1em)] grid-cols-1 gap-3 overflow-auto md:grid lg:grid-cols-2">
         {images.map((image, index) => (
           <div
             key={index}

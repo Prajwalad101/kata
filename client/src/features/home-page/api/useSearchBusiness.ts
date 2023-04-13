@@ -16,7 +16,9 @@ const searchBusiness = async (
   searchText: string | undefined,
   api: AxiosInstance
 ): Promise<Response> => {
-  const result = await api.get(`/business/search?text=${searchText}`);
+  const result = await api.get(`/business/search?text=${searchText}`, {
+    params: { verified: { eq: true } },
+  });
   return result.data;
 };
 

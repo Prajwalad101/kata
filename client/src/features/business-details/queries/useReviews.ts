@@ -25,7 +25,7 @@ export default function useReviews(queryParams: object) {
 
   const query = useQuery(
     ['reviews', params],
-    () => fetchReviews(queryParams, api),
+    () => fetchReviews(params, api),
     { staleTime: 1000 * 10 }
   );
 

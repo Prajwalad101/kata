@@ -4,9 +4,11 @@ import { BiPhone } from 'react-icons/bi';
 import { BsLaptop } from 'react-icons/bs';
 import { HiOutlineLocationMarker } from 'react-icons/hi';
 import { classNames } from 'src/utils/tailwind';
+import DynamicMap from '../DynamicMap/DynamicMap';
 
 interface LocationAndContactProps {
   location: IBusiness['location'];
+  website: IBusiness['website'];
   directions: IBusiness['directions'];
   email: IBusiness['email'];
   contactNumber: IBusiness['contactNumber'];
@@ -17,6 +19,7 @@ export default function LocationAndContact({
   location,
   directions,
   email,
+  website,
   contactNumber,
   className = '',
 }: LocationAndContactProps) {
@@ -30,7 +33,7 @@ export default function LocationAndContact({
       <h4 className="mb-6 text-xl font-medium">
         Location and Contact Information
       </h4>
-      <div className="mb-5 h-[200px] w-full bg-gray-200" />
+      <DynamicMap coordinates={location.coordinates} className="mb-5" />
       <div className="flex flex-wrap items-start justify-between gap-x-5">
         <div
           className="mb-5 flex 
@@ -60,7 +63,14 @@ export default function LocationAndContact({
       </div>
       <div className="flex cursor-pointer gap-4 hover:text-gray-600">
         <BsLaptop size={23} className="shrink-0" />
-        <span className="underline">Website</span>
+        <a
+          onClick={() => {
+            window.open(`https://${website}`, '_blank');
+          }}
+          className="underline"
+        >
+          Website
+        </a>
       </div>
     </div>
   );

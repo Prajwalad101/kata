@@ -12,6 +12,7 @@ export function getRelativeDate(date: string) {
   });
 
   const diff: number = new Date().getTime() - new Date(date).getTime(); // difference in milliseconds
+
   const { days, hours, minutes, sec } = msToTime(diff);
 
   let result = '';
@@ -24,6 +25,8 @@ export function getRelativeDate(date: string) {
     result = formatter.format(-minutes, 'minute');
   } else if (sec !== 0) {
     result = formatter.format(-sec, 'second');
+  } else {
+    result = 'Just Now'
   }
 
   return result;

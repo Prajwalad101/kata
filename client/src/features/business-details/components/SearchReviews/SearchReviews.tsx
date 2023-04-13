@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
 import useDebounce from 'src/hooks/useDebounce';
 
-interface SearchReviewsProps {
+interface CommunitySectionSearchProps {
   onChange: (_value: string) => void;
+  placeholder: string;
 }
 
-export default function SearchReviews({ onChange }: SearchReviewsProps) {
+export default function CommunitySectionSearch({ onChange, placeholder }: CommunitySectionSearchProps) {
   const [searchText, setSearchText] = useState<string>('');
 
   const debounceCb = (text: string) => {
@@ -26,7 +27,7 @@ export default function SearchReviews({ onChange }: SearchReviewsProps) {
       <input
         type="text"
         className="rounded-[4px] border border-gray-500 px-5 py-[9px]"
-        placeholder="Search for reviews"
+        placeholder={placeholder}
         onChange={handleChange}
         value={searchText}
       />

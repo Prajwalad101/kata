@@ -27,7 +27,7 @@ const PrimaryButton = forwardRef(
         )}
         {...customProps}
       >
-        {isLoading && <ClipLoader size={27} color={'#ffffff'} />}
+        {isLoading && <ClipLoader size={24} color={'#ffffff'} />}
         {!isLoading && children}
       </button>
     );

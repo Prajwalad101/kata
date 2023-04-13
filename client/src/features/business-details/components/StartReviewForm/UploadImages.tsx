@@ -36,6 +36,7 @@ export default function UploadImages({
     useDropzone({
       onDrop,
       noClick: true,
+      maxFiles: 10,
       accept: {
         'image/*': ['.jpeg', '.png'],
       },
@@ -69,9 +70,9 @@ export default function UploadImages({
           >
             Browse
           </button>
-          {images?.length && (
+          {!!images?.length && (
             <p className="mt-3 text-gray-500">
-              {images.length} images uploaded
+              {images.length && images.length} images uploaded
             </p>
           )}
         </div>
@@ -79,6 +80,7 @@ export default function UploadImages({
           <p className="text-gray-400">File type is not allowed</p>
         )}
       </div>
+      <p className="text-gray-500">Note: Please upload less than 10 images</p>
       {error && <p className="mb-3 text-sm text-red-600">*{error}</p>}
       {/* Preview images */}
       <div className="flex gap-3 overflow-x-auto">

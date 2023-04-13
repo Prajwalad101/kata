@@ -1,6 +1,7 @@
 import { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import { QueryProvider } from 'src/components/context-provider';
+import LocationProvider from 'src/layouts/LocationProvider';
 import ToastProvider from 'src/layouts/ToastProvider/ToastProvider';
 import UserProvider from 'src/layouts/UserProvider';
 import '../styles/globals.css';
@@ -22,9 +23,11 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <QueryProvider>
       <ToastProvider>
-        <UserProvider>
-          {getLayout(<Component {...pageProps} />, pageProps)}
-        </UserProvider>
+        <LocationProvider>
+          <UserProvider>
+            {getLayout(<Component {...pageProps} />, pageProps)}
+          </UserProvider>
+        </LocationProvider>
       </ToastProvider>
     </QueryProvider>
   );

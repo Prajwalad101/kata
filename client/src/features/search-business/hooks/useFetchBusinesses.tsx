@@ -17,20 +17,24 @@ export const fetchBusinesses = async (
   const baseURL = process.env.NEXT_PUBLIC_HOST;
 
   const response = await axios.get(`${baseURL}/api/business`, {
-    params,
+    params: {
+      ...params,
+      verified: true,
+    },
   });
 
   return response.data;
 };
 
 type UseFetchBusinessesProps = {
-  sort: string; // sort items based on this field(eg:-createdAt)
-  features: string[]; // filter items based on this property
+  sort?: string; // sort items based on this field(eg:-createdAt)
+  features?: string[]; // filter items based on this property
+  coordinates?: [number, number];
 };
 
 function useFetchBusinesses(props?: UseFetchBusinessesProps) {
   const {
-    query: { name },
+    query: { name, category },
   } = useRouter();
 
   let params = {};
@@ -38,10 +42,12 @@ function useFetchBusinesses(props?: UseFetchBusinessesProps) {
     params = {
       ...(props.sort && { sort: props.sort }),
       ...(isString(name) && { subcategory: name }),
+      ...(isString(category) && { category: category }),
       ...(props.features &&
         props.features.length !== 0 && {
           features: props.features.join(','),
         }),
+      ...(props.coordinates && { coordinates: props.coordinates }),
     };
   }
 

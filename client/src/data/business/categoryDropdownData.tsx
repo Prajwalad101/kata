@@ -1,4 +1,8 @@
-import { AiFillCar, AiOutlineShoppingCart } from 'react-icons/ai';
+import {
+  AiFillCar,
+  AiOutlineHome,
+  AiOutlineShoppingCart,
+} from 'react-icons/ai';
 import { BiCoffeeTogo, BiFootball } from 'react-icons/bi';
 import { BsMusicNote } from 'react-icons/bs';
 import { FaPizzaSlice, FaSwimmingPool } from 'react-icons/fa';
@@ -10,10 +14,16 @@ import {
   GiWeightLiftingUp,
   GiWireCoil,
 } from 'react-icons/gi';
-import { MdOutlineFastfood, MdOutlineSportsTennis } from 'react-icons/md';
+import { VscSymbolMisc } from 'react-icons/vsc';
+import {
+  MdOutlineFastfood,
+  MdOutlineSportsBaseball,
+  MdOutlineSportsTennis,
+} from 'react-icons/md';
 import { RiCake3Fill, RiHotelLine } from 'react-icons/ri';
 import { TbRollercoaster } from 'react-icons/tb';
 import { ICategoryDropdown } from 'src/types/business';
+import { IoRestaurantOutline } from 'react-icons/io5';
 
 const iconSize = 20;
 
@@ -21,6 +31,7 @@ const iconSize = 20;
 const categoryDropdownData: ICategoryDropdown[] = [
   {
     name: 'food and drinks',
+    icon: <IoRestaurantOutline size={40} />,
     subcategories: [
       {
         name: 'resturant',
@@ -58,6 +69,7 @@ const categoryDropdownData: ICategoryDropdown[] = [
   },
   {
     name: 'sports and fitness',
+    icon: <MdOutlineSportsBaseball size={40} />,
     subcategories: [
       {
         name: 'gym',
@@ -88,6 +100,7 @@ const categoryDropdownData: ICategoryDropdown[] = [
   },
   {
     name: 'home services',
+    icon: <AiOutlineHome size={40} />,
     subcategories: [
       {
         name: 'plumbing',
@@ -113,6 +126,7 @@ const categoryDropdownData: ICategoryDropdown[] = [
   },
   {
     name: 'others',
+    icon: <VscSymbolMisc size={40} />,
     subcategories: [
       {
         name: 'entertainment',

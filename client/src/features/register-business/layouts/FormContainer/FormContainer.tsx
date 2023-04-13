@@ -10,6 +10,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { Divider, PrimaryButton, SecondaryButton } from 'src/components';
 import { Breadcrumbs, FormStep1, FormStep2, Header } from '../../components';
+import ErrorMessage from '@destiny/common/data/errorsMessages';
 import {
   registerBusinessFormStep1,
   registerBusinessFormStep2,
@@ -30,7 +31,7 @@ interface FormContainerProps {
 }
 
 function FormContainer({ mutation }: FormContainerProps) {
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(1);
 
   const resolver = yupResolver(validationSchemas[step - 1]);
   const { register, control, handleSubmit, setValue } = useForm({
@@ -65,7 +66,11 @@ function FormContainer({ mutation }: FormContainerProps) {
       mutation.mutate(formData, {
         onError: (error) => {
           if (error instanceof AxiosError) {
-            toast.error('Error while registering business');
+            if (error.response?.status === 401) {
+              toast.error(ErrorMessage.loggedOut);
+            } else {
+              toast.error(ErrorMessage.generic);
+            }
           }
         },
       });
@@ -100,6 +105,7 @@ function FormContainer({ mutation }: FormContainerProps) {
         )}
         {step === 2 && (
           <FormStep2
+            setValue={setValue}
             control={control}
             register={register}
             className="mb-20 xs:pt-10"

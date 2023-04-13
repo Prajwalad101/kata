@@ -1,7 +1,6 @@
 import { BusinessPage } from '@features/search-business/hooks/useFetchRecommendBusiness';
 import Image from 'next/image';
 import RatingIcons from 'src/components/icons/ratings/RatingIcons';
-import getRatingStats from 'src/utils/getRatingStats';
 import { getPublicFilePath } from 'src/utils/text';
 
 export interface BusinessCardProps {
@@ -9,8 +8,7 @@ export interface BusinessCardProps {
 }
 
 function BusinessCard({ business }: BusinessCardProps) {
-  const images = business.images.map((image) => getPublicFilePath(image));
-  const { avgRating, numRatings } = getRatingStats(business.ratings);
+  const images = business.images?.map((image) => getPublicFilePath(image));
 
   return (
     <div className="transition-color group cursor-pointer rounded-md font-rubik hover:bg-gray-50">
@@ -31,8 +29,10 @@ function BusinessCard({ business }: BusinessCardProps) {
         </div>
         {/* Business Rating */}
         <div className="mb-2 flex gap-2 ">
-          <RatingIcons rating={avgRating} />
-          <span className="text-sm text-secondarytext">({numRatings})</span>
+          <RatingIcons avgRating={business.avgRating} />
+          <span className="text-sm text-secondarytext">
+            ({business.ratingCount})
+          </span>
         </div>
 
         {/* Location */}

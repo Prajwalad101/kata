@@ -1,5 +1,5 @@
 import { IBusiness } from '@destiny/common/types';
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 const businessSchema = new mongoose.Schema<IBusiness>(
   {
@@ -11,6 +11,11 @@ const businessSchema = new mongoose.Schema<IBusiness>(
     description: {
       type: String,
       required: [true, 'A business must contain a description'],
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: [true, 'A business most contain a business owner'],
     },
     city: { type: String, required: [true, 'City is required'] },
     workingDays: [
@@ -55,6 +60,7 @@ const businessSchema = new mongoose.Schema<IBusiness>(
         required: [true, 'Please provide location address'],
       },
     },
+    website: String,
     features: {
       type: [String],
       validate: {
@@ -78,13 +84,13 @@ const businessSchema = new mongoose.Schema<IBusiness>(
       },
     },
     verified: { type: Boolean, default: false },
-    // total_rating: { type: Number, default: 0 },
-    // rating_count: { type: Number, default: 0 },
-    // avgRating: { type: Number, default: 0 },
     ratings: {
       type: [Number],
       default: [0, 0, 0, 0, 0],
     },
+    totalRating: { type: Number, default: 0 },
+    avgRating: { type: Number, default: 0 },
+    ratingCount: { type: Number, default: 0 },
   },
   {
     toJSON: { virtuals: true },
@@ -96,6 +102,9 @@ const businessSchema = new mongoose.Schema<IBusiness>(
 // index based on business name and address
 businessSchema.index({ name: 'text', 'location.address': 'text' });
 
+// create geospatial index
+businessSchema.index({ location: '2dsphere' });
+
 businessSchema.virtual('reviews', {
   ref: 'Review',
   foreignField: 'business',
@@ -104,12 +113,19 @@ businessSchema.virtual('reviews', {
 
 // calculate the avgRating field from total_rating & rating_count
 // only runs when creating business and updating business through save (done in reviewMiddleware)
-// businessSchema.pre('save', function (next) {
-//   if (this.totalRating === 0 || this.numReviews === 0) return next();
+/* businessSchema.pre('save', function (next) {
+  const numRatings = this.ratings.reduce((acc, cur) => acc + cur, 0);
+  if (numRatings === 0) return next();
 
-//   this.avgRating = this.totalRating / this.numReviews;
-//   next();
-// });
+  const totalRating = this.ratings.reduce(
+    (acc, cur, i) => acc + cur * (i + 1),
+    0
+  );
+
+  const avgRating = totalRating / numRatings;
+  this.averageRating = avgRating;
+  this.totalRating = totalRating;
+}); */
 
 const Business = mongoose.model<IBusiness>('Business', businessSchema);
 

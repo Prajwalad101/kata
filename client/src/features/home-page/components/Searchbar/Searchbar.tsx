@@ -1,4 +1,5 @@
 import useSearchBusiness from '@features/home-page/api/useSearchBusiness';
+import Link from 'next/link';
 import { useState } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { GrLocation } from 'react-icons/gr';
@@ -57,21 +58,20 @@ function Searchbar() {
         )}
         {searchText &&
           data?.data.map((business) => (
-            <div
-              key={business._id}
-              className="my-1 flex cursor-pointer items-center justify-between bg-white px-5 py-2.5 duration-150 hover:bg-gray-100"
-            >
-              <div className="flex items-center gap-4">
-                <p className="font-medium">{business.name}</p>
-                <p className="text-sm capitalize text-gray-400">
-                  ({business.category})
-                </p>
+            <Link key={business._id} href={`/search/business/${business._id}`}>
+              <div className="my-1 flex cursor-pointer items-center justify-between bg-white px-5 py-2.5 duration-150 hover:bg-gray-100">
+                <div className="flex items-center gap-4">
+                  <p className="font-medium">{business.name}</p>
+                  <p className="text-sm capitalize text-gray-400">
+                    ({business.category})
+                  </p>
+                </div>
+                <div className="flex items-center gap-3 text-gray-500">
+                  <GrLocation className="text-gray-700" />
+                  <p className="text-sm">{business.location.address}</p>
+                </div>
               </div>
-              <div className="flex items-center gap-3 text-gray-500">
-                <GrLocation className="text-gray-700" />
-                <p className="text-sm">{business.location.address}</p>
-              </div>
-            </div>
+            </Link>
           ))}
       </div>
     </div>

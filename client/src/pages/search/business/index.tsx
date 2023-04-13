@@ -5,7 +5,8 @@ import {
   SortItems,
 } from '@features/search-business/components';
 import BusinessNotFound from '@features/search-business/components/BusinessNotFound/BusinessNotFound';
-import { sortItemData } from '@features/search-business/data';
+import MapSearch from '@features/search-business/components/MapSearch/MapSearch';
+import { sortOptions } from '@features/search-business/components/SortItems/SortItems';
 import { useFetchBusinesses } from '@features/search-business/hooks';
 import { fetchBusinesses } from '@features/search-business/hooks/useFetchBusinesses';
 import {
@@ -14,6 +15,8 @@ import {
 } from '@features/search-business/layouts';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { GetServerSideProps } from 'next';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { memo, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { PropagateLoader } from 'react-spinners';
@@ -23,16 +26,21 @@ import { Navbar, Sidebar } from 'src/components/navigation';
 import { NextPageWithLayout } from 'src/pages/_app';
 
 const SearchBusiness: NextPageWithLayout = () => {
+  const { name, city, category } = useRouter().query;
+
   const [selectedSort, setSelectedSort] = useState<string>(
-    sortItemData[0].sortField
+    sortOptions[0].value
   );
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
+  const [coordinates, setCoordinates] = useState<[number, number]>();
+
   const { ref, inView } = useInView();
 
   const { data, isLoading, isSuccess, fetchNextPage, isFetchingNextPage } =
     useFetchBusinesses({
       sort: selectedSort,
       features: selectedFeatures,
+      coordinates,
     });
 
   useEffect(() => {
@@ -49,14 +57,28 @@ const SearchBusiness: NextPageWithLayout = () => {
   );
 
   const SortComponent = (
-    <SortItems selectedSort={selectedSort} setSelectedSort={setSelectedSort} />
+    <SortItems
+      sort={selectedSort}
+      onSelect={(selected) => setSelectedSort(selected)}
+    />
   );
+
+  const Map = <MapSearch coordinates={coordinates} onChange={setCoordinates} />;
 
   return (
     <>
+      <Head>
+        <title>{`Search ${name || category} in ${city}`}</title>
+        <meta
+          property="og:title"
+          content={`Search ${name || category} in ${city}`}
+          key="Search Page"
+        />
+      </Head>
       <SearchBusinessSection
         filterComponent={filterComponent}
         sortComponent={SortComponent}
+        mapComponent={Map}
       >
         <>
           {isLoading && <BusinessListSkeleton />}
@@ -86,23 +108,28 @@ const MemoBusinessList = memo(BusinessList);
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
 
-  const sort = sortItemData[0].sortField;
+  const sort = sortOptions[0].value;
+
   const subcategory = context.query.name;
+  const category = context.query.category;
 
   const params = {
     sort,
     ...(isString(subcategory) && { subcategory }),
+    ...(isString(category) && { category }),
   };
 
-  await queryClient.prefetchQuery(
-    ['business', sort, subcategory],
-    () => fetchBusinesses(params),
-    { staleTime: 1000 * 10 } // 10 mins
-  );
+  const queryKey = ['business', params];
+
+  await queryClient.prefetchInfiniteQuery({
+    queryKey,
+    queryFn: () => fetchBusinesses(params),
+    staleTime: 1000 * 60, // 1 minute
+  });
 
   return {
     props: {
-      dehydratedState: dehydrate(queryClient),
+      dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
     },
   };
 };

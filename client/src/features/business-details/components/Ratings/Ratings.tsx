@@ -1,23 +1,27 @@
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import RatingIcons from 'src/components/icons/ratings/RatingIcons';
-import getRatingStats from 'src/utils/getRatingStats';
 import { classNames } from 'src/utils/tailwind';
 
 const ratingLabels = ['very poor', 'poor', 'average', 'very good', 'excellent'];
 
 interface RatingsProps {
-  ratings: [number, number, number, number, number];
+  avgRating: number;
+  totalRating: number;
+  ratingCount: number;
+  ratings: number[];
   className?: string;
   onClick: (_value: number) => void;
 }
 
 export default function Ratings({
+  ratingCount,
+  totalRating,
+  avgRating,
   ratings,
   className = '',
   onClick,
 }: RatingsProps) {
-  const { avgRating, numRatings } = getRatingStats(ratings);
   const { ref, inView } = useInView();
 
   const [ratingPercentage, setRatingPercentage] = useState<number[]>([
@@ -28,25 +32,25 @@ export default function Ratings({
   useEffect(() => {
     if (inView) {
       const ratingPercentage = ratings.map((rating) => {
-        if (numRatings <= 0) return 0;
-        return (rating / numRatings) * 100;
+        if (ratingCount <= 0) return 0;
+        return (rating / ratingCount) * 100;
       });
       setRatingPercentage(ratingPercentage);
     }
-  }, [inView, numRatings, ratings]);
+  }, [inView, ratingCount, ratings]);
 
   return (
     <div
       ref={ref}
       className={classNames(className, 'rounded-md border-gray-300')}
     >
-      <div className="mb-3 flex items-center gap-8">
+      <div className="mb-2 flex items-center gap-8">
         <h4 className="text-3xl font-medium">{avgRating.toFixed(1)}</h4>
-        <RatingIcons rating={avgRating} size={19} className="gap-[6px]" />
+        <RatingIcons avgRating={avgRating} size={19} className="gap-[6px]" />
       </div>
-      <p className="mb-10 text-gray-500 underline">from {numRatings} reviews</p>
+      <p className="mb-5 text-gray-500 underline">from {totalRating} reviews</p>
       <div className="flex flex-col gap-3">
-        {ratings.map((rating, index) => {
+        {ratings.map((_, index) => {
           return (
             <div key={index} className="mb-1 items-center xs:flex">
               <div className="mb-1 flex gap-3 xs:mb-0">

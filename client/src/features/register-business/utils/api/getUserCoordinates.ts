@@ -1,3 +1,5 @@
+import { toast } from 'react-toastify';
+
 const getUserCoordinates = () => {
   const promise = new Promise<[number, number]>(function (resolve, reject) {
     const geolocation = navigator.geolocation;
@@ -11,12 +13,15 @@ const getUserCoordinates = () => {
         const { coords } = position;
         resolve([coords.longitude, coords.latitude]);
       },
-      (_error) =>
-        reject(
-          new Error(
-            'Something went wrong while getting your location. Please try again later'
-          )
-        )
+      (error) => {
+        if (error.PERMISSION_DENIED) {
+          toast.error('Permission Denied');
+        }
+      },
+      {
+        enableHighAccuracy: false,
+        maximumAge: Infinity,
+      }
     );
   });
 

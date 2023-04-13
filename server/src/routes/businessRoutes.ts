@@ -1,5 +1,10 @@
 import express from 'express';
-import businessController from '../controllers/businessController';
+import businessController, {
+  getHighestRatedBusinesses,
+  getNearestBusinesses,
+  getTrendingBusinesses,
+} from '../controllers/businessController';
+import { jwtAuth } from '../middlewares/jwtAuthMiddleware';
 import uploadFiles from '../utils/multer/uploadFiles';
 
 const router = express.Router();
@@ -13,8 +18,11 @@ const upload = uploadFiles({
 router
   .route('/')
   .get(businessController.getAllBusinesses)
-  .post(upload, businessController.createBusiness);
+  .post(jwtAuth(), upload, businessController.createBusiness);
 
+router.route('/trending').get(getTrendingBusinesses);
+router.route('/nearest').get(getNearestBusinesses);
+router.route('/highest-rated').get(getHighestRatedBusinesses);
 router.route('/search').get(businessController.searchBusiness);
 
 router

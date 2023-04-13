@@ -29,7 +29,7 @@ export default function SuccessfulRegister() {
   };
 
   const rocketAnimOptions = {
-    loop: false,
+    loop: true,
     autoplay: true,
     animationData: rocketLaunchAnimation,
     rendererSetting: { preserveAspectRatio: 'xMidYMid slice' },
@@ -40,18 +40,12 @@ export default function SuccessfulRegister() {
       eventName: 'complete',
       callback: () => setAnimationStep(1),
     },
-    {
-      eventName: 'loopComplete',
-      callback: () => {
-        console.log('loop complete');
-      },
-    },
   ] as const;
 
   if (!shouldRender) return <></>;
 
   return (
-    <div className="">
+    <div className="mb-10">
       {animationStep === 0 && (
         <Lottie
           options={confettiAnimOptions}
