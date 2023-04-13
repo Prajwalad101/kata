@@ -67,15 +67,8 @@ export const reportUser = catchAsync(
       onCooldown: true,
     });
 
-    // put the user on cooldown
-    await Cooldown.create({ user: req.body.reportedBy, cooldownPeriod: '1d' });
-
-    // remove cooldown after 24 hours
-    setTimeout(async () => {
-      await User.findByIdAndUpdate(req.body.reportedBy, {
-        onCooldown: false,
-      });
-    }, 86400000);
+    // keep track of cooldown period to update later
+    await Cooldown.create({ user: req.body.reportedBy, cooldownPeriod: 0.01 });
 
     // block user if they have 4 or more reports
     if (user?.reportCount >= 4) {

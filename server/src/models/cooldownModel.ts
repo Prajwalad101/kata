@@ -4,10 +4,13 @@ const cooldownSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: [true, 'A user is required'],
     },
+    // in hrs
     cooldownPeriod: {
-      type: String,
-      enum: ['1hr', '10m', '5hr', '1d', '1w', '1y'],
+      type: Number,
+      required: [true, 'A cooldown period is required'],
     },
   },
   { timestamps: true }
