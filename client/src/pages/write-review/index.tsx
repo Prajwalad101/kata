@@ -1,8 +1,6 @@
-import { Searchbar } from '@features/home-page/components';
+import { MainHeading, Searchbar } from '@features/home-page/components';
 import { ReviewCards } from '@features/write-review/components';
 import Head from 'next/head';
-import Image from 'next/image';
-import PhoneIllustration from 'public/illustrations/review-business/phone.svg';
 import { NavigationProvider } from 'src/components/context-provider';
 import { AppLayout } from 'src/components/layout';
 import { Navbar, Sidebar } from 'src/components/navigation';
@@ -21,25 +19,19 @@ const WriteReview: NextPageWithLayout = () => {
       </Head>
       <main className="mt-10">
         {/* BG Image */}
-        <div className="overlay absolute inset-0 -z-10 h-[500px] bg-gray-100 sm:h-[640px]" />
-        <div className="mb-7 flex h-[400px] flex-col items-start justify-between overflow-hidden sm:h-[515px] lg:flex-row">
+        {/* <div className="overlay absolute inset-0 z-10 h-[500px] bg-gray-500 sm:h-[640px]" /> */}
+        <div className="absolute inset-0 -z-10 hidden h-[700px] bg-review-landing-img bg-cover md:block" />
+        <div className="mb-7 flex h-[350px] flex-col items-start justify-between overflow-hidden md:h-[600px] lg:flex-row">
           <div className="sm:mb-5 lg:mt-10 lg:mb-0">
-            <h1 className="mb-4 font-merriweather text-4xl font-bold leading-snug sm:mb-2 md:w-[600px]">
+            <MainHeading className="mb-5 max-w-sm sm:max-w-xl md:mb-7">
               Review and rate your favourite businesses
-            </h1>
-            <span className="mb-8 inline-block font-merriweather font-semibold text-gray-500">
+            </MainHeading>
+            <span className="mb-8 inline-block text-xl text-gray-500 md:text-gray-200">
               Search for a business in order to create a review
             </span>
             <div className="pl-1">
               <Searchbar />
             </div>
-          </div>
-          <div className="relative -ml-10 hidden h-[400px] w-[400px] sm:block lg:-ml-0">
-            <Image
-              src={PhoneIllustration}
-              alt="phone illustration"
-              layout="fill"
-            />
           </div>
         </div>
         <div className="mx-auto mb-9 text-center md:mb-11">
@@ -58,7 +50,7 @@ WriteReview.getLayout = (page) => (
   <>
     <AppLayout size="sm">
       <NavigationProvider>
-        <Navbar theme="light" />
+        <Navbar theme="dark" />
         <Sidebar />
       </NavigationProvider>
       {page}

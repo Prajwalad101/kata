@@ -27,7 +27,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
     <div
       onClick={() => handleNavigate(review.business?._id)}
       className={classNames(
-        'cursor-pointer overflow-hidden text-ellipsis rounded-md bg-gray-100 shadow-md transition-all hover:scale-[101%] hover:shadow-lg sm:w-[350px]',
+        'min-w-full max-w-[350px] cursor-pointer overflow-hidden text-ellipsis rounded-md bg-gray-100 shadow-md transition-all hover:scale-[101%] hover:shadow-lg',
         noImage ? '' : 'row-span-2'
       )}
     >
