@@ -34,7 +34,9 @@ export const getAllUsers = catchAsync(
       return {
         id: user._id,
         ...user,
-        blocked: user.blocked ? 'true' : 'false',
+        banned: user.banned ? 'true' : 'false',
+        suspended: user.suspended ? 'true' : 'false',
+        onCooldown: user.onCooldown ? 'true' : 'false',
       };
     });
 

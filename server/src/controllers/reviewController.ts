@@ -4,9 +4,9 @@ import User from '../models/userModel';
 import { APIFeatures } from '../utils/apiFeatures';
 import AppError from '../utils/appError';
 import { increaseBusinessHits } from '../utils/business/increaseBusinessHits';
-import ErrorMessage from '@destiny/common/data/errorsMessages';
 import catchAsync from '../utils/catchAsync';
 import Business from '../models/businessModel';
+import { validateUser } from '../utils/user/validateUser';
 
 export const getMostLikedReviews = catchAsync(
   async (_req: Request, res: Response, _next: NextFunction) => {
@@ -110,11 +110,8 @@ const createReview = catchAsync(
       return next(error);
     }
 
-    // prevent suspended users from reviewing businesses
-    if (author?.blocked) {
-      const error = new AppError(ErrorMessage.suspended, 400);
-      return next(error);
-    }
+    // check if the user is banned or suspended
+    await validateUser(req.body.author);
 
     const filePaths = files?.map((file) => file.path);
 
@@ -122,10 +119,11 @@ const createReview = catchAsync(
     let newReview = await Review.create(req.body);
     newReview = await newReview.populate('author');
 
-    // hit score depends on the rating
     increaseBusinessHits({
       businessId,
-      hitScore: req.body.rating,
+      action: 'createReview',
+      rating: req.body.rating,
+      userId: req.body.author,
     });
 
     res.status(201).json({
@@ -180,16 +178,8 @@ const handleReviewLikes = catchAsync(
       return next(error);
     }
 
-    // user who updates the post
-    const user = await User.findById(req.body.userId);
-
-    // check if the user is blocked
-    if (user?.blocked) {
-      const error = new AppError(ErrorMessage.suspended, 400);
-      return next(error);
-    }
-
-    // increaseBusinessHits(businessId, 'reply');
+    // check if the user is banned or suspended
+    await validateUser(req.body.userId);
 
     await Review.findByIdAndUpdate(reviewId, {
       ...(req.body.type === 'increment' && {

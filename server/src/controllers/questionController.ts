@@ -1,12 +1,11 @@
-import ErrorMessage from '@destiny/common/data/errorsMessages';
 import { NextFunction, Request, Response } from 'express';
 import Business from '../models/businessModel';
 import Question from '../models/questionModel';
-import User from '../models/userModel';
 import { APIFeatures } from '../utils/apiFeatures';
 import AppError from '../utils/appError';
 import { increaseBusinessHits } from '../utils/business/increaseBusinessHits';
 import catchAsync from '../utils/catchAsync';
+import { validateUser } from '../utils/user/validateUser';
 
 export const getAllQuestions = catchAsync(
   async (req: Request, res: Response, _next: NextFunction) => {
@@ -57,6 +56,9 @@ export const createQuestion = catchAsync(
       return next(error);
     }
 
+    // check if user is blocked or suspended
+    await validateUser(req.body.author);
+
     // prevent business owners from posting question on their own business
     if (business.owner.toString() === req.body.author) {
       const error = new AppError(
@@ -68,7 +70,11 @@ export const createQuestion = catchAsync(
     let newQuestion = await Question.create(req.body);
     newQuestion = await newQuestion.populate('author');
 
-    increaseBusinessHits({ businessId: req.body.business, hitScore: 3 });
+    increaseBusinessHits({
+      businessId: req.body.business,
+      action: 'askQuestion',
+      userId: req.body.author,
+    });
 
     res.status(201).json({
       status: 'success',
@@ -85,7 +91,14 @@ export const createReply = catchAsync(
       return next(error);
     }
 
-    increaseBusinessHits({ businessId, hitScore: 2 });
+    // check if user is blocked or suspended
+    await validateUser(req.body.author);
+
+    increaseBusinessHits({
+      businessId,
+      action: 'replyReview',
+      userId: req.body.author,
+    });
 
     const query = Question.findByIdAndUpdate(
       req.body.questionId,
@@ -118,16 +131,8 @@ export const handleQuestionLikes = catchAsync(
       return next(error);
     }
 
-    // user who updates the post
-    const user = await User.findById(req.body.userId);
-
-    // check if the user is blocked
-    if (user?.blocked) {
-      const error = new AppError(ErrorMessage.suspended, 400);
-      return next(error);
-    }
-
-    // increaseBusinessHits(businessId, 'likes');
+    // check if the user is suspended or banned
+    await validateUser(req.body.userId);
 
     await Question.findByIdAndUpdate(
       questionId,

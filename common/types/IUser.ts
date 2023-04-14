@@ -9,6 +9,8 @@ export interface IUser {
   numReviews: number;
   numQuestions: number;
   onCooldown: boolean;
-  blocked: boolean;
+  banned: boolean;
+  suspended: boolean;
+  suspendedCount: number;
   reportCount: number;
 }

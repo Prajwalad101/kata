@@ -38,7 +38,15 @@ const userSchema = new mongoose.Schema<IUser>(
       type: Number,
       default: 0,
     },
-    blocked: {
+    suspended: {
+      type: Boolean,
+      default: false,
+    },
+    suspendedCount: {
+      type: Number,
+      default: 0,
+    },
+    banned: {
       type: Boolean,
       default: false,
     },
