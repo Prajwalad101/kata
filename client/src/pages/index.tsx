@@ -9,6 +9,7 @@ import {
 import ChooseCategory from '@features/home-page/components/ChooseCategory/ChooseCategory';
 import { RecommendedSection } from '@features/recommended-business/layouts';
 import Head from 'next/head';
+import { AdvancedImage } from '@cloudinary/react';
 import { Divider } from 'src/components';
 import { NavigationProvider } from 'src/components/context-provider/NavigationProvider/NavigationProvider';
 import { AppLayout } from 'src/components/layout';
@@ -21,6 +22,7 @@ const Home: NextPageWithLayout = () => {
 
   const trendingBusinessQuery = useTrendingBusiness();
   const nearestBusinessQuery = useNearestBusiness(coordinates);
+
   const highestRatedBusinessQuery = useHighestRatedBusiness(coordinates);
 
   return (
