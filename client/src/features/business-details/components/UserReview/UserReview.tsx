@@ -102,8 +102,9 @@ function Feedback({ likes, reviewId }: FeedbackProps) {
   const businessId = useRouter().query.businessId;
 
   const handleReviewLikesMutation = useHandleReviewLikes();
+  console.log('LIKES', likes);
 
-  const alreadyLiked = user?._id && likes.users.includes(user?._id);
+  const alreadyLiked = user?._id && likes.users?.includes(user?._id);
 
   const handleLike = () => {
     if (!user?._id) {

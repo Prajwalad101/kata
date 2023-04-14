@@ -227,7 +227,9 @@ const createBusiness = catchAsync(
 const getBusiness = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const business = await Business.findById(req.params.id);
-    increaseBusinessHits({ businessId: req.params.id, hitScore: 2 });
+
+    // increase hitScore by 1
+    increaseBusinessHits({ businessId: req.params.id, action: 'visit' });
 
     if (!business) {
       return next(new AppError('No document found with that ID', 404));

@@ -1,9 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
-import Cooldown from '../models/cooldownModel';
 import Report from '../models/reportModel';
+import Timer from '../models/timerModel';
 import User from '../models/userModel';
 import AppError from '../utils/appError';
 import catchAsync from '../utils/catchAsync';
+import { suspendUser } from '../utils/user/suspendUser';
 
 export const getAllUsers = catchAsync(
   async (_req: Request, res: Response, _next: NextFunction) => {
@@ -67,19 +68,30 @@ export const reportUser = catchAsync(
       onCooldown: true,
     });
 
-    // keep track of cooldown period to update later
-    await Cooldown.create({ user: req.body.reportedBy, cooldownPeriod: 24 }); // 24 hours
+    // create a cooldown timer of 24 hours for user who reported
+    await Timer.create({
+      user: req.body.reportedBy,
+      duration: 24,
+      action: 'cooldown',
+    });
 
-    // block user if they have 4 or more reports
+    // keep track of report count on users
     if (user?.reportCount >= 4) {
-      await User.findByIdAndUpdate(req.body.userId, { blocked: true });
+      // reset report count and suspend user
+      await User.findByIdAndUpdate(req.body.userId, { reportCount: 0 });
+      suspendUser(req.body.userId);
+
+      // create timer to unsuspend user after 48 hours
+      await Timer.create({
+        user: req.body.reportedBy,
+        duration: 48,
+        action: 'suspend',
+      });
     } else {
-      // increase report count on user document
       await User.findByIdAndUpdate(req.body.userId, {
         $inc: { reportCount: 1 },
       });
 
-      // create a report document
       await Report.create({ ...req.body, user: req.body.userId });
     }
     res.status(204).json();
