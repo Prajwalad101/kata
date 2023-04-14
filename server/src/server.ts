@@ -1,7 +1,14 @@
 import mongoose from 'mongoose';
 import './loadEnv';
-import cron from 'node-cron';
-import User from './models/userModel';
+import { userSchedule } from './schedules/userSchedule';
+import { interactionSchedule } from './schedules/interactionSchedule';
+import { v2 as cloudinary } from 'cloudinary';
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 process.on('uncaughtException', (err: Error) => {
   console.log('Uncaught Exception. Shutting down...');
@@ -10,9 +17,6 @@ process.on('uncaughtException', (err: Error) => {
 });
 
 import app from './app';
-import { userSchedule } from './schedules/userSchedule';
-import { interactionSchedule } from './schedules/interactionSchedule';
-
 const DB = process.env.DB as string;
 
 mongoose.set('strictQuery', false);
