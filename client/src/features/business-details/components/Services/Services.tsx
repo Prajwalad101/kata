@@ -1,3 +1,4 @@
+import { useBusiness } from '@features/business-details/queries';
 import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
@@ -8,20 +9,10 @@ import BusinessDirections from '../BusinessDirections/BusinessDirections';
 import SendMessage from '../modals/SendMessage/SendMessage';
 
 interface ServicesProps {
-  businessId: string;
-  businessEmail: string;
-  businessOwner: string;
-  businessCoordinates: [number, number];
   className?: string;
 }
 
-export default function Services({
-  businessId,
-  businessEmail,
-  businessOwner,
-  businessCoordinates,
-  className = '',
-}: ServicesProps) {
+export default function Services({ className = '' }: ServicesProps) {
   const auth = useAuth();
 
   const [isMessageOpen, setIsMessageOpen] = useState(false);
@@ -31,11 +22,13 @@ export default function Services({
     setIsMessageOpen(false);
   };
 
+  const { data: business } = useBusiness();
+
   const handleModalOpen = () => {
     if (!auth?.user) {
       return toast.error('You have to be logged in to send a message');
     }
-    if (businessOwner === auth?.user._id) {
+    if (business?.owner === auth?.user._id) {
       return toast.error("You can't send a message to your own business");
     }
     setIsMessageOpen(true);
@@ -43,16 +36,20 @@ export default function Services({
 
   return (
     <>
-      <SendMessage
-        businessEmail={businessEmail}
-        isOpen={isMessageOpen}
-        closeModal={closeMessageModal}
-      />
-      <BusinessDirections
-        isOpen={isDirectionsOpen}
-        closeModal={() => setIsDirectionsOpen(false)}
-        businessCoordinates={businessCoordinates}
-      />
+      {business?.email && (
+        <SendMessage
+          businessEmail={business.email}
+          isOpen={isMessageOpen}
+          closeModal={closeMessageModal}
+        />
+      )}
+      {business?.location.coordinates && (
+        <BusinessDirections
+          isOpen={isDirectionsOpen}
+          closeModal={() => setIsDirectionsOpen(false)}
+          businessCoordinates={business.location.coordinates}
+        />
+      )}
       <div
         className={classNames(
           className,
@@ -78,31 +75,34 @@ export default function Services({
           <p className="mb-3 text-gray-700">
             - Get directions to the business from your current location
           </p>
-          <SecondaryButton
+          <PrimaryButton
             onClick={() => setIsDirectionsOpen(true)}
             className="w-full max-w-[200px] py-2.5"
           >
             Get directions
-          </SecondaryButton>
+          </PrimaryButton>
         </div>
 
-        <div>
-          <p className="mb-3 text-gray-700">
-            - Easily browse menu and order food directly from ____
-          </p>
-          <Link
-            href={{
-              pathname: '/start-order',
-              query: { id: businessId },
-            }}
-          >
-            <a>
-              <PrimaryButton className="w-full max-w-[200px] py-2.5">
-                Order Food
-              </PrimaryButton>
-            </a>
-          </Link>
-        </div>
+        {/* Only show order food button if business category is food and drinks*/}
+        {business?.category === 'food and drinks' && (
+          <div>
+            <p className="mb-3 text-gray-700">
+              - Easily browse menu and order food directly from ____
+            </p>
+            <Link
+              href={{
+                pathname: '/start-order',
+                query: { id: business?._id },
+              }}
+            >
+              <a>
+                <PrimaryButton className="w-full max-w-[200px] py-2.5">
+                  Order Food
+                </PrimaryButton>
+              </a>
+            </Link>
+          </div>
+        )}
       </div>
     </>
   );

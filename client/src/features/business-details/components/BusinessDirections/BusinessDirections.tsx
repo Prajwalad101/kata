@@ -64,6 +64,7 @@ export default function BusinessDirections({
       const travelMode = google.maps.TravelMode.DRIVING;
       setTravelMode(travelMode);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [coordinates, window.google]);
 
   useEffect(() => {
