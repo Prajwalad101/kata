@@ -30,10 +30,6 @@ class APIFeatures {
     );
 
     // remove quotations outside of an array
-    console.log('-------------');
-    console.log('QUERYSTRING', queryStr);
-    console.log('type', typeof queryStr);
-    console.log('-------------');
     queryStr = queryStr.replaceAll('"[', '[').replaceAll(']"', ']');
 
     this.query = this.query.find(JSON.parse(queryStr));
