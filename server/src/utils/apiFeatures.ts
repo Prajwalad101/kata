@@ -23,9 +23,6 @@ class APIFeatures {
     ];
     excludedFields.forEach((el) => delete queryObj[el]);
 
-    console.log('-------------');
-    console.log('QUERYOBJ', queryObj);
-    console.log('-------------');
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(
       /\b(gte|gt|lte|lt|in|text|search)\b/g,
@@ -35,6 +32,7 @@ class APIFeatures {
     // remove quotations outside of an array
     console.log('-------------');
     console.log('QUERYSTRING', queryStr);
+    console.log('type', typeof queryStr);
     console.log('-------------');
     queryStr = queryStr.replaceAll('"[', '[').replaceAll(']"', ']');
 
