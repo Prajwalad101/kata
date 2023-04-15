@@ -1,7 +1,8 @@
 import { isString } from '@destiny/common/utils';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import { AxiosInstance } from 'axios';
 import { useRouter } from 'next/router';
+import useCreateApi from 'src/api/useCreateApi';
 import { BusinessPage } from './useFetchRecommendBusiness';
 
 interface SearchBusinessResponse {
@@ -11,12 +12,8 @@ interface SearchBusinessResponse {
   data: BusinessPage;
 }
 
-export const fetchBusinesses = async (
-  params: object
-): Promise<SearchBusinessResponse> => {
-  const baseURL = process.env.NEXT_PUBLIC_HOST;
-
-  const response = await axios.get(`${baseURL}/api/business`, {
+export const fetchBusinesses = async (params: object, api: AxiosInstance) => {
+  const response = await api.get<SearchBusinessResponse>('/business', {
     params: {
       ...params,
       verified: true,
@@ -37,6 +34,8 @@ function useFetchBusinesses(props?: UseFetchBusinessesProps) {
     query: { name, category },
   } = useRouter();
 
+  const api = useCreateApi();
+
   let params = {};
   if (props) {
     params = {
@@ -56,7 +55,7 @@ function useFetchBusinesses(props?: UseFetchBusinessesProps) {
   const query = useInfiniteQuery(
     ['business', params],
     ({ pageParam = 1 }) => {
-      return fetchBusinesses({ ...params, page: pageParam });
+      return fetchBusinesses({ ...params, page: pageParam }, api);
     },
     {
       staleTime: 1000 * 10,
