@@ -5,7 +5,6 @@ import BusinessHits from '../models/businessHits';
 import Business from '../models/businessModel';
 import { APIFeatures } from '../utils/apiFeatures';
 import AppError from '../utils/appError';
-import { increaseBusinessHits } from '../utils/business/increaseBusinessHits';
 import { filterFeatures } from '../utils/businessFunc';
 import catchAsync from '../utils/catchAsync';
 import { uploadToCloud } from '../utils/uploadToCloud';
