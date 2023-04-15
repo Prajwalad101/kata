@@ -19,10 +19,8 @@ export const fetchBusiness = async (
   if (api) {
     result = await api.get<Response>(`/business/${businessId}`);
   } else {
-    console.log(process.env.NEXT_PUBLIC_HOST);
-
     result = await axios.get<Response>(
-      `${process.env.NEXT_PUBLIC_HOST}/api/business/${businessId}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/business/${businessId}`
     );
   }
 

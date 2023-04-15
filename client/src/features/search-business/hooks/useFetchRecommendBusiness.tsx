@@ -1,8 +1,9 @@
 import { IBusiness } from '@destiny/common/types';
 import { isString } from '@destiny/common/utils';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { useRouter } from 'next/router';
+import useCreateApi from 'src/api/useCreateApi';
 
 export type BusinessPage = Pick<
   IBusiness,
@@ -26,13 +27,10 @@ interface SearchBusinessResponse {
 }
 
 export const fetchRecommendBusiness = async (
-  params: object
+  params: object,
+  api: AxiosInstance
 ): Promise<SearchBusinessResponse> => {
-  const baseURL = process.env.NEXT_PUBLIC_HOST;
-
-  const response = await axios.get(`${baseURL}/api/business`, {
-    params,
-  });
+  const response = await api.get('/business', { params });
 
   return response.data;
 };
@@ -47,6 +45,7 @@ function useFetchRecommendBusiness(props?: UseBusinessesProps) {
   const {
     query: { subcategory },
   } = useRouter();
+  const api = useCreateApi();
 
   let params = {};
   if (props) {
@@ -65,7 +64,7 @@ function useFetchRecommendBusiness(props?: UseBusinessesProps) {
 
   const query = useQuery(
     ['business', params],
-    () => fetchRecommendBusiness(params),
+    () => fetchRecommendBusiness(params, api),
     {
       enabled: isEnabled, // only run when the filter button is clicked
       staleTime: 1000 * 10,
