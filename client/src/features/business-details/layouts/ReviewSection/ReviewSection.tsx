@@ -43,7 +43,7 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
 
   const openReviewModal = () => {
     if (!user) {
-      return toast.error(ErrorMessage.loggedOut);
+      return toast.error(ErrorMessages.loggedOut);
     }
 
     if (user._id === business?.owner) {

@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { AiOutlineSearch } from 'react-icons/ai';
-import { BiMenu } from 'react-icons/bi';
 import { toast } from 'react-toastify';
 import PrimaryButton from 'src/components/button/primary/PrimaryButton';
 import Logo from 'src/components/logo/Logo';
