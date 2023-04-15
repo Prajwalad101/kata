@@ -20,6 +20,7 @@ const nextConfig = withTM({
       'dummyimage.com',
       'images.unsplash.com',
       'platform-lookaside.fbsbx.com',
+      'res.cloudinary.com',
     ],
   },
 });

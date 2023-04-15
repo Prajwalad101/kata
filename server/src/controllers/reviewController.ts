@@ -7,6 +7,7 @@ import { increaseBusinessHits } from '../utils/business/increaseBusinessHits';
 import catchAsync from '../utils/catchAsync';
 import Business from '../models/businessModel';
 import { validateUser } from '../utils/user/validateUser';
+import { uploadToCloud } from '../utils/uploadToCloud';
 
 export const getMostLikedReviews = catchAsync(
   async (_req: Request, res: Response, _next: NextFunction) => {
@@ -110,13 +111,17 @@ const createReview = catchAsync(
       return next(error);
     }
 
-    // check if the user is banned or suspended
-    await validateUser(req.body.author);
+    const fileData = files?.map(({ filename, path }) => ({
+      path,
+      name: filename,
+    }));
 
-    const filePaths = files?.map((file) => file.path);
+    let images: string[] = [];
+    if (fileData) {
+      images = await uploadToCloud({ files: fileData, folder: 'reviews' });
+    }
 
-    req.body.images = filePaths;
-    let newReview = await Review.create(req.body);
+    let newReview = await Review.create({ ...req.body, images });
     newReview = await newReview.populate('author');
 
     increaseBusinessHits({

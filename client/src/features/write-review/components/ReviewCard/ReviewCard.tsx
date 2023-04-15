@@ -6,7 +6,6 @@ import RatingIcons from 'src/components/icons/ratings/RatingIcons';
 import Slider from 'src/components/slider/Slider';
 import { getRelativeDate } from 'src/utils/date';
 import { classNames } from 'src/utils/tailwind';
-import { getPublicFilePath } from 'src/utils/text';
 
 interface ReviewCardProps {
   review: Review;
@@ -36,7 +35,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
           {review.images.map((image, index) => (
             <div key={index} className="relative h-full w-full">
               <Image
-                src={getPublicFilePath(image)}
+                src={image}
                 alt="image"
                 layout="fill"
                 objectFit="cover"

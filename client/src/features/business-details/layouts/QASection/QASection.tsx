@@ -1,3 +1,4 @@
+import ErrorMessages from '@destiny/common/data/errorsMessages';
 import {
   PostQuestion,
   SortQA,
@@ -51,11 +52,8 @@ export default function QASection({ className = '' }: QASectionProps) {
       );
     }
 
-    if (user.blocked) {
-      return toast.error(
-        'You have been suspended due to violation of terms and services'
-      );
-    }
+    if (user.suspended) return toast.error(ErrorMessages.suspended);
+    if (user.banned) return toast.error(ErrorMessages.banned);
     setQADialogOpen(true);
   };
 

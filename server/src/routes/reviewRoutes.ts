@@ -9,19 +9,18 @@ const router = express.Router();
 
 // multer middleware to process files
 const upload = uploadFiles({
-  path: '../client/public/uploads/images/reviews/',
+  path: `${__dirname}/../../assets/uploads/reviews/`,
   maxCount: 10,
   fieldName: 'image',
 });
 
-router.route('/most-liked').get(getMostLikedReviews);
-
 router.route('/').get(reviewController.getAllReviews).post(
   jwtAuth(), // authenticate users before creating reviews
   upload,
-  // incrementBusinessRating,
   reviewController.createReview
 );
+
+router.route('/most-liked').get(getMostLikedReviews);
 
 router
   .route('/:id')

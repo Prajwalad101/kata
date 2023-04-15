@@ -6,20 +6,19 @@ import Link from 'next/link';
 import { FaQuoteLeft } from 'react-icons/fa';
 import RatingIcons from 'src/components/icons/ratings/RatingIcons';
 import Slider from 'src/components/slider/Slider';
-import { getPublicFilePath } from 'src/utils/text';
 
 export interface BusinessCardProps {
   business: BusinessPage[number];
 }
 
 function BusinessCard({ business }: BusinessCardProps) {
-  // get image path relative to the public folder
-  const images = business.images.map((image) => getPublicFilePath(image));
-
   return (
     <div className="h-48 font-rubik transition-colors hover:bg-gray-50 sm:flex">
-      <Slider numItems={images.length} className="shrink-0 sm:w-[224px]">
-        {images.map((image, index) => (
+      <Slider
+        numItems={business.images.length}
+        className="shrink-0 sm:w-[224px]"
+      >
+        {business.images.map((image, index) => (
           <div key={index} className="relative h-full w-full">
             <Image
               src={image}

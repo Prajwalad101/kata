@@ -15,7 +15,6 @@ import RatingIcons from 'src/components/icons/ratings/RatingIcons';
 import { useAuth } from 'src/layouts/UserProvider';
 import { getRelativeDate } from 'src/utils/date';
 import { classNames } from 'src/utils/tailwind';
-import { getPublicFilePath } from 'src/utils/text';
 
 interface UserReviewProps {
   review: IReview;
@@ -74,7 +73,7 @@ export default function UserReview({ review }: UserReviewProps) {
               >
                 <Image
                   key={index}
-                  src={getPublicFilePath(image)}
+                  src={image}
                   alt="review-image"
                   layout="fill"
                   objectFit="cover"
@@ -110,9 +109,8 @@ function Feedback({ likes, reviewId }: FeedbackProps) {
     if (!user?._id) {
       return toast.error('You have to be logged in to like this post');
     }
-    if (user.blocked) {
-      return toast.error(ErrorMessage.suspended);
-    }
+    if (user.suspended) return toast.error(ErrorMessage.suspended);
+    if (user.banned) return toast.error(ErrorMessage.banned);
 
     if (isString(businessId) && isString(user._id))
       handleReviewLikesMutation.mutate(

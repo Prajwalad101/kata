@@ -18,7 +18,6 @@ import FormErrorMessage from 'src/components/FormErrorMessage/FormErrorMessage';
 import { useAuth } from 'src/layouts/UserProvider';
 import { getRelativeDate } from 'src/utils/date';
 import { classNames } from 'src/utils/tailwind';
-import { getPublicFilePath } from 'src/utils/text';
 import ReportUserDropdown from '../ReportUserDropdown/ReportUserDropdown';
 
 interface FormInputs {
@@ -58,8 +57,11 @@ export default function UserQuestion({ data }: UserQuestionProps) {
 
     if (!userId) return toast.error(ErrorMessage.loggedOut);
 
-    if (user.blocked) {
+    if (user.suspended) {
       return toast.error(ErrorMessage.suspended);
+    }
+    if (user.banned) {
+      return toast.error(ErrorMessage.banned);
     }
 
     if (isString(businessId)) {
@@ -96,7 +98,8 @@ export default function UserQuestion({ data }: UserQuestionProps) {
     if (!user?._id) return;
     if (!isString(businessId)) return toast.error('Invalid business id');
 
-    if (user.blocked) return toast.error(ErrorMessage.suspended);
+    if (user.suspended) return toast.error(ErrorMessage.suspended);
+    if (user.banned) return toast.error(ErrorMessage.banned);
 
     submitReply.mutate(
       {
@@ -130,7 +133,7 @@ export default function UserQuestion({ data }: UserQuestionProps) {
             <div className="h-[50px] w-[50px] shrink-0 ">
               <Image
                 className="rounded-full"
-                src={getPublicFilePath(data.author.picture)}
+                src={data.author.picture}
                 alt="user-profile"
                 width={50}
                 height={50}

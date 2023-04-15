@@ -1,4 +1,4 @@
-import ErrorMessage from '@destiny/common/data/errorsMessages';
+import ErrorMessages from '@destiny/common/data/errorsMessages';
 import useReportUser from '@features/business-details/queries/useReportUser';
 import { Menu, Transition } from '@headlessui/react';
 import { AxiosError } from 'axios';
@@ -54,11 +54,14 @@ export default function ReportUserDropdown({
 
   const handleReport = () => {
     if (!user || !user._id) {
-      return toast.error(ErrorMessage.loggedOut);
+      return toast.error(ErrorMessages.loggedOut);
     }
 
-    if (user.blocked) {
-      return toast.error(ErrorMessage.suspended);
+    if (user.suspended) {
+      return toast.error(ErrorMessages.suspended);
+    }
+    if (user.banned) {
+      return toast.error(ErrorMessage.banned);
     }
 
     if (!reports || reports.length === 0) {
