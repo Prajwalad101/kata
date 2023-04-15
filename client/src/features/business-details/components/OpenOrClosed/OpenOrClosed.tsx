@@ -14,7 +14,7 @@ export default function openOrClosed(workingDays: IBusiness['workingDays']) {
       currentDate.setDate(currentDate.getDate() + 1);
       nextWorkingDay = currentDate.toLocaleString('en-us', { weekday: 'long' });
     }
-    return `Opens, ${nextWorkingDay}`;
+    return `Opens ${nextWorkingDay}`;
   }
 
   const workingDay = workingDays.find((day) => day.day === currentDay);
@@ -28,19 +28,21 @@ export default function openOrClosed(workingDays: IBusiness['workingDays']) {
     // calculate time until the business closes
     const timeUntilClose = endDate.getTime() - currentDate.getTime();
     const hoursUntilClose = Math.floor(timeUntilClose / (1000 * 60 * 60));
-    const minutesUntilClose = Math.floor(
+    /* const minutesUntilClose = Math.floor(
       (timeUntilClose % (1000 * 60 * 60)) / (1000 * 60)
-    );
-    return `Closes in ${hoursUntilClose} hrs and ${minutesUntilClose} minutes`;
+    ); */
+    // return `Closes in ${hoursUntilClose} hrs and ${minutesUntilClose} minutes`;
+    return `Closes in ${hoursUntilClose} hrs`;
   } else {
     // calculate time until the business opens
     const timeUntilOpen = startDate.getTime() - currentDate.getTime();
     const hoursUntilOpen = Math.floor(
       (timeUntilOpen % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
     );
-    const minutesUntilOpen = Math.floor(
+    /* const minutesUntilOpen = Math.floor(
       (timeUntilOpen % (1000 * 60 * 60)) / (1000 * 60)
-    );
-    return `Opens in ${hoursUntilOpen} hrs and ${minutesUntilOpen} min`;
+    ); */
+    // return `Opens in ${hoursUntilOpen} hrs and ${minutesUntilOpen} min`;
+    return `Opens in ${hoursUntilOpen} hrs`;
   }
 }

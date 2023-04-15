@@ -12,7 +12,7 @@ import Head from 'next/head';
 import { Divider } from 'src/components';
 import { NavigationProvider } from 'src/components/context-provider/NavigationProvider/NavigationProvider';
 import { AppLayout } from 'src/components/layout';
-import { Navbar } from 'src/components/navigation';
+import { Navbar, Sidebar } from 'src/components/navigation';
 import { useLocation } from 'src/layouts/LocationProvider';
 import { NextPageWithLayout } from 'src/pages/_app';
 
@@ -81,6 +81,7 @@ Home.getLayout = (page) => (
   <AppLayout size="sm">
     <NavigationProvider>
       <Navbar theme="dark" />
+      <Sidebar />
     </NavigationProvider>
     {page}
   </AppLayout>
