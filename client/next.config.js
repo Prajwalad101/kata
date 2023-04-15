@@ -5,14 +5,14 @@ const withTM = require('next-transpile-modules')(['@destiny/common']);
 
 const nextConfig = withTM({
   reactStrictMode: true,
-  async rewrites() {
+  /* async rewrites() {
     return [
       {
         source: '/api/:slug*',
         destination: 'http://localhost:4000/api/:slug*',
       },
     ];
-  },
+  }, */
   images: {
     domains: [
       'lh3.googleusercontent.com',

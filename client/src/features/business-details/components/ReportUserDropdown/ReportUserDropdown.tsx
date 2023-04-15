@@ -61,7 +61,7 @@ export default function ReportUserDropdown({
       return toast.error(ErrorMessages.suspended);
     }
     if (user.banned) {
-      return toast.error(ErrorMessage.banned);
+      return toast.error(ErrorMessages.banned);
     }
 
     if (!reports || reports.length === 0) {

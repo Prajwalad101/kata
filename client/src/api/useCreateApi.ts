@@ -5,7 +5,7 @@ export default function useCreateApi() {
   const [accessToken] = useCookie('access-token', null);
 
   const api = axios.create({
-    baseURL: `${process.env.NEXT_PUBLIC_HOST}/api`,
+    baseURL: `${process.env.NEXT_PUBLIC_BASE_URL}/api`,
     headers: { Authorization: `Bearer ${accessToken}` },
   });
 

@@ -9,7 +9,6 @@ import {
 import ChooseCategory from '@features/home-page/components/ChooseCategory/ChooseCategory';
 import { RecommendedSection } from '@features/recommended-business/layouts';
 import Head from 'next/head';
-import { Divider } from 'src/components';
 import { NavigationProvider } from 'src/components/context-provider/NavigationProvider/NavigationProvider';
 import { AppLayout } from 'src/components/layout';
 import { Navbar, Sidebar } from 'src/components/navigation';

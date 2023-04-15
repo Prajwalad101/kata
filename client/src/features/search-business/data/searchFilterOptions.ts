@@ -1,9 +1,9 @@
-import { BusinessSubcategory } from '@destiny/common/types';
-import { IFilterByOptions } from '@features/search-business/types';
+// import { BusinessSubcategory } from '@destiny/common/types';
 
-type SearchFilterOptions = { [_type in BusinessSubcategory]: IFilterByOptions };
+// type SearchFilterOptions = { [_type in BusinessSubcategory]: IFilterByOptions };
 
-const searchFilterOptions: Partial<SearchFilterOptions> = {
+// const searchFilterOptions: Partial<SearchFilterOptions> = {
+const searchFilterOptions = {
   resturant: {
     price: ['cheap', 'medium', 'high', 'exclusive'],
     suggested: ['delivery', 'reservations', 'events'],

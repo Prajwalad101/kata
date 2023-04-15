@@ -81,7 +81,7 @@ export default function FilterFeatures({
 }
 
 interface FilterGroupProps {
-  businessCategory: BusinessCategories[number];
+  businessCategory: BusinessCategories[number] | undefined;
   featureType: string;
   selectedFeatures: string[];
   setSelectedFeatures: (_features: string[]) => void;
@@ -94,13 +94,13 @@ function FilterGroup({
   selectedFeatures,
   setSelectedFeatures,
 }: FilterGroupProps) {
-  const features = businessCategory.features.filter(
+  const features = businessCategory?.features.filter(
     (feature) => feature.tag === featureType
   );
 
   return (
     <>
-      {features.map((feature, index) => (
+      {features?.map((feature, index) => (
         <div key={index}>
           <Checkbox
             className="mb-4"
