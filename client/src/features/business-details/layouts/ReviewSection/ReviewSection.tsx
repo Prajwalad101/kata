@@ -9,13 +9,13 @@ import CommunitySectionNotFound from '@features/business-details/components/Revi
 import CommunitySectionSearch from '@features/business-details/components/SearchReviews/SearchReviews';
 import { reviewSortOptions } from '@features/business-details/data';
 import { useBusiness, useReviews } from '@features/business-details/queries';
-import ErrorMessage from '@destiny/common/data/errorsMessages';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { Portal, SecondaryButton } from 'src/components';
 import { useAuth } from 'src/layouts/UserProvider';
 import { addOrRemove } from 'src/utils/array';
 import { classNames } from 'src/utils/tailwind';
+import ErrorMessages from '@destiny/common/data/errorsMessages';
 
 interface ReviewSectionProps {
   className?: string;
@@ -49,8 +49,11 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
     if (user._id === business?.owner) {
       return toast.error('You cannot review your own business');
     }
-    if (user.blocked) {
-      return toast.error(ErrorMessage.suspended);
+    if (user.suspended) {
+      return toast.error(ErrorMessages.suspended);
+    }
+    if (user.banned) {
+      return toast.error(ErrorMessages.banned);
     }
     setReviewModalOpen(true);
   };

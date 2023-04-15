@@ -3,7 +3,6 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { MdOutlinePhotoSizeSelectActual } from 'react-icons/md';
 import Slider from 'src/components/slider/Slider';
-import { getPublicFilePath } from 'src/utils/text';
 import ImagePreview from '../modals/ImagePreview/ImagePreview';
 
 export default function BusinessImage() {
@@ -16,7 +15,7 @@ export default function BusinessImage() {
 
   if (!isSuccess) return <></>;
 
-  const images = data.images.map((image) => getPublicFilePath(image));
+  const images = data.images;
   const businessName = data.name;
 
   return (

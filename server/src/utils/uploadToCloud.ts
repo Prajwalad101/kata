@@ -20,6 +20,7 @@ export const uploadToCloud = async ({
       .upload(path, {
         public_id: name,
         folder,
+        // TODO: Turn this on later
         // moderation: 'webpurify',
       })
       .then((result) => {

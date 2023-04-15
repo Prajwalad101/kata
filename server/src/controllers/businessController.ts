@@ -8,6 +8,7 @@ import AppError from '../utils/appError';
 import { increaseBusinessHits } from '../utils/business/increaseBusinessHits';
 import { filterFeatures } from '../utils/businessFunc';
 import catchAsync from '../utils/catchAsync';
+import { uploadToCloud } from '../utils/uploadToCloud';
 
 export const getTrendingBusinesses = catchAsync(
   async (_req: Request, res: Response, _next: NextFunction) => {
@@ -211,12 +212,22 @@ const createBusiness = catchAsync(
 
     const files = req.files as Express.Multer.File[] | undefined;
 
-    const filePaths = files?.map((file) => file.path);
+    const fileData = files?.map(({ filename, path }) => ({
+      path,
+      name: filename,
+    }));
 
-    // add images paths to the request body
-    req.body.images = filePaths;
+    let images: string[] = [];
+    if (fileData) {
+      images = await uploadToCloud({ files: fileData, folder: 'businesses' });
+    }
 
-    const business = await Business.create({ ...req.body, owner: user._id });
+    const business = await Business.create({
+      ...req.body,
+      images,
+      owner: user._id,
+    });
+
     res.status(201).json({
       status: 'success',
       data: business,
@@ -227,9 +238,6 @@ const createBusiness = catchAsync(
 const getBusiness = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const business = await Business.findById(req.params.id);
-
-    // increase hitScore by 1
-    increaseBusinessHits({ businessId: req.params.id, action: 'visit' });
 
     if (!business) {
       return next(new AppError('No document found with that ID', 404));

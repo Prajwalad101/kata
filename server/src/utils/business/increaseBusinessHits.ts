@@ -2,7 +2,7 @@ import BusinessHits from '../../models/businessHits';
 import Interaction from '../../models/interactionsModel';
 import { suspendUser } from '../user/suspendUser';
 
-type Action = 'createReview' | 'askQuestion' | 'visit' | 'replyReview';
+type Action = 'createReview' | 'askQuestion' | 'replyReview';
 
 type Props = {
   businessId: string;
@@ -24,7 +24,6 @@ export const increaseBusinessHits = async ({
     createReview: rating || 2, // hitscore depends on review
     replyReview: 2,
     askQuestion: 2,
-    visit: 1,
   };
 
   // if user is logged in, update interactions collection
