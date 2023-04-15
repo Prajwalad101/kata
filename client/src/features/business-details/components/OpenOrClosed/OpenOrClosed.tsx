@@ -1,51 +1,46 @@
 import { IBusiness } from '@destiny/common/types';
 import { convertTime12to24, timeToDate } from 'src/utils/date';
 
-interface OpenOrClosedProps {
-  workingDays: IBusiness['workingDays'];
-  className?: string;
-}
+export default function openOrClosed(workingDays: IBusiness['workingDays']) {
+  const days = workingDays.map((workingDay) => workingDay.day);
 
-const weeks = [
-  'Sunday',
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-];
-
-export default function OpenOrClosed({
-  workingDays,
-  className = '',
-}: OpenOrClosedProps) {
   const currentDate = new Date();
-  const dayIndex = currentDate.getDay();
+  const currentDay = currentDate.toLocaleString('en-us', { weekday: 'long' });
 
-  const currentDay = weeks[dayIndex];
-
-  // Check if current day is present in working Days
-  const workingDay = workingDays.find(
-    (workingDay) => workingDay.day.toLowerCase() === currentDay.toLowerCase()
-  );
-
-  if (!workingDay) {
-    return (
-      <div className={className}>
-        <span className="inline-block font-medium">Closed</span>
-      </div>
-    );
+  if (!days.includes(currentDay)) {
+    // calculate time until business opens on the next working day
+    let nextWorkingDay = currentDay;
+    while (!days.includes(nextWorkingDay)) {
+      currentDate.setDate(currentDate.getDate() + 1);
+      nextWorkingDay = currentDate.toLocaleString('en-us', { weekday: 'long' });
+    }
+    return `Opens, ${nextWorkingDay}`;
   }
 
-  // convert time to date for comparison
-  const openingDate = timeToDate(convertTime12to24(workingDay.startTime));
-  const closingDate = timeToDate(convertTime12to24(workingDay.endTime));
+  const workingDay = workingDays.find((day) => day.day === currentDay);
+  if (!workingDay) return 'Closed';
 
-  const isOpen = openingDate < currentDate && closingDate > currentDate;
+  const startDate = timeToDate(convertTime12to24(workingDay.startTime));
+  const endDate = timeToDate(convertTime12to24(workingDay.endTime));
 
-  // add opening hours with hours remaining in the current day
-  // const hoursTillOpen = 24 - openingDate.getHours() + currentDate.getHours();
-
-  return <div className={className}>{isOpen ? 'Open' : 'Closed'}</div>;
+  // check if current time is between opening and closing hours
+  if (currentDate >= startDate && currentDate <= endDate) {
+    // calculate time until the business closes
+    const timeUntilClose = endDate.getTime() - currentDate.getTime();
+    const hoursUntilClose = Math.floor(timeUntilClose / (1000 * 60 * 60));
+    const minutesUntilClose = Math.floor(
+      (timeUntilClose % (1000 * 60 * 60)) / (1000 * 60)
+    );
+    return `Closes in ${hoursUntilClose} hrs and ${minutesUntilClose} minutes`;
+  } else {
+    // calculate time until the business opens
+    const timeUntilOpen = startDate.getTime() - currentDate.getTime();
+    const hoursUntilOpen = Math.floor(
+      (timeUntilOpen % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
+    const minutesUntilOpen = Math.floor(
+      (timeUntilOpen % (1000 * 60 * 60)) / (1000 * 60)
+    );
+    return `Opens in ${hoursUntilOpen} hrs and ${minutesUntilOpen} min`;
+  }
 }

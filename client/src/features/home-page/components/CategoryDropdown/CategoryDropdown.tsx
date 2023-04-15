@@ -14,7 +14,6 @@ export default function CategoryDropdown({
   subcategories,
   headingColor = 'white',
 }: CategoryDropdownProps) {
-  console.log('HEADINGCOLOR', headingColor);
   // to display items in two columns
   const evenItems = subcategories.filter(
     (_subCategory, i) => i % 2 === 0 || i === 0

@@ -2,6 +2,7 @@ import { IBusiness } from '@destiny/common/types';
 import { BusinessCard } from '@features/recommended-business/components';
 import Link from 'next/link';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
+import { Divider } from 'src/components';
 import Slider from 'src/components/slider/Slider';
 import { ButtonProps } from 'src/types/props';
 import { classNames } from 'src/utils/tailwind';
@@ -46,6 +47,7 @@ function RecommendedSection({
               </div>
             ))}
           </Slider>
+          <Divider className="mt-4" />
         </>
       )}
     </div>

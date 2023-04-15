@@ -9,7 +9,6 @@ import {
 import ChooseCategory from '@features/home-page/components/ChooseCategory/ChooseCategory';
 import { RecommendedSection } from '@features/recommended-business/layouts';
 import Head from 'next/head';
-import { AdvancedImage } from '@cloudinary/react';
 import { Divider } from 'src/components';
 import { NavigationProvider } from 'src/components/context-provider/NavigationProvider/NavigationProvider';
 import { AppLayout } from 'src/components/layout';
@@ -54,7 +53,6 @@ const Home: NextPageWithLayout = () => {
       />
       {coordinates && (
         <>
-          <Divider className="mt-4" />
           <RecommendedSection
             title="Near to you"
             description="Explore local businesses near to your location"
@@ -65,7 +63,6 @@ const Home: NextPageWithLayout = () => {
       )}
       {coordinates && (
         <>
-          <Divider className="mt-4" />
           <RecommendedSection
             title="Highest rated"
             description="Find the best rated businesses near to you"

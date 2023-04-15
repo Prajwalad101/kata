@@ -1,5 +1,5 @@
 import { IReview } from '@destiny/common/types';
-import { OpenOrClosed } from '@features/business-details/components';
+import openOrClosed from '@features/business-details/components/OpenOrClosed/OpenOrClosed';
 import { BusinessPage } from '@features/search-business/hooks/useFetchRecommendBusiness';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -12,6 +12,8 @@ export interface BusinessCardProps {
 }
 
 function BusinessCard({ business }: BusinessCardProps) {
+  const businessStatus = openOrClosed(business.workingDays);
+
   return (
     <div className="h-48 font-rubik transition-colors hover:bg-gray-50 sm:flex">
       <Slider
@@ -43,10 +45,9 @@ function BusinessCard({ business }: BusinessCardProps) {
                     ({business.ratingCount})
                   </p>
                 </div>
-                <OpenOrClosed
-                  className="text-sm font-medium text-gray-600"
-                  workingDays={business.workingDays}
-                />
+                <p className="inline-block text-sm font-medium text-gray-600">
+                  {businessStatus}
+                </p>
               </div>
               <p className="mb-4 text-sm text-secondarytext">
                 {business.location.address}

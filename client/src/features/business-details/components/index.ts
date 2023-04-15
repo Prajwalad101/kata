@@ -8,7 +8,6 @@ import LocationAndContact from './Location&Contact/Location&Contact';
 import About from './modals/About/About';
 import ImagePreview from './modals/ImagePreview/ImagePreview';
 import SendMessage from './modals/SendMessage/SendMessage';
-import OpenOrClosed from './OpenOrClosed/OpenOrClosed';
 import PostQuestion from './PostQuestion/PostQuestion';
 import Ratings from './Ratings/Ratings';
 import ReportUserDropdown from './ReportUserDropdown/ReportUserDropdown';
@@ -22,7 +21,6 @@ import UserReview from './UserReview/UserReview';
 
 export {
   BreadCrumbs,
-  OpenOrClosed,
   BusinessDescription,
   BusinessImage,
   BusinessAttributes,

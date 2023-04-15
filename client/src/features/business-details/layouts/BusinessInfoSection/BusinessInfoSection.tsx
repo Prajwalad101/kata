@@ -2,8 +2,8 @@ import { IBusiness } from '@destiny/common/types';
 import {
   BusinessDescription,
   BusinessImage,
-  OpenOrClosed,
 } from '@features/business-details/components';
+import openOrClosed from '@features/business-details/components/OpenOrClosed/OpenOrClosed';
 import { FaPhoneAlt } from 'react-icons/fa';
 import RatingIcons from 'src/components/icons/ratings/RatingIcons';
 
@@ -16,6 +16,8 @@ export default function BusinessInfoSection({
   business,
   className = '',
 }: BusinessInfoSectionProps) {
+  const businessStatus = openOrClosed(business.workingDays);
+
   return (
     <div className={className}>
       <div className="mb-5 flex flex-col gap-5 md:mb-0 md:flex-row">
@@ -33,7 +35,7 @@ export default function BusinessInfoSection({
             </span>
           </div>
           <span className="mb-2 inline-block">{business.location.address}</span>
-          <OpenOrClosed workingDays={business.workingDays} className="mb-5" />
+          <p className="mb-2 font-medium text-gray-700">{businessStatus}</p>
           <BusinessDescription
             description={business.description}
             className="mb-7"
