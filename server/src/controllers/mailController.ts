@@ -58,3 +58,29 @@ export const sendMail = catchAsync(
       .json({ status: 'success', message: 'Mail successfully sent' });
   }
 );
+
+interface SendWelcomeMailProps {
+  email: string;
+  name: string;
+}
+
+export const sendWelcomeMail = async ({
+  email,
+  name,
+}: SendWelcomeMailProps) => {
+  if (!process.env.MAILGUN_DOMAIN) {
+    const error = new AppError('Mailgun Domain not found', 404);
+    throw error;
+  }
+
+  const result = await mg.messages.create(process.env.MAILGUN_DOMAIN, {
+    from: 'prajwalad101@gmail.com',
+    to: email,
+    subject: 'Welcome to Kata',
+    template: 'welcomeuser',
+    'h:X-Mailgun-Variables': JSON.stringify({
+      name,
+    }),
+  });
+  return result;
+};
