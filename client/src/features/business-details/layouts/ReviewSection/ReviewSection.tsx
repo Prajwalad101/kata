@@ -79,7 +79,7 @@ export default function ReviewSection({ className = '' }: ReviewSectionProps) {
           </SecondaryButton>
         </Portal>
 
-        <div className="mb-7 flex flex-wrap-reverse items-center justify-between gap-y-5 gap-x-2">
+        <div className="mb-7 flex flex-wrap-reverse items-center justify-between gap-x-2 gap-y-5">
           <SortReview
             sortOptions={reviewSortOptions}
             selectedSort={selectedSort}

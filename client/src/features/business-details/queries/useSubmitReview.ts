@@ -38,7 +38,11 @@ export default function useSubmitReview() {
           const prevData = JSON.parse(JSON.stringify(data)) as IBusiness;
           const ratingIndex = newReview.rating - 1;
 
+          // update business stats with new review
           prevData.ratings[ratingIndex] += 1;
+          prevData.ratingCount += 1;
+          prevData.totalRating += newReview.rating;
+          prevData.avgRating = prevData.totalRating / prevData.ratingCount;
           return prevData;
         }
       );
