@@ -1,5 +1,6 @@
 import passport from 'passport';
 import { Strategy } from 'passport-google-oauth2';
+import { sendWelcomeMail } from '../../controllers/mailController';
 import { createUser, findUser } from '../../controllers/userController';
 
 passport.use(
@@ -19,6 +20,8 @@ passport.use(
         user = await findUser(profile.id);
         if (!user) {
           user = await createUser(profile);
+          // send welcome mail after creating new user
+          await sendWelcomeMail({ email: user.email, name: user.userName });
         }
         return done(null, user);
       } catch (err) {
