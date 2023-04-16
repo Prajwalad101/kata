@@ -48,7 +48,7 @@ export default function Ratings({
         <h4 className="text-3xl font-medium">{avgRating.toFixed(1)}</h4>
         <RatingIcons avgRating={avgRating} size={19} className="gap-[6px]" />
       </div>
-      <p className="mb-5 text-gray-500 underline">from {totalRating} reviews</p>
+      <p className="mb-5 text-gray-500 underline">from {ratingCount} reviews</p>
       <div className="flex flex-col gap-3">
         {ratings.map((_, index) => {
           return (
@@ -71,7 +71,7 @@ export default function Ratings({
                 <div className="relative h-[10px] w-full rounded-full bg-gray-300">
                   <div
                     className={classNames(
-                      'absolute left-0 top-0 bottom-0 h-full rounded-full bg-primaryred'
+                      'absolute bottom-0 left-0 top-0 h-full rounded-full bg-primaryred'
                     )}
                     style={{
                       width: `${ratingPercentage[index]}%`,
