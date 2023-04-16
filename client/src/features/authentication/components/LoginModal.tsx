@@ -25,7 +25,7 @@ export default function LoginModal({ isOpen, closeModal }: LoginModalProps) {
         </p>
 
         <Link
-          href={`${process.env.NEXT_PUBLIC_SERVER_ENDPOINT}/api/auth/google/start`}
+          href={`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/google/start`}
         >
           <button
             onClick={closeModal}
@@ -37,7 +37,7 @@ export default function LoginModal({ isOpen, closeModal }: LoginModalProps) {
         </Link>
         <p className="mb-2 text-gray-500">or</p>
         <Link
-          href={`${process.env.NEXT_PUBLIC_SERVER_ENDPOINT}/api/auth/facebook/start`}
+          href={`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/facebook/start`}
         >
           <button
             onClick={closeModal}
