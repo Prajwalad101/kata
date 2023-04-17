@@ -8,6 +8,7 @@ import AppError from '../utils/appError';
 import { filterFeatures } from '../utils/businessFunc';
 import catchAsync from '../utils/catchAsync';
 import { uploadToCloud } from '../utils/uploadToCloud';
+import { sendRegistrationMail } from './mailController';
 
 export const getTrendingBusinesses = catchAsync(
   async (_req: Request, res: Response, _next: NextFunction) => {
@@ -226,6 +227,13 @@ const createBusiness = catchAsync(
       images,
       owner: user._id,
     });
+
+    if (business) {
+      await sendRegistrationMail({
+        email: business.email,
+        businessName: business.name,
+      });
+    }
 
     res.status(201).json({
       status: 'success',
