@@ -8,7 +8,12 @@ import AppError from '../utils/appError';
 import { filterFeatures } from '../utils/businessFunc';
 import catchAsync from '../utils/catchAsync';
 import { uploadToCloud } from '../utils/uploadToCloud';
-import { sendRegistrationMail } from './mailController';
+import {
+  sendRegistrationMail,
+  sendRejectionMail,
+  sendVerifiedMail,
+  sendWelcomeMail,
+} from './mailController';
 
 export const getTrendingBusinesses = catchAsync(
   async (_req: Request, res: Response, _next: NextFunction) => {
@@ -259,6 +264,8 @@ const getBusiness = catchAsync(
 
 const updateBusiness = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    // if business status is being updated, send a mail to the business owner
+
     const business = await Business.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
@@ -266,6 +273,20 @@ const updateBusiness = catchAsync(
 
     if (!business) {
       return next(new AppError('No document found with that ID', 404));
+    }
+
+    if (business.status === 'rejected') {
+      await sendRejectionMail({
+        email: business?.email,
+        businessName: business?.name,
+      });
+    }
+
+    if (business.status === 'verified') {
+      await sendVerifiedMail({
+        email: business?.email,
+        businessName: business?.name,
+      });
     }
 
     res.status(200).json({

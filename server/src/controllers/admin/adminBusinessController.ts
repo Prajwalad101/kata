@@ -16,6 +16,7 @@ const getAllBusinesses = catchAsync(
       'category',
       'website',
       'verified',
+      'status',
       'avgRating',
       'totalRating',
       'ratingCount',

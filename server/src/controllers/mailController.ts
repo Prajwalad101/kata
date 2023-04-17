@@ -98,13 +98,59 @@ export const sendRegistrationMail = async ({
     throw error;
   }
 
-  console.log('EMAIL', email);
+  const result = await mg.messages.create(process.env.MAILGUN_DOMAIN, {
+    from: 'prajwalad101@gmail.com',
+    to: email,
+    subject: '[Kata] Business Registered',
+    template: 'pendingbusiness',
+    'h:X-Mailgun-Variables': JSON.stringify({
+      businessName,
+    }),
+  });
+  return result;
+};
+
+export const sendRejectionMail = async ({
+  email,
+  businessName,
+}: {
+  email: string;
+  businessName: string;
+}) => {
+  if (!process.env.MAILGUN_DOMAIN) {
+    const error = new AppError('Mailgun Domain not found', 404);
+    throw error;
+  }
 
   const result = await mg.messages.create(process.env.MAILGUN_DOMAIN, {
     from: 'prajwalad101@gmail.com',
     to: email,
-    subject: 'Welcome to Kata',
-    template: 'pendingbusiness',
+    subject: '[Kata] Business Rejected',
+    template: 'rejectionmail',
+    'h:X-Mailgun-Variables': JSON.stringify({
+      businessName,
+    }),
+  });
+  return result;
+};
+
+export const sendVerifiedMail = async ({
+  email,
+  businessName,
+}: {
+  email: string;
+  businessName: string;
+}) => {
+  if (!process.env.MAILGUN_DOMAIN) {
+    const error = new AppError('Mailgun Domain not found', 404);
+    throw error;
+  }
+
+  const result = await mg.messages.create(process.env.MAILGUN_DOMAIN, {
+    from: 'prajwalad101@gmail.com',
+    to: email,
+    subject: '[Kata] Business Verified',
+    template: 'business_verified',
     'h:X-Mailgun-Variables': JSON.stringify({
       businessName,
     }),
