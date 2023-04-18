@@ -7,9 +7,6 @@ export const getAllUsers = catchAsync(
   async (req: Request, res: Response, _next: NextFunction) => {
     const userQuery = User.find();
 
-    req.query.fields =
-      'userName,email,picture,reportCount,numQuestions,trustPoints,blocked';
-
     if (req.query._end && req.query._start) {
       req.query.limit = String(
         Number(req.query._end) - Number(req.query._start)
@@ -27,20 +24,13 @@ export const getAllUsers = catchAsync(
       .limitFields()
       .paginate();
 
-    let allUsers = await apiFeatures.query;
-
-    allUsers = allUsers.map((value: unknown) => {
-      const user = JSON.parse(JSON.stringify(value));
-      return {
-        id: user._id,
-        ...user,
-        banned: user.banned ? 'true' : 'false',
-        suspended: user.suspended ? 'true' : 'false',
-        onCooldown: user.onCooldown ? 'true' : 'false',
-      };
+    const allUsers = await apiFeatures.query;
+    const users = allUsers.map((user: any) => {
+      const userCpy = JSON.parse(JSON.stringify(user));
+      return { id: userCpy._id, ...userCpy };
     });
 
-    res.json(allUsers);
+    res.json(users);
   }
 );
 
