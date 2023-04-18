@@ -8,6 +8,7 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
+    "typeRoots": ["./types"],
     "strict": true
   },
   "ts-node": {
