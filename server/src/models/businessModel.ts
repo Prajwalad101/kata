@@ -83,6 +83,11 @@ const businessSchema = new mongoose.Schema<IBusiness>(
         message: 'A business must contain 2 or more images',
       },
     },
+    status: {
+      type: String,
+      enum: ['verified', 'rejected', 'pending'],
+      default: 'pending',
+    },
     verified: { type: Boolean, default: false },
     ratings: {
       type: [Number],

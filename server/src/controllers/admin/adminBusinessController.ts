@@ -16,6 +16,7 @@ const getAllBusinesses = catchAsync(
       'category',
       'website',
       'verified',
+      'status',
       'avgRating',
       'totalRating',
       'ratingCount',
@@ -40,14 +41,7 @@ const getAllBusinesses = catchAsync(
       .limitFields()
       .paginate();
 
-    let allBusiness = await apiFeatures.query;
-
-    allBusiness = allBusiness.map((business: unknown) => {
-      const newBusiness = JSON.parse(JSON.stringify(business));
-      delete newBusiness._id;
-      newBusiness.verified = String(newBusiness.verified);
-      return newBusiness;
-    });
+    const allBusiness = await apiFeatures.query;
 
     res.json(allBusiness);
   }

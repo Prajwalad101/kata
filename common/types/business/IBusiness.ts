@@ -21,6 +21,7 @@ export interface IBusiness {
   images: string[];
   reviews?: IReview[];
   verified: boolean;
+  status: "verified" | "rejected" | "pending";
   ratings: [number, number, number, number, number];
   totalRating: number;
   avgRating: number;
