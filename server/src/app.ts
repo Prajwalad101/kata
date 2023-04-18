@@ -15,7 +15,7 @@ import adminLogsRouter from './routes/admin/adminLogsRouter';
 import adminReviewsRouter from './routes/admin/adminReviewsRouter';
 import adminUserRouter from './routes/admin/adminUserRouter';
 import cors from 'cors';
-import Logger from './models/loggerModel';
+import { reqResLoggerMiddleware } from './middlewares/reqResLoggerMiddleware';
 
 const app = express();
 
@@ -24,18 +24,7 @@ app.use(cors());
 // Middlewares
 app.use(express.json());
 app.use(morgan('dev'));
-
-app.use((req, res, next) => {
-  const method = req.method;
-  const endpoint = req.originalUrl;
-  const request = req.body;
-
-  res.on('finish', async () => {
-    const status = res.statusCode;
-    await Logger.create({ method, endpoint, status, request });
-  });
-  next();
-});
+app.use(reqResLoggerMiddleware);
 app.use(passport.initialize());
 
 // public routes

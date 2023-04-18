@@ -19,6 +19,8 @@ const getLogs = catchAsync(
       delete req.query._start;
     }
 
+    logsQuery.populate('user', 'userName email');
+
     const apiFeatures = new APIFeatures(logsQuery, req.query)
       .filter()
       .sort()
@@ -38,7 +40,10 @@ const getLogs = catchAsync(
 
 const getLog = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const log = await Logger.findById(req.params.id);
+    const logQuery = Logger.findById(req.params.id);
+    logQuery.populate({ path: 'user' });
+
+    const log = await logQuery;
 
     if (!log) {
       return next(new AppError('No log found with that ID', 404));
