@@ -1,5 +1,6 @@
 import { IUser } from '@destiny/common/types';
 import { createContext, ReactNode, useContext } from 'react';
+import { toast } from 'react-toastify';
 import useCookie from 'src/hooks/browser/useCookie';
 import parseJwt from 'src/utils/text/parseJwt';
 
@@ -19,7 +20,10 @@ interface UserProviderProps {
 export default function UserProvider({ children }: UserProviderProps) {
   const [accessToken, _, removeToken] = useCookie('access-token', null);
 
-  const logout = removeToken;
+  const logout = () => {
+    toast.success('Successfully logged out', { toastId: 'logout-success' });
+    removeToken();
+  };
 
   const user = accessToken
     ? (parseJwt(accessToken) as Partial<IUser>)

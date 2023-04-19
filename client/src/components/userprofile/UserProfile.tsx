@@ -39,18 +39,20 @@ export default function UserProfile({ user, logout }: UserProfileProps) {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
             <div className="px-1">
               <Menu.Item>
-                <button className="group flex w-full cursor-default items-center bg-gray-100 px-2 py-2 text-sm text-gray-900">
+                <button className="group flex w-full cursor-default items-center bg-gray-100 px-2 py-3 text-sm text-gray-900">
                   Prajwal Adhikari
                 </button>
               </Menu.Item>
-              <Menu.Item>
-                <button className="group flex w-full cursor-default bg-gray-100 px-2 py-2 text-sm text-gray-900">
-                  {user.email}
-                </button>
-              </Menu.Item>
+              {user.email && (
+                <Menu.Item>
+                  <button className="group w-full cursor-default overflow-hidden overflow-ellipsis whitespace-nowrap bg-gray-100 px-2 py-2 text-start text-sm text-gray-900">
+                    {user.email}
+                  </button>
+                </Menu.Item>
+              )}
               <Menu.Item>
                 {({ active }) => (
                   <button

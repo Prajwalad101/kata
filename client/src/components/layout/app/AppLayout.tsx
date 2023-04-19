@@ -1,3 +1,6 @@
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 import Footer from 'src/components/Footer/Footer';
 import { classNames } from 'src/utils/tailwind';
 
@@ -7,6 +10,18 @@ interface IAppLayout {
 }
 
 function AppLayout({ children, size }: IAppLayout) {
+  const router = useRouter();
+
+  const { authentication } = router.query;
+
+  useEffect(() => {
+    if (authentication?.includes('success')) {
+      toast.success('Successfully logged in', {
+        toastId: 'login-success',
+      });
+    }
+  }, [router, authentication]);
+
   return (
     <div
       className={classNames(
