@@ -1,7 +1,7 @@
 import { Review } from '@features/write-review/api/useMostLikedReviews';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { AiFillHeart, AiTwotoneHeart } from 'react-icons/ai';
+import { AiFillHeart } from 'react-icons/ai';
 import RatingIcons from 'src/components/icons/ratings/RatingIcons';
 import Slider from 'src/components/slider/Slider';
 import { getRelativeDate } from 'src/utils/date';
@@ -45,7 +45,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
           ))}
         </Slider>
       )}
-      <div className={classNames(noImage ? 'px-3 pt-5 pb-4' : 'p-3')}>
+      <div className={classNames(noImage ? 'px-3 pb-4 pt-5' : 'p-3')}>
         <div className="mb-3 flex justify-between">
           <h3 className="cursor-pointer text-lg font-medium leading-tight decoration-red-400 decoration-2 hover:underline">
             {review.business?.name || '------------'}

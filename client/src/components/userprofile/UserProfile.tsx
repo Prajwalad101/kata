@@ -1,6 +1,7 @@
 import { IUser } from '@destiny/common/types';
 import { Menu, Transition } from '@headlessui/react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { Fragment } from 'react';
 
 interface UserProfileProps {
@@ -9,6 +10,12 @@ interface UserProfileProps {
 }
 
 export default function UserProfile({ user, logout }: UserProfileProps) {
+  const router = useRouter();
+
+  const navigateToProfile = () => {
+    router.push(`/user/${user._id}`);
+  };
+
   return (
     <div className="h-[40px]">
       <Menu as="div" className="relative inline-block h-[40px] text-left">
@@ -43,6 +50,18 @@ export default function UserProfile({ user, logout }: UserProfileProps) {
                 <button className="group flex w-full cursor-default bg-gray-100 px-2 py-2 text-sm text-gray-900">
                   {user.email}
                 </button>
+              </Menu.Item>
+              <Menu.Item>
+                {({ active }) => (
+                  <button
+                    onClick={navigateToProfile}
+                    className={`${
+                      active ? 'bg-blue-500 text-white' : 'text-gray-900'
+                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                  >
+                    Profile
+                  </button>
+                )}
               </Menu.Item>
             </div>
             <div className="px-1 py-1">
