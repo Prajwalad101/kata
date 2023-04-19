@@ -14,7 +14,7 @@ const useCookie = (
   defaultValue: string | null,
   attributes?: CookieAttributes
 ) => {
-  const [cookie, setCookie] = useState<string | null>(defaultValue); // TODO: Add custom functions for cookie management.
+  const [cookie, setCookie] = useState<string | null>(defaultValue);
 
   const updateCookie = useCallback(
     (value: string) => {
