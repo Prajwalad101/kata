@@ -15,13 +15,14 @@ export const suspendUser = async (userId: string) => {
     let suspendDuration = 0;
     switch (user.suspendedCount) {
       case 1:
-        suspendDuration = 24; // 1 day
+        suspendDuration = 0.00833333333; // 30 seconds
+        // suspendDuration = 24; // 1 day
         break;
       case 2:
-        suspendDuration = 168;
+        suspendDuration = 168; // 1 week
         break;
       case 3:
-        suspendDuration = 720;
+        suspendDuration = 720; // 1 month
         break;
       default:
         user.banned = true;

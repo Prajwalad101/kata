@@ -23,7 +23,7 @@ app.use(cors());
 
 // Middlewares
 app.use(express.json());
-app.use(morgan('dev'));
+// app.use(morgan('dev'));
 app.use(reqResLoggerMiddleware);
 app.use(passport.initialize());
 

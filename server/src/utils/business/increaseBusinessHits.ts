@@ -35,10 +35,6 @@ export const increaseBusinessHits = async ({
         business: businessId,
       });
 
-      console.log('------------------');
-      console.log('USER INTERACTION', interaction);
-      console.log('------------------');
-
       // if found, increase count by 1
       if (interaction) {
         await Interaction.findByIdAndUpdate(interaction._id, {
@@ -51,10 +47,11 @@ export const increaseBusinessHits = async ({
           console.log('Max spam interactions reached: SUSPENDING USER');
           console.log('------------------');
           await suspendUser(userId);
+          return;
         }
 
         // if  count is greater than MAX_INTERACTIONS , don't update hitscore
-        if (interaction.count > MAX_INTERACTIONS) {
+        if (interaction.count >= MAX_INTERACTIONS) {
           console.log('------------------');
           console.log('Max interactions reached: HITSCORE NOT UPDATED');
           console.log('------------------');

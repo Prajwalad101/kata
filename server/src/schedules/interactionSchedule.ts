@@ -1,7 +1,7 @@
 import cron from 'node-cron';
 import Interaction from '../models/interactionsModel';
 
-// clears Interaction collection every Sunday at 12:00 PM
+// clears Interaction collection every Sunday at 12:00 PM (every week)
 export const interactionSchedule = () => {
   cron.schedule(
     '0 12 * * Sun',

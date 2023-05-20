@@ -4,8 +4,12 @@ import cron from 'node-cron';
 
 export const userSchedule = () => {
   cron.schedule(
-    '0 */3 * * *',
+    // '*/10 * * * * *', // every 10 seconds
+    '0 */3 * * *', // every 3 hours
     async () => {
+      console.log('------------');
+      console.log('Running UserSchedule Task');
+      console.log('------------');
       // find the documents that have exceeded their timer duration
       const timers = await Timer.aggregate([
         {
@@ -32,6 +36,12 @@ export const userSchedule = () => {
           },
         },
       ]);
+
+      if (timers.length > 0) {
+        console.log('----------');
+        console.log('TIMERS', timers);
+        console.log('----------');
+      }
 
       timers.forEach(async (timer) => {
         await Timer.findByIdAndDelete(timer._id);
