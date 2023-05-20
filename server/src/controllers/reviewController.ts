@@ -94,6 +94,9 @@ const createReview = catchAsync(
       return next(error);
     }
 
+    // check if the user is banned or suspended
+    await validateUser(req.body.author);
+
     // prevent business owners from reviewing their own business
     if (business.owner.toString() === req.body.author) {
       const error = new AppError(
