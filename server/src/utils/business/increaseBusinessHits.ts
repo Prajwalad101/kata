@@ -11,8 +11,8 @@ type Props = {
   userId?: string; // if the user is logged in
 };
 
-const MAX_INTERACTIONS = 5;
-const SPAM_INTERACTIONS = 20;
+const MAX_INTERACTIONS = 2; // max interactions before hitscore is not updated
+const SPAM_INTERACTIONS = 3; // max interactions before user is suspended
 
 export const increaseBusinessHits = async ({
   businessId,
