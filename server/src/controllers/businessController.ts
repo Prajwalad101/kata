@@ -12,7 +12,6 @@ import {
   sendRegistrationMail,
   sendRejectionMail,
   sendVerifiedMail,
-  sendWelcomeMail,
 } from './mailController';
 
 export const getTrendingBusinesses = catchAsync(

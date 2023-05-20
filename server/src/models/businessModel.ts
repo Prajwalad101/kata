@@ -15,7 +15,7 @@ const businessSchema = new mongoose.Schema<IBusiness>(
     owner: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      required: [true, 'A business most contain a business owner'],
+      required: [true, 'A business must contain a business owner'],
     },
     city: { type: String, required: [true, 'City is required'] },
     workingDays: [

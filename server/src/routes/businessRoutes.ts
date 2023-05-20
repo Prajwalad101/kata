@@ -9,9 +9,16 @@ import uploadFiles from '../utils/multer/uploadFiles';
 
 const router = express.Router();
 
-const upload = uploadFiles({
-  path: '../client/public/uploads/images/business/',
+/* const upload = uploadFiles({
+  path: `${__dirname}/../../assets/uploads/business/`,
+  // path: '../client/public/uploads/images/business/',
   maxCount: 30,
+  fieldName: 'image',
+}); */
+
+const upload = uploadFiles({
+  path: `${__dirname}/../../assets/uploads/business/`,
+  maxCount: 10,
   fieldName: 'image',
 });
 
