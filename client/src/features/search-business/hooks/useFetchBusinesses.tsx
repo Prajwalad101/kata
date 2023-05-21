@@ -26,7 +26,7 @@ export const fetchBusinesses = async (params: object, api?: AxiosInstance) => {
     response = await api.get<SearchBusinessResponse>('/business', {
       params: {
         ...params,
-        verified: true,
+        // verified: true,
       },
     });
   } else {
@@ -35,7 +35,7 @@ export const fetchBusinesses = async (params: object, api?: AxiosInstance) => {
       {
         params: {
           ...params,
-          verified: true,
+          // verified: true,
         },
       }
     );

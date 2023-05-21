@@ -28,9 +28,10 @@ export default function Services({ className = '' }: ServicesProps) {
     if (!auth?.user) {
       return toast.error('You have to be logged in to send a message');
     }
-    if (business?.owner === auth?.user._id) {
+    // TODO: Uncomment after email is verified
+    /* if (business?.owner === auth?.user._id) {
       return toast.error("You can't send a message to your own business");
-    }
+    } */
     setIsMessageOpen(true);
   };
 
