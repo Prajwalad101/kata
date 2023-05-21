@@ -44,6 +44,11 @@ function FormContainer({ mutation }: FormContainerProps) {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
+    const newData = JSON.parse(JSON.stringify(data));
+    let directions,
+      socials,
+      location = {};
+
     if (step < 4) {
       setStep((prev) => {
         const newStep = prev + 1;
@@ -51,18 +56,25 @@ function FormContainer({ mutation }: FormContainerProps) {
         return newStep;
       });
     } else {
-      data.directions = data.directions.map(
+      directions = newData.directions.map(
         (direction: { value: string }) => direction.value
       );
-      data.socials = data.socials.map(
+      socials = newData.socials.map(
         (social: { value: string }) => social.value
       );
-      data.location = {
+      location = {
         type: 'Point',
-        coordinates: data.coordinates,
-        address: data.address,
+        coordinates: newData.coordinates,
+        address: newData.address,
       };
-      const formData = dataToFormData(data);
+
+      const formData = dataToFormData({
+        ...data,
+        directions,
+        socials,
+        location,
+      });
+
       mutation.mutate(formData, {
         onError: (error) => {
           if (error instanceof AxiosError) {
@@ -127,7 +139,7 @@ function FormContainer({ mutation }: FormContainerProps) {
           <SecondaryButton
             type="button"
             onClick={handleBack}
-            className="py-2 px-10"
+            className="px-10 py-2"
           >
             {step === 1 ? 'Cancel' : 'Back'}
           </SecondaryButton>

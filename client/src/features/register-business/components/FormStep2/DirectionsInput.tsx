@@ -26,6 +26,8 @@ export default function DirectionsInput({
     name: 'directions',
   });
 
+  console.log(fields);
+
   return (
     <FieldLayout>
       <MyLabel

@@ -8,9 +8,9 @@ export const infoCardData = [
     ),
     image: '/images/for-business/publish-post.png',
     items: [
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit Corrupti, necessitatibus',
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore nostrum aspernatur consequuntur.',
-      'Lorem ipsum dolor sit amet consectetur adipisicing.',
+      'Add or edit product or service offerings, pricing and availability',
+      'Let users know your mission statement and its offerings',
+      'Update business name, address, contact information and operating hours',
     ],
   },
   {
@@ -20,9 +20,9 @@ export const infoCardData = [
     ),
     image: '/images/for-business/people-search.png',
     items: [
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit Corrupti, necessitatibus',
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore nostrum aspernatur consequuntur.',
-      'Lorem ipsum dolor sit amet consectetur adipisicing.',
+      'Respond to reviews and inquiries from customers',
+      'Engage with customers to address concerns and provide assistance',
+      'Receive and manage customer feedback, suggestions or testimonials',
     ],
   },
   {
@@ -34,9 +34,9 @@ export const infoCardData = [
     ),
     image: '/images/for-business/online-connection.png',
     items: [
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit Corrupti, necessitatibus',
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore nostrum aspernatur consequuntur.',
-      'Lorem ipsum dolor sit amet consectetur adipisicing.',
+      'Monitor and track customer reviews and ratings on your business profile',
+      'Respond to reviews and show engagement with customers',
+      'Showcase positive reviews on your website or social media pages',
     ],
   },
 ];
