@@ -39,7 +39,7 @@ export const userSchedule = () => {
 
       if (timers.length > 0) {
         console.log('----------');
-        console.log('TIMERS', timers);
+        console.log('DUE TIMERS', timers);
         console.log('----------');
       }
 

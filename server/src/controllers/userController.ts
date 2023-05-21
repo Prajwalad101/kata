@@ -68,10 +68,13 @@ export const reportUser = catchAsync(
       onCooldown: true,
     });
 
-    // create a cooldown timer of 24 hours for user who reported
+    // create a cooldown timer of 30 seconds for user who reported
+    // const COOLDOWN_PERIOD = 24;
+    const COOLDOWN_PERIOD = 0.00833333333;
+
     await Timer.create({
       user: req.body.reportedBy,
-      duration: 24,
+      duration: COOLDOWN_PERIOD,
       action: 'cooldown',
     });
 
@@ -80,13 +83,6 @@ export const reportUser = catchAsync(
       // reset report count and suspend user
       await User.findByIdAndUpdate(req.body.userId, { reportCount: 0 });
       suspendUser(req.body.userId);
-
-      // create timer to unsuspend user after 48 hours
-      await Timer.create({
-        user: req.body.reportedBy,
-        duration: 48,
-        action: 'suspend',
-      });
     } else {
       await User.findByIdAndUpdate(req.body.userId, {
         $inc: { reportCount: 1 },

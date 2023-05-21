@@ -19,7 +19,7 @@ router.route('/google/start').get(
 
 router.route('/google/redirect').get(
   passport.authenticate('google', {
-    failureRedirect: `${process.env.CLIENT_ORIGIN}?authentication=error&message=invalid-credentials`,
+    failureRedirect: `${process.env.CLIENT_ORIGIN}?authentication=error&message=something went wrong`,
     session: false,
   }),
   handleUserToken,

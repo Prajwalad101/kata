@@ -23,6 +23,12 @@ passport.use(
           // send welcome mail after creating new user
           await sendWelcomeMail({ email: user.email, name: user.userName });
         }
+
+        // prevent banned users from logging in
+        if (user.banned) {
+          return done(null, false);
+        }
+
         return done(null, user);
       } catch (err) {
         return done(err, null);

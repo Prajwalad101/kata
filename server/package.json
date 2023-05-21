@@ -5,7 +5,9 @@
   "scripts": {
     "format": "eslint . --fix",
     "start": "nodemon --exec ts-node src/server.ts",
-    "start:prod": "ts-node --transpileOnly src/server.ts"
+    "start:prod": "ts-node --transpileOnly src/server.ts",
+    "import:business": "ts-node data/importBusinessData.ts --import",
+    "delete:business": "ts-node data/importBusinessData.ts --delete"
   },
   "dependencies": {
     "@destiny/common": "1.0.0",

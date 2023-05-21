@@ -53,7 +53,7 @@ export const getTrendingBusinesses = catchAsync(
       },
       {
         $match: {
-          verified: true,
+          status: 'verified',
         },
       },
       // Stage 6: exclude nested business field
@@ -96,7 +96,7 @@ export const getNearestBusinesses = catchAsync(
           distanceField: 'calcDistance',
         },
       },
-      { $match: { verified: true } },
+      { $match: { status: 'verified' } },
     ]);
 
     res.json({
@@ -130,7 +130,7 @@ export const getHighestRatedBusinesses = catchAsync(
       },
       {
         $match: {
-          verified: true,
+          status: 'verified',
           ratingCount: { $gt: 10 },
           avgRating: { $gt: 4.5 },
         },
@@ -319,7 +319,7 @@ const searchBusiness = catchAsync(
     }
 
     const businessesQuery = Business.find(
-      { $text: { $search: searchString }, verified: true },
+      { $text: { $search: searchString }, status: 'verified' },
       { score: { $meta: 'textScore' } }
     );
 
