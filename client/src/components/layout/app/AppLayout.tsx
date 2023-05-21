@@ -20,6 +20,11 @@ function AppLayout({ children, size }: IAppLayout) {
         toastId: 'login-success',
       });
     }
+    if (authentication?.includes('error')) {
+      toast.error('Something went wrong', {
+        toastId: 'login-error',
+      });
+    }
   }, [router, authentication]);
 
   return (

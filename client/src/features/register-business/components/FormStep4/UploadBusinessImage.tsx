@@ -53,7 +53,7 @@ export default function UploadBusinessImage({
       onDrop,
       noClick: true,
       accept: {
-        'image/*': ['.jpeg', '.png'],
+        'image/*': ['.jpeg', '.png', '.jpg', '.svg'],
       },
     });
 
@@ -87,7 +87,7 @@ export default function UploadBusinessImage({
               Drag and Drop files here
             </p>
             <p className="mb-5 text-sm text-gray-400">
-              Files supported: JPG, PNG, JPEG
+              Files supported: JPG, PNG, JPEG, SVG
             </p>
             <button
               type="button"
