@@ -19,7 +19,12 @@ import { reqResLoggerMiddleware } from './middlewares/reqResLoggerMiddleware';
 
 const app = express();
 
-app.use(cors());
+const corsOptions = {
+  origin: process.env.CLIENT_ORIGIN,
+  optionsSuccessStatus: 200
+}
+
+app.use(cors(corsOptions));
 
 // Middlewares
 app.use(express.json());
