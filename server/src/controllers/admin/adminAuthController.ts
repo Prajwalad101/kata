@@ -4,7 +4,6 @@ import jwt from 'jsonwebtoken';
 
 export const handleAdminLogin = catchAsync(
   async (req: Request, res: Response, _next: NextFunction) => {
-    console.log('REQBODY', req.body);
     const email = req.body.email;
     const password = req.body.password;
 

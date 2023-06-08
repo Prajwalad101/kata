@@ -43,18 +43,12 @@ export const increaseBusinessHits = async ({
 
         // if count is greater than SPAM_INTERACTIONS, suspend user
         if (interaction.count >= SPAM_INTERACTIONS) {
-          console.log('------------------');
-          console.log('Max spam interactions reached: SUSPENDING USER');
-          console.log('------------------');
           await suspendUser(userId);
           return;
         }
 
         // if  count is greater than MAX_INTERACTIONS , don't update hitscore
         if (interaction.count >= MAX_INTERACTIONS) {
-          console.log('------------------');
-          console.log('Max interactions reached: HITSCORE NOT UPDATED');
-          console.log('------------------');
           return;
         }
       } else {

@@ -5,9 +5,17 @@ import catchAsync from '../utils/catchAsync';
 
 export const handleUserToken = catchAsync(
   async (req: Request, res: Response, _next: NextFunction) => {
+    const clientOrigin = process.env.CLIENT_ORIGIN;
+    const domainPattern = /(?:https?:\/\/)?(?:www\.)?([\w.-]+)/;
+
+    const matches = clientOrigin.match(domainPattern);
+    const domain = matches[1];
+
     const accessToken = generateAccessToken(req.user);
     res
-      .cookie('access-token', accessToken)
+      .cookie('access-token', accessToken, {
+        domain
+      })
       .redirect(`${process.env.CLIENT_ORIGIN}?authentication=success`);
   }
 );
