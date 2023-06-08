@@ -1,13 +1,42 @@
-# KATA
+<div id="top"></div>
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <h1 align="center">KATA</h1>
+  <p align="center">
+    Find and review your favourite businesses
+    <br />
+    <br/>
+    <a href="https://kataweb.tech">Get Started</a>
+  </p>
+</div>
 
-A business review application that lets users locate and review various businesses.
 
 
-## Home Page
-
-The home page for the application. The home page allows users to search businesses based on name or address. This section also contains recommendations for users. The recommendations are based on the business hitscore and location relative to the user.
+<!-- ABOUT THE PROJECT -->
+## About The Project
 
 ![Home Page](https://imgur.com/XRzn1pC.png)
+
+Introducing "Kata," a powerful and user-friendly application that allows individuals to discover, evaluate, and review a wide range of businesses in their local area and beyond. Inspired by the popular platform Yelp, Kata puts the power of informed decision-making directly in the hands of its users.
+
+With Kata, finding the perfect restaurant, hotel, salon, or any other type of business becomes effortless. The app features a comprehensive database that encompasses an extensive variety of businesses, ensuring that users have access to a diverse selection of options. Whether you're searching for a cozy coffee shop, a reliable plumber, or a trendy boutique, Kata has got you covered.
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+
+### Built With
+
+* [Next.js](https://nextjs.org/)
+* [React.js](https://reactjs.org/)
+* [TailwindCSS](https://tailwindcss.com/)
+* [ExpressJS](https://expressjs.com/)
+* [MongoDB/ Mongoose](https://mongodb.com/)
+* [Mailgun](https://mailgun.com/)
+* [Cloudinary](https://cloudinary.com/)
+* [Google Maps](https://google.com/maps)
+
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Authentication
 
